@@ -1,0 +1,26 @@
+{
+  "name": "app",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "lint": "tslint -c tslint.json 'src/**/*.ts'",
+    "lint:fix": "tslint --fix -c tslint.json 'src/**/*.ts'",
+    "test": "npm run build && mocha dist/test/**/*.js",
+    "start": "npm run build && node dist/src/index"
+  },
+  "author": "Allison Machado Gonçalves",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/chai": "^4.1.7",
+    "@types/mocha": "^5.2.6",
+    "@types/node": "^12.0.0",
+    "@types/sinon": "^7.0.11",
+    "chai": "^4.2.0",
+    "mocha": "^6.1.4",
+    "sinon": "^7.3.2",
+    "tslint": "^5.16.0",
+    "typescript": "^3.4.5"
+  }
+}
