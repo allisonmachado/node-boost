@@ -20,13 +20,13 @@ export abstract class RespositoryTemplate {
         return new Promise((resolve, reject) => {
             this.connection.getPool().getConnection((err, conn) => {
                 if (err) {
-                    this.logger.error(`get connection: ${JSON.stringify(err)}`);
+                    this.logger.error(`get connection: ${err}`);
                     reject(err);
                 }
                 conn.query(preparedStatement, (error, results) => {
                     conn.release();
                     if (error) {
-                        this.logger.error(`query: ${JSON.stringify(error)}`);
+                        this.logger.error(`query: ${error}`);
                         reject(error)
                     }
                     resolve(results);
