@@ -1,4 +1,4 @@
-import { UserRepository } from "../data-source/repositories/UserRepository";
+import { UserRepository } from "../data/repositories/UserRepository";
 import { Logger } from "../Logger";
 
 export class UserService {

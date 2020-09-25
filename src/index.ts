@@ -8,9 +8,9 @@ import express from "express";
 /* Import application definitions */
 import { Environment as Env } from "./Environment";
 import { UserController } from "./controllers/User";
-import { UserRepository } from "./data-source/repositories/UserRepository";
+import { UserRepository } from "./data/repositories/UserRepository";
 import { UserService } from "./business/UserService";
-import { Connection } from "./data-source/mysql/Connection";
+import { Connection } from "./data/repositories/mysql/Connection";
 import { Logger } from "./Logger";
 
 const app = express();

@@ -1,7 +1,7 @@
 import mysql from "mysql";
 
-import { Environment } from "../../Environment";
-import { Logger } from "../../Logger";
+import { Environment } from "../../../Environment";
+import { Logger } from "../../../Logger";
 
 export class Connection {
     private readonly logger = new Logger(Connection.name);

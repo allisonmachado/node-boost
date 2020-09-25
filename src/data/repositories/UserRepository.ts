@@ -1,7 +1,7 @@
 import { Logger } from "../../Logger";
-import { Connection } from "../mysql/Connection";
+import { Connection } from "./mysql/Connection";
 import { UserEntity } from "../entities/user/UserEntity";
-import { RespositoryTemplate } from "../mysql/RepositoryTemplate";
+import { RespositoryTemplate } from "./mysql/RepositoryTemplate";
 
 export class UserRepository extends RespositoryTemplate {
     private readonly llogger = new Logger(UserRepository.name);

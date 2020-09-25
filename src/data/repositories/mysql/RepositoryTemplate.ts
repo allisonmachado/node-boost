@@ -1,8 +1,8 @@
 import mysql from "mysql";
 
-import { CheckTypes } from "../../CheckTypes";
+import { CheckTypes } from "../../../CheckTypes";
 import { Connection } from "./Connection";
-import { Logger } from "../../Logger";
+import { Logger } from "../../../Logger";
 
 export abstract class RespositoryTemplate {
     private readonly logger = new Logger(RespositoryTemplate.name);
@@ -20,11 +20,13 @@ export abstract class RespositoryTemplate {
         return new Promise((resolve, reject) => {
             this.connection.getPool().getConnection((err, conn) => {
                 if (err) {
+                    this.logger.error(`get connection: ${JSON.stringify(err)}`);
                     reject(err);
                 }
                 conn.query(preparedStatement, (error, results) => {
                     conn.release();
                     if (error) {
+                        this.logger.error(`query: ${JSON.stringify(error)}`);
                         reject(error)
                     }
                     resolve(results);
