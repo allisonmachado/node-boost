@@ -24,6 +24,7 @@
     "@types/mysql": "^2.15.15",
     "@types/node": "^12.0.0",
     "@types/sinon": "^7.0.11",
+    "@types/validator": "^13.1.0",
     "chai": "^4.2.0",
     "mocha": "^6.1.4",
     "sinon": "^7.3.2",
@@ -36,6 +37,7 @@
     "express": "^4.17.1",
     "lodash": "^4.17.20",
     "mysql": "^2.18.1",
+    "validator": "^13.1.17",
     "winston": "^3.3.3"
   }
 }
