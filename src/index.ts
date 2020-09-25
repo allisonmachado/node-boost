@@ -5,19 +5,16 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import { Logger } from "./Logger";
+import { UserController } from "./controllers/User";
 
 const app = express();
-const port = 3000;
+const port = Environment.getPort();
 const logger = new Logger("Main");
-
-app.get("/", (req: express.Request, res: express.Response) => {
-    res.send("Hello World!");
-});
 
 app.listen(port, () => {
     logger.info(`App listening at ${port}`);
     logger.info(`App running in ${Environment.getLocation()} environment`);
-
-    logger.error(`error log`);
-    logger.debug(`debug log`);
 });
+
+// exposed controllers:
+new UserController(app);
