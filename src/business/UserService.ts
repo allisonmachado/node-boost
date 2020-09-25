@@ -1,14 +1,20 @@
-import { UserDataObject } from "../data-source/entities/user/UserDataObject";
 import { UserRepository } from "../data-source/repositories/UserRepository";
+import { Logger } from "../Logger";
 
 export class UserService {
-    private userRepository: UserRepository;
+    private readonly logger = new Logger(UserService.name);
 
-    constructor(userRepository: UserRepository) {
+    constructor(private userRepository: UserRepository) {
         this.userRepository = userRepository;
+        this.logger.debug(`initialized`);
     }
 
-    public async list(): Promise<UserDataObject[]> {
-        return this.userRepository.findTop3();
+    public async list(): Promise<Array<{ name: string, surname: string, email: string }>> {
+        const users = await this.userRepository.findTop10();
+        return users.map(u => ({
+            name: u.getName(),
+            surname: u.getSurname(),
+            email: u.getEmail(),
+        }));
     }
 }

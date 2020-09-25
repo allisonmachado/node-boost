@@ -6,16 +6,24 @@ dotenv.config();
 import express from "express";
 
 /* Import application definitions */
-import { Logger } from "./Logger";
-import { Environment } from "./Environment";
+import { Environment as Env } from "./Environment";
 import { UserController } from "./controllers/User";
 import { UserRepository } from "./data-source/repositories/UserRepository";
 import { UserService } from "./business/UserService";
+import { Connection } from "./data-source/mysql/Connection";
+import { Logger } from "./Logger";
 
 const app = express();
 
 /* init data access layer: */
-const userRepository = new UserRepository();
+const mysqlConnection = new Connection(
+    Env.getMysqlHost(),
+    Env.getMysqlUser(),
+    Env.getMysqlPassword(),
+    Env.getMysqlSchema(),
+    Env.getMysqlConnectionPoolLimit(),
+)
+const userRepository = new UserRepository(mysqlConnection);
 
 /* init business logic definition: */
 const userService = new UserService(userRepository);
@@ -24,8 +32,8 @@ const userService = new UserService(userRepository);
 new UserController(app, userService);
 
 /* listen */
-app.listen(Environment.getPort(), () => {
+app.listen(Env.getPort(), () => {
     const logger = new Logger("index");
-    logger.info(`App listening at ${Environment.getPort()}`);
-    logger.info(`App running in ${Environment.getLocation()} environment`);
+    logger.info(`App listening at ${Env.getPort()}`);
+    logger.info(`App running in ${Env.getLocation()} environment`);
 });
