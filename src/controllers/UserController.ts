@@ -1,9 +1,11 @@
 import express from "express";
 
+import { HandleExceptions } from "./HandleExceptions";
 import { BaseController } from "./BaseController";
 import { UserService } from "../business/UserService";
 import { Logger } from "../Logger";
 
+@HandleExceptions
 export class UserController extends BaseController {
     private readonly logger = new Logger(UserController.name);
 

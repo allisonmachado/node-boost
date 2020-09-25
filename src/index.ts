@@ -7,7 +7,7 @@ import express from "express";
 
 /* Import application definitions */
 import { Environment as Env } from "./Environment";
-import { UserController } from "./controllers/User";
+import { UserController } from "./controllers/UserController";
 import { UserRepository } from "./data/repositories/UserRepository";
 import { UserService } from "./business/UserService";
 import { Connection } from "./data/repositories/mysql/Connection";
