@@ -6,6 +6,8 @@ dotenv.config();
 
 import { Logger } from "./Logger";
 import { UserController } from "./controllers/User";
+import { UserRepository } from "./data-source/repositories/UserRepository";
+import { UserService } from "./business/UserService";
 
 const app = express();
 const port = Environment.getPort();
@@ -16,5 +18,12 @@ app.listen(port, () => {
     logger.info(`App running in ${Environment.getLocation()} environment`);
 });
 
-// exposed controllers:
-new UserController(app);
+
+/* data access layer: */
+const userRepository = new UserRepository();
+
+/* business logic definition: */
+const userService = new UserService(userRepository);
+
+/* application api: */
+new UserController(app, userService);
