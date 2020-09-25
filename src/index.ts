@@ -1,17 +1,23 @@
-import express from "express";
 import { Environment } from "./Environment";
-import dotenv from "dotenv";
 
+import express from "express";
+import dotenv from "dotenv";
 dotenv.config();
 
-const app = express()
-const port = 3000
+import { Logger } from "./Logger";
 
-app.get('/', (req: express.Request, res: express.Response) => {
-  res.send('Hello World!');
+const app = express();
+const port = 3000;
+const logger = new Logger("Main");
+
+app.get("/", (req: express.Request, res: express.Response) => {
+    res.send("Hello World!");
 });
 
 app.listen(port, () => {
-  console.log(`App listening at ${port}`);
-  console.log(`App running in ${Environment.getLocation()} environment`);
-})
+    logger.info(`App listening at ${port}`);
+    logger.info(`App running in ${Environment.getLocation()} environment`);
+
+    logger.error(`error log`);
+    logger.debug(`debug log`);
+});
