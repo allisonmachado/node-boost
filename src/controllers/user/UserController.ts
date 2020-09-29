@@ -2,7 +2,7 @@ import express from "express";
 
 import { HandleExceptions } from "../Advices";
 import { BaseController } from "../BaseController";
-import { RequestFilter } from "./RequestFilter";
+import { InputFilter } from "./InputFilter";
 import { UserService } from "../../business/UserService";
 import { CheckTypes } from "../../CheckTypes";
 import { Logger } from "../../Logger";
@@ -14,7 +14,7 @@ export class UserController extends BaseController {
     constructor(
         protected express: express.Express,
         private userService: UserService,
-        private userRequestValidator: RequestFilter,
+        private userRequestValidator: InputFilter,
     ) {
         super(express);
         this.express.post("/users", this.createUser.bind(this));
@@ -25,22 +25,21 @@ export class UserController extends BaseController {
     }
 
     private async createUser(req: express.Request, res: express.Response): Promise<void> {
-        if (!this.userRequestValidator.isCreateRequestValid(req)) {
+        const name = req.body['name'];
+        const surname = req.body['surname'];
+        const email = req.body['email'];
+        const password = req.body['password'];
+
+        if (!this.userRequestValidator.isCreateRequestValid(
+            name, surname, email, password,
+        )) {
             res.status(400).send();
             return;
         }
         const userId = await this.userService.create(
-            req.body['name'],
-            req.body['surname'],
-            req.body['email'],
-            req.body['password'],
+            name, surname, email, password,
         );
-        res.send({
-            id: userId,
-            name: req.body['name'],
-            surname: req.body['surname'],
-            email: req.body['email']
-        });
+        res.send({ id: userId, name, surname, email });
     }
 
     private async getUsers(req: express.Request, res: express.Response): Promise<void> {
@@ -60,9 +59,13 @@ export class UserController extends BaseController {
         }
         res.send(users);
     }
-    
+
     private async updateUser(req: express.Request, res: express.Response): Promise<void> {
-        if (!this.userRequestValidator.isUpdateRequestValid(req)) {
+        const name = req.body['name'];
+        const surname = req.body['surname'];
+        const password = req.body['password'];
+
+        if (!this.userRequestValidator.isUpdateRequestValid(name, surname, password)) {
             res.status(400).send();
             return;
         }

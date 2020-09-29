@@ -8,7 +8,7 @@ import bodyParser from "body-parser";
 
 /* Import application definitions */
 import { Environment as Env } from "./Environment";
-import { UserRequestFilter } from "./controllers/user/UserRequestFilter";
+import { UserInputFilter } from "./controllers/user/UserInputFilter";
 import { UserController } from "./controllers/user/UserController";
 import { UserRepository } from "./data/repositories/UserRepository";
 import { UserService } from "./business/UserService";
@@ -32,7 +32,7 @@ const userRepository = new UserRepository(mysqlConnection);
 const userService = new UserService(userRepository);
 
 /* init application api: */
-new UserController(app, userService, new UserRequestFilter());
+new UserController(app, userService, new UserInputFilter());
 
 /* listen */
 app.listen(Env.getPort(), () => {
