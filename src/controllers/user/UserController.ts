@@ -1,11 +1,11 @@
 import express from "express";
 
-import { HandleExceptions } from "./HandleExceptions";
-import { BaseController } from "./BaseController";
-import { InputValidator } from "./InputValidator";
-import { UserService } from "../business/UserService";
-import { CheckTypes } from "../CheckTypes";
-import { Logger } from "../Logger";
+import { HandleExceptions } from "../HandleExceptions";
+import { BaseController } from "../BaseController";
+import { RequestFilter } from "./RequestFilter";
+import { UserService } from "../../business/UserService";
+import { CheckTypes } from "../../CheckTypes";
+import { Logger } from "../../Logger";
 
 @HandleExceptions
 export class UserController extends BaseController {
@@ -14,6 +14,7 @@ export class UserController extends BaseController {
     constructor(
         protected express: express.Express,
         private userService: UserService,
+        private userRequestValidator: RequestFilter,
     ) {
         super(express);
         this.express.post("/users", this.createUser.bind(this))
@@ -23,12 +24,7 @@ export class UserController extends BaseController {
     }
 
     private async createUser(req: express.Request, res: express.Response): Promise<void> {
-        if (
-            !InputValidator.isLength(req.body['name'], 2, 145) ||
-            !InputValidator.isLength(req.body['surname'], 2, 145) ||
-            !InputValidator.isLength(req.body['email'], 2, 100) ||
-            !InputValidator.isLength(req.body['password'], 8, 200)
-        ) {
+        if (!this.userRequestValidator.isCreateRequestValid(req)) {
             res.status(400).send();
             return;
         }
@@ -52,7 +48,7 @@ export class UserController extends BaseController {
     }
 
     private async getUser(req: express.Request, res: express.Response): Promise<void> {
-        if (!InputValidator.isInteger(req.params['id'])) {
+        if (!this.userRequestValidator.isGetRequestValid(req)) {
             res.status(400).send();
             return;
         }
