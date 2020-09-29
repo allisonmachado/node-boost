@@ -39,7 +39,7 @@ export class UserController extends BaseController {
         const userId = await this.userService.create(
             name, surname, email, password,
         );
-        res.send({ id: userId, name, surname, email });
+        res.status(201).send({ id: userId, name, surname, email });
     }
 
     private async getUsers(req: express.Request, res: express.Response): Promise<void> {
@@ -61,14 +61,21 @@ export class UserController extends BaseController {
     }
 
     private async updateUser(req: express.Request, res: express.Response): Promise<void> {
+        const id = req.body['id'];
         const name = req.body['name'];
         const surname = req.body['surname'];
         const password = req.body['password'];
 
-        if (!this.userRequestValidator.isUpdateRequestValid(name, surname, password)) {
+        if (!this.userRequestValidator.isUpdateRequestValid(id, name, surname, password)) {
             res.status(400).send();
             return;
         }
-        res.send();
+        const affectedRows = await this.userService.update(id, name, surname, password)
+        if (affectedRows === 1) {
+            res.send({ id, name, surname, password });
+        } else {
+            res.status(400).send();
+            return;
+        }
     }
 }

@@ -24,6 +24,10 @@ export class UserService {
         return this.visiblePropsMapper(users)[0];
     }
 
+    public async update(id: string, name: string, surname: string, password: string): Promise<number> {
+        return this.userRepository.update(id, name, surname, password);
+    }
+
     private visiblePropsMapper(users: UserEntity[]): UserAccessibleProps[] {
         return users.map(u => ({
             name: u.getName(),

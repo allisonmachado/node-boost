@@ -6,3 +6,4 @@ dist/
 .env.dev
 *.log
 npm-debug.log*
+*.tmp

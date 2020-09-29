@@ -19,8 +19,10 @@ export class UserInputFilter implements InputFilter {
         return validator.isInt(id);
     }
 
-    public isUpdateRequestValid(name: any, surname: any, password: any): boolean {
+    public isUpdateRequestValid(id: any, name: any, surname: any, password: any): boolean {
         return (
+            CheckTypes.isTypeNumericInteger(id)
+            &&
             (CheckTypes.isNullOrUndefined(name) || validator.isLength(name, { min: 2, max: 145 }))
             &&
             (CheckTypes.isNullOrUndefined(surname) || validator.isLength(surname, { min: 2, max: 145 }))

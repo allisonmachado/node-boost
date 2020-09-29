@@ -20,6 +20,14 @@ export class CheckTypes {
     );
   }
 
+  public static isTypeNumeric(data: any): boolean {
+    return check.number(data);
+  }
+
+  public static isTypeNumericInteger(data: any): boolean {
+    return check.number(data) && check.integer(data);
+  }
+
   public static isTypeString(data: any): boolean {
     return check.string(data);
   }
