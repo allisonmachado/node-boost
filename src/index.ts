@@ -4,6 +4,7 @@ dotenv.config();
 
 /* Import express for web interface */
 import express from "express";
+import bodyParser from "body-parser";
 
 /* Import application definitions */
 import { Environment as Env } from "./Environment";
@@ -14,6 +15,7 @@ import { Connection } from "./data/repositories/mysql/Connection";
 import { Logger } from "./Logger";
 
 const app = express();
+app.use(bodyParser.json());
 
 /* init data access layer: */
 const mysqlConnection = new Connection(

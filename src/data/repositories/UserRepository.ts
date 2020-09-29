@@ -11,7 +11,7 @@ export class UserRepository extends RespositoryTemplate {
         this.llogger.debug(`initialized`);
     }
 
-    public async create(name, surname, email, password): Promise<number> {
+    public async create(name: string, surname: string, email: string, password: string): Promise<number> {
         const sql = "INSERT INTO `simple_db`.`user` (`name`, `surname`, `email`, `password`) "
             + "VALUES (?, ?, ?, ?)";
         const data = await this.query(sql, [name, surname, email, password]);

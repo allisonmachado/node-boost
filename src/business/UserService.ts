@@ -10,6 +10,10 @@ export class UserService {
         this.logger.debug(`initialized`);
     }
 
+    public async create(name: string, surname: string, email: string, password: string): Promise<number> {
+        return this.userRepository.create(name, surname, email, password);
+    }
+
     public async list(): Promise<UserAccessibleProps[]> {
         const users = await this.userRepository.findTop10();
         return this.visiblePropsMapper(users);
