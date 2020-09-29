@@ -1,6 +1,6 @@
 import express from "express";
 
-import { HandleExceptions } from "../HandleExceptions";
+import { HandleExceptions } from "../Advices";
 import { BaseController } from "../BaseController";
 import { RequestFilter } from "./RequestFilter";
 import { UserService } from "../../business/UserService";
@@ -17,9 +17,10 @@ export class UserController extends BaseController {
         private userRequestValidator: RequestFilter,
     ) {
         super(express);
-        this.express.post("/users", this.createUser.bind(this))
-        this.express.get("/users", this.getUsers.bind(this))
-        this.express.get("/users/:id", this.getUser.bind(this))
+        this.express.post("/users", this.createUser.bind(this));
+        this.express.get("/users", this.getUsers.bind(this));
+        this.express.get("/users/:id", this.getUser.bind(this));
+        this.express.put("/users", this.updateUser.bind(this));
         this.logger.debug(`initialized`);
     }
 
@@ -58,5 +59,13 @@ export class UserController extends BaseController {
             return;
         }
         res.send(users);
+    }
+    
+    private async updateUser(req: express.Request, res: express.Response): Promise<void> {
+        if (!this.userRequestValidator.isUpdateRequestValid(req)) {
+            res.status(400).send();
+            return;
+        }
+        res.send();
     }
 }
