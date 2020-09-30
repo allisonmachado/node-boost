@@ -30,7 +30,7 @@ export class UserController extends BaseController {
         const email = req.body['email'];
         const password = req.body['password'];
 
-        if (!this.userRequestValidator.isCreateRequestValid(
+        if (!this.userRequestValidator.isCreateParamsValid(
             name, surname, email, password,
         )) {
             res.status(400).send();
@@ -48,11 +48,12 @@ export class UserController extends BaseController {
     }
 
     private async getUser(req: express.Request, res: express.Response): Promise<void> {
-        if (!this.userRequestValidator.isGetRequestValid(req)) {
+        const id = req.params['id'];
+        if (!this.userRequestValidator.isValidId(id)) {
             res.status(400).send();
             return;
         }
-        const users = await this.userService.findById(parseInt(req.params['id']));
+        const users = await this.userService.findById(parseInt(id));
         if (!CheckTypes.hasContent(users)) {
             res.status(404).send();
             return;
@@ -66,7 +67,7 @@ export class UserController extends BaseController {
         const surname = req.body['surname'];
         const password = req.body['password'];
 
-        if (!this.userRequestValidator.isUpdateRequestValid(id, name, surname, password)) {
+        if (!this.userRequestValidator.isUpdateParamsValid(id, name, surname, password)) {
             res.status(400).send();
             return;
         }
