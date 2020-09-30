@@ -21,6 +21,7 @@ export class UserController extends BaseController {
         this.express.get("/users", this.getUsers.bind(this));
         this.express.get("/users/:id", this.getUser.bind(this));
         this.express.put("/users", this.updateUser.bind(this));
+        this.express.delete("/users/:id", this.deleteUser.bind(this));
         this.logger.debug(`initialized`);
     }
 
@@ -75,7 +76,22 @@ export class UserController extends BaseController {
         if (affectedRows === 1) {
             res.send({ id, name, surname, password });
         } else {
+            res.status(404).send();
+            return;
+        }
+    }
+
+    private async deleteUser(req: express.Request, res: express.Response): Promise<void> {
+        const id = req.params['id'];
+        if (!this.userRequestValidator.isValidId(id)) {
             res.status(400).send();
+            return;
+        }
+        const affectedRows = await this.userService.delete(parseInt(id));
+        if (affectedRows === 1) {
+            res.send({ id });
+        } else {
+            res.status(404).send();
             return;
         }
     }

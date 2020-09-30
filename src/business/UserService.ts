@@ -28,6 +28,10 @@ export class UserService {
         return this.userRepository.update(id, name, surname, password);
     }
 
+    public async delete(id: number): Promise<number> {
+        return this.userRepository.delete(id);
+    }
+
     private visiblePropsMapper(users: UserEntity[]): UserAccessibleProps[] {
         return users.map(u => ({
             name: u.getName(),

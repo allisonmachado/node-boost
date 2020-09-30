@@ -57,4 +57,9 @@ export class UserRepository extends RespositoryTemplate {
         const result = await this.query(sql, valuesToUpdate);
         return result.affectedRows;
     }
+
+    public async delete(id: number): Promise<number> {
+        const result = await this.query("DELETE FROM `simple_db`.`user` WHERE (`id` = ?)", [id]);
+        return result.affectedRows;
+    }
 }
