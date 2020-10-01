@@ -8,10 +8,16 @@ import bodyParser from "body-parser";
 
 /* Import application definitions */
 import { Environment as Env } from "./Environment";
+
 import { UserInputFilter } from "./controllers/user/UserInputFilter";
 import { UserController } from "./controllers/user/UserController";
 import { UserRepository } from "./data/repositories/UserRepository";
 import { UserService } from "./business/UserService";
+
+import { AuthController } from "./controllers/auth/AuthController";
+import { AuthService } from "./business/AuthService";
+import { AuthInputFilter } from "./controllers/auth/AuthInputFilter";
+
 import { Connection } from "./data/repositories/mysql/Connection";
 import { Logger } from "./Logger";
 
@@ -30,9 +36,11 @@ const userRepository = new UserRepository(mysqlConnection);
 
 /* init business logic definition: */
 const userService = new UserService(userRepository);
+const authService = new AuthService(Env.getJwtSecret());
 
 /* init application api: */
 new UserController(app, userService, new UserInputFilter());
+new AuthController(app, authService, new AuthInputFilter());
 
 /* listen */
 app.listen(Env.getPort(), () => {

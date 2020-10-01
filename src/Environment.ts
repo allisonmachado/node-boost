@@ -31,6 +31,10 @@ export class Environment {
     return parseInt(process.env.MYSQL_CONNECTION_POOL_LIMIT);
   }
 
+  public static getJwtSecret(): string {
+    return process.env.JWT_SECRET;
+  }
+
   public static isProd(): boolean {
     return process.env.ENV == "prod";
   }
