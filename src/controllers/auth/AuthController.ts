@@ -35,6 +35,7 @@ export class AuthController extends BaseController {
                 accessToken: token
             });
         } else {
+            this.logger.info(`invalid auth attempt: [${email}]`);
             res.status(400).send();
         }
     }

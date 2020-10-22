@@ -8,11 +8,13 @@ import bodyParser from "body-parser";
 
 /* Import application definitions */
 import { Environment as Env } from "./lib/Environment";
+import { CircularCache } from "./lib/CircularCache";
 
 import { UserInputFilter } from "./controllers/user/UserInputFilter";
 import { UserController } from "./controllers/user/UserController";
 import { UserRepository } from "./data/repositories/UserRepository";
 import { UserService } from "./business/UserService";
+import { UserEntity } from "./data/entities/user/UserEntity";
 
 import { AuthController } from "./controllers/auth/AuthController";
 import { AuthService } from "./business/AuthService";
@@ -36,7 +38,7 @@ const userRepository = new UserRepository(mysqlConnection);
 
 /* init business logic definition: */
 const userService = new UserService(userRepository);
-const authService = new AuthService(Env.getJwtSecret());
+const authService = new AuthService(Env.getJwtSecret(), userRepository, new CircularCache<UserEntity>(10));
 
 /* init application api: */
 new UserController(app, userService, new UserInputFilter());

@@ -24,9 +24,12 @@ export class UserRepository extends RespositoryTemplate {
         return data.map((d: any) => new UserEntity(d.id, d.name, d.surname, d.email, d.password));
     }
 
-    public async findByEmail(email: number): Promise<UserEntity[]> {
+    public async findByEmail(email: string): Promise<UserEntity> {
         const data = await this.query("SELECT * FROM simple_db.user WHERE email = ?", [email]);
-        return data.map((d: any) => new UserEntity(d.id, d.name, d.surname, d.email, d.password));
+        if (CheckTypes.isEmptyArray(data) || !CheckTypes.isTypeArray(data)) {
+            return null;
+        }
+        return data.map((d: any) => new UserEntity(d.id, d.name, d.surname, d.email, d.password))[0];
     }
 
     public async findTop10(): Promise<UserEntity[]> {
