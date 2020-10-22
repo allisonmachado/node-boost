@@ -1,4 +1,4 @@
-import { Logger } from "../Logger";
+import { Logger } from "../lib/Logger";
 
 /**
  * This is intended to be used as a Typescript decorator for controller classes.

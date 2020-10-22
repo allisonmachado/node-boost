@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { CheckTypes } from "../src/CheckTypes";
+import { CheckTypes } from "../src/lib/CheckTypes";
 
 describe("CheckTypes Specification", () => {
   describe("Content types and value verification", () => {

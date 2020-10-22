@@ -1,6 +1,6 @@
 import express from "express";
 
-import { Logger } from "../../Logger";
+import { Logger } from "../../lib/Logger";
 import { InputFilter } from "./InputFilter";
 import { AuthService } from "../../business/AuthService";
 import { BaseController } from "../BaseController";

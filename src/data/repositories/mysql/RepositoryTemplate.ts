@@ -1,8 +1,8 @@
 import mysql from "mysql";
 
-import { CheckTypes } from "../../../CheckTypes";
+import { CheckTypes } from "../../../lib/CheckTypes";
 import { Connection } from "./Connection";
-import { Logger } from "../../../Logger";
+import { Logger } from "../../../lib/Logger";
 
 export abstract class RespositoryTemplate {
     private readonly logger = new Logger(RespositoryTemplate.name);

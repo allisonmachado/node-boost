@@ -1,6 +1,6 @@
 import { UserRepository } from "../data/repositories/UserRepository";
 import { UserEntity } from "../data/entities/user/UserEntity";
-import { Logger } from "../Logger";
+import { Logger } from "../lib/Logger";
 
 export class UserService {
     private readonly logger = new Logger(UserService.name);

@@ -7,7 +7,7 @@ import express from "express";
 import bodyParser from "body-parser";
 
 /* Import application definitions */
-import { Environment as Env } from "./Environment";
+import { Environment as Env } from "./lib/Environment";
 
 import { UserInputFilter } from "./controllers/user/UserInputFilter";
 import { UserController } from "./controllers/user/UserController";
@@ -19,7 +19,7 @@ import { AuthService } from "./business/AuthService";
 import { AuthInputFilter } from "./controllers/auth/AuthInputFilter";
 
 import { Connection } from "./data/repositories/mysql/Connection";
-import { Logger } from "./Logger";
+import { Logger } from "./lib/Logger";
 
 const app = express();
 app.use(bodyParser.json());

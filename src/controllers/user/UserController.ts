@@ -4,8 +4,8 @@ import { HandleExceptions } from "../Advices";
 import { BaseController } from "../BaseController";
 import { InputFilter } from "./InputFilter";
 import { UserService } from "../../business/UserService";
-import { CheckTypes } from "../../CheckTypes";
-import { Logger } from "../../Logger";
+import { CheckTypes } from "../../lib/CheckTypes";
+import { Logger } from "../../lib/Logger";
 
 @HandleExceptions
 export class UserController extends BaseController {

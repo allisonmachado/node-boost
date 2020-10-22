@@ -1,8 +1,8 @@
-import { Logger } from "../../Logger";
+import { Logger } from "../../lib/Logger";
 import { Connection } from "./mysql/Connection";
 import { UserEntity } from "../entities/user/UserEntity";
+import { CheckTypes } from "../../lib/CheckTypes";
 import { RespositoryTemplate } from "./mysql/RepositoryTemplate";
-import { CheckTypes } from "../../CheckTypes";
 
 export class UserRepository extends RespositoryTemplate {
     private readonly llogger = new Logger(UserRepository.name);
@@ -21,6 +21,11 @@ export class UserRepository extends RespositoryTemplate {
 
     public async findById(id: number): Promise<UserEntity[]> {
         const data = await this.query("SELECT * FROM simple_db.user WHERE id = ?", [id]);
+        return data.map((d: any) => new UserEntity(d.id, d.name, d.surname, d.email, d.password));
+    }
+
+    public async findByEmail(email: number): Promise<UserEntity[]> {
+        const data = await this.query("SELECT * FROM simple_db.user WHERE email = ?", [email]);
         return data.map((d: any) => new UserEntity(d.id, d.name, d.surname, d.email, d.password));
     }
 

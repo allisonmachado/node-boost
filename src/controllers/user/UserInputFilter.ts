@@ -1,6 +1,6 @@
 import { ReturnFalseOnError } from "../Advices";
 import { InputFilter } from "./InputFilter";
-import { CheckTypes } from "../../CheckTypes";
+import { CheckTypes } from "../../lib/CheckTypes";
 
 import validator from "validator";
 

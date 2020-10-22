@@ -1,5 +1,5 @@
-import { Logger } from "../Logger";
-import { CheckTypes } from "../CheckTypes";
+import { Logger } from "../lib/Logger";
+import { CheckTypes } from "../lib/CheckTypes";
 
 import jwt from "jsonwebtoken";
 
