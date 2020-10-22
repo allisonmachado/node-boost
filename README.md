@@ -1,6 +1,6 @@
 # Yet another Nodejs backend template (0.0.1)
 
-The objective of this project is to create a minimalist template of backend REST application.
+The objective of this project is to create a clean (but opinionated) template for a nodejs backend REST application. (actually I just want to have some fun...)
 
 ## Why
 I want to create a clean and simple template that put into action a layered architecture with well-defined responsibilities to be able to accomodate a source code base that may grow big as time passes. Those layers listed from high level to low level are:
@@ -32,4 +32,4 @@ It also includes:
 1. Integration with tslint
 2. Build scripts
 
-...and more is to came! ;)
+...still more is to came! ;)

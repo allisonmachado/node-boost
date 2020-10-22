@@ -1,7 +1,7 @@
 {
   "name": "app",
   "version": "0.0.1",
-  "description": "",
+  "description": "clean template for a nodejs backend REST application",
   "main": "index.js",
   "scripts": {
     "lint": "tslint -c tslint.json 'src/**/*.ts'",
