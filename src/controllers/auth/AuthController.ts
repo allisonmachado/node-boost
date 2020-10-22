@@ -5,6 +5,7 @@ import { InputFilter } from "./InputFilter";
 import { AuthService } from "../../business/AuthService";
 import { BaseController } from "../BaseController";
 import { HandleExceptions } from "../Advices";
+import { Environment } from "../../lib/Environment";
 
 @HandleExceptions
 export class AuthController extends BaseController {
@@ -16,6 +17,7 @@ export class AuthController extends BaseController {
         private authServiceValidator: InputFilter,
     ) {
         super(express);
+        this.express.get("/auth", this.verifyToken.bind(this));
         this.express.post("/auth", this.authenticateUser.bind(this));
     }
 
@@ -27,7 +29,7 @@ export class AuthController extends BaseController {
             email, password,
         )) {
             res.status(400).send();
-            return
+            return;
         }
         if (await this.authService.validateCredentials(email, password)) {
             const token = await this.authService.signTemporaryToken(email);
@@ -38,5 +40,16 @@ export class AuthController extends BaseController {
             this.logger.info(`invalid auth attempt: [${email}]`);
             res.status(400).send();
         }
+    }
+
+    private async verifyToken(req: express.Request, res: express.Response): Promise<void> {
+        if (!Environment.isLocal()) {
+            res.status(404).send();
+            return;
+        }
+        const token = req.body['accessToken'];
+        res.send({
+            value: await this.authService.validateAccessToken(token)
+        });
     }
 }

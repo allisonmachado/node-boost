@@ -28,6 +28,16 @@ export class AuthService {
         return false;
     }
 
+    public async validateAccessToken(accessToken: string): Promise<UserJwtPayload> {
+        try {
+            const tokenValue = await this.verify(accessToken);
+            return tokenValue;
+        } catch (error) {
+            this.logger.debug(`invalid access token [${accessToken}]`);
+            return null;
+        }
+    }
+
     public async signTemporaryToken(email: string): Promise<string> {
         let user = this.cache.search(email);
         if (!CheckTypes.hasContent(user)) {
@@ -40,9 +50,21 @@ export class AuthService {
         });
     }
 
+    private async verify(payload: string): Promise<UserJwtPayload> {
+        return new Promise((resolve, reject) => {
+            jwt.verify(payload, this.secret, (err: Error | null, decoded: UserJwtPayload | undefined,) => {
+                if (!!err) {
+                    reject(err);
+                } else {
+                    resolve(decoded);
+                }
+            });
+        });
+    }
+
     private async sign(payload: UserJwtPayload): Promise<string> {
         return new Promise((resolve, reject) => {
-            jwt.sign(payload, this.secret, function (err: Error | null, token: string | undefined) {
+            jwt.sign(payload, this.secret, (err: Error | null, token: string | undefined) => {
                 if (!!err) {
                     reject(err);
                 } else {
