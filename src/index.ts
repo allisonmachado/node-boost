@@ -49,7 +49,7 @@ const authMiddleware = new AuthMiddleware(authService);
 app.get("/users", usercontroller.getUsers.bind(usercontroller));
 app.get("/users/:id", usercontroller.getUser.bind(usercontroller));
 app.post("/users", authMiddleware.verify.bind(authMiddleware), usercontroller.createUser.bind(usercontroller));
-app.put("/users", authMiddleware.verify.bind(authMiddleware), usercontroller.updateUser.bind(usercontroller));
+app.put("/users/:id", authMiddleware.verify.bind(authMiddleware), usercontroller.updateUser.bind(usercontroller));
 app.delete("/users/:id", authMiddleware.verify.bind(authMiddleware), usercontroller.deleteUser.bind(usercontroller));
 
 app.get("/auth", authController.verifyToken.bind(authController));

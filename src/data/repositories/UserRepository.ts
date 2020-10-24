@@ -39,7 +39,7 @@ export class UserRepository extends RespositoryTemplate {
 
     public async update(id: string, name: string = "", surname: string = "", password: string = ""): Promise<number> {
         if (!CheckTypes.hasContent(name) && !CheckTypes.hasContent(surname) && !CheckTypes.hasContent(password)) {
-            return;
+            return 0;
         }
         if (CheckTypes.isNullOrUndefined(id)) {
             throw new Error(`Id is mandatory parameter for updating user record`);

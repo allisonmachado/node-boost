@@ -29,7 +29,8 @@ export class UserService extends BaseService {
     }
 
     public async update(id: string, name: string, surname: string, password: string): Promise<number> {
-        return this.userRepository.update(id, name, surname, password);
+        let hashedPassword = password ? await SharedFunctions.hashPassword(password) : "";
+        return this.userRepository.update(id, name, surname, hashedPassword);
     }
 
     public async delete(id: number): Promise<number> {
