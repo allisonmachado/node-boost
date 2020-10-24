@@ -1,13 +1,14 @@
 import { Logger } from "../lib/Logger";
 import { CheckTypes } from "../lib/CheckTypes";
 import { UserEntity } from "../data/entities/user/UserEntity";
+import { BaseService } from "./BaseService";
 import { CircularCache } from "../lib/CircularCache";
 import { UserRepository } from "../data/repositories/UserRepository";
 import { SharedFunctions } from "../lib/SharedFunctions";
 
 import jwt from "jsonwebtoken";
 
-export class AuthService {
+export class AuthService extends BaseService {
     private readonly logger = new Logger(AuthService.name);
 
     constructor(
@@ -15,6 +16,7 @@ export class AuthService {
         private userRepository: UserRepository,
         private cache: CircularCache<UserEntity>,
     ) {
+        super();
         if (!CheckTypes.hasContent(secret)) {
             throw new Error(`[${AuthService.name}]: jwt secret to sign or validate token is required`);
         }

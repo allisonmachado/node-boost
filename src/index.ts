@@ -13,11 +13,11 @@ import { CircularCache } from "./lib/CircularCache";
 import { UserInputFilter } from "./controllers/user/UserInputFilter";
 import { UserController } from "./controllers/user/UserController";
 import { UserRepository } from "./data/repositories/UserRepository";
-import { UserService } from "./business/UserService";
+import { UserService } from "./services/UserService";
 import { UserEntity } from "./data/entities/user/UserEntity";
 
 import { AuthController } from "./controllers/auth/AuthController";
-import { AuthService } from "./business/AuthService";
+import { AuthService } from "./services/AuthService";
 import { AuthInputFilter } from "./controllers/auth/AuthInputFilter";
 import { AuthMiddleware } from "./middlewares/AuthMiddleware";
 

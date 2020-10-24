@@ -1,6 +1,6 @@
 import express from "express";
 
-import { AuthService, UserJwtPayload } from "../business/AuthService";
+import { AuthService, UserJwtPayload } from "../services/AuthService";
 
 export class AuthMiddleware {
     constructor(private authService: AuthService) { }

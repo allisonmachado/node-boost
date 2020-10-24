@@ -2,7 +2,7 @@ import express from "express";
 
 import { Logger } from "../../lib/Logger";
 import { InputFilter } from "./InputFilter";
-import { AuthService } from "../../business/AuthService";
+import { AuthService } from "../../services/AuthService";
 import { Environment } from "../../lib/Environment";
 import { BaseController } from "../BaseController";
 import { HandleExceptions } from "../Advices";

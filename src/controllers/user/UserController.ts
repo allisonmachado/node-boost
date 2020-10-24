@@ -3,7 +3,7 @@ import express from "express";
 import { HandleExceptions } from "../Advices";
 import { BaseController } from "../BaseController";
 import { InputFilter } from "./InputFilter";
-import { UserService } from "../../business/UserService";
+import { UserService } from "../../services/UserService";
 import { CheckTypes } from "../../lib/CheckTypes";
 import { Logger } from "../../lib/Logger";
 

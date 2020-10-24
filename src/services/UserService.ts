@@ -1,12 +1,14 @@
 import { SharedFunctions } from "../lib/SharedFunctions";
 import { UserRepository } from "../data/repositories/UserRepository";
+import { BaseService } from "./BaseService";
 import { UserEntity } from "../data/entities/user/UserEntity";
 import { Logger } from "../lib/Logger";
 
-export class UserService {
+export class UserService extends BaseService {
     private readonly logger = new Logger(UserService.name);
 
     constructor(private userRepository: UserRepository) {
+        super();
         this.userRepository = userRepository;
         this.logger.debug(`initialized`);
     }
