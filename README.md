@@ -1,6 +1,6 @@
 # Yet another Nodejs backend template (0.0.1)
 
-The objective of this project is to create a clean (but opinionated) template for a nodejs backend REST application. (actually I just want to have some fun...)
+The objective of this project is to create a clean (but opinionated) template for a Nodejs backend REST application. (actually I just want to have some fun...)
 
 ## Why
 I want to create a clean and simple template that put into action a layered architecture with well-defined responsibilities to be able to accomodate a source code base that may grow big as time passes. Those layers listed from high level to low level are:
@@ -12,9 +12,9 @@ I want to create a clean and simple template that put into action a layered arch
 5. ./src/lib: this is a set of code shared among multiple distincs parts of the application and provide small reusable units.
 
 ## How
-To enable a good implementation of these layers, and to simplify the writing of tests, this template applies the concept of Inversion of Control levereged by the power Typescript language.
+To enable a good implementation of these layers, and to simplify the writing of tests, this template, levereged by the power Typescript language, applies the concept of Inversion of Control!
 
-Although no specific auxiliar library for IoC is being used (such as inversify for example to enable Dependency Injection), the responsibility of a DI container is written in the index.js file which is the startup point of the application. Also, loosely coupled elements can be optionally achieved through the specification of well defined interfaces.
+Although no specific auxiliar library for IoC is being used (such as inversify for example to enable Dependency Injection), the responsibility of a DI container for now is written in the index.js file which is the startup point of the application. Also, loosely coupled elements can be optionally achieved through the specification of well defined interfaces.
 
 ## What
 
