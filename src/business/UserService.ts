@@ -36,6 +36,7 @@ export class UserService {
 
     private visiblePropsMapper(users: UserEntity[]): UserAccessibleProps[] {
         return users.map(u => ({
+            id: u.getId(),
             name: u.getName(),
             surname: u.getSurname(),
             email: u.getEmail(),
@@ -44,6 +45,7 @@ export class UserService {
 }
 
 interface UserAccessibleProps {
+    id: number,
     name: string;
     surname: string;
     email: string;

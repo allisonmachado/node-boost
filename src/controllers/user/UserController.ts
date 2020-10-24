@@ -2,7 +2,6 @@ import express from "express";
 
 import { HandleExceptions } from "../Advices";
 import { BaseController } from "../BaseController";
-import { AuthMiddleware } from "../../middlewares/AuthMiddleware";
 import { InputFilter } from "./InputFilter";
 import { UserService } from "../../business/UserService";
 import { CheckTypes } from "../../lib/CheckTypes";
@@ -13,26 +12,19 @@ export class UserController extends BaseController {
     private readonly logger = new Logger(UserController.name);
 
     constructor(
-        protected express: express.Express,
         private userService: UserService,
         private userRequestValidator: InputFilter,
-        private authMiddleware: AuthMiddleware,
     ) {
-        super(express);
-        this.express.post("/users", this.createUser.bind(this));
-        this.express.get("/users", this.authMiddleware.verify.bind(this.authMiddleware), this.getUsers.bind(this));
-        this.express.get("/users/:id", this.getUser.bind(this));
-        this.express.put("/users", this.updateUser.bind(this));
-        this.express.delete("/users/:id", this.deleteUser.bind(this));
+        super();
         this.logger.debug(`initialized`);
     }
 
-    private async getUsers(req: express.Request, res: express.Response): Promise<void> {
+    public async getUsers(req: express.Request, res: express.Response): Promise<void> {
         let users = await this.userService.list();
         res.send(users);
     }
 
-    private async createUser(req: express.Request, res: express.Response): Promise<void> {
+    public async createUser(req: express.Request, res: express.Response): Promise<void> {
         const name = req.body['name'];
         const surname = req.body['surname'];
         const email = req.body['email'];
@@ -50,7 +42,7 @@ export class UserController extends BaseController {
         res.status(201).send({ id: userId, name, surname, email });
     }
 
-    private async getUser(req: express.Request, res: express.Response): Promise<void> {
+    public async getUser(req: express.Request, res: express.Response): Promise<void> {
         const id = req.params['id'];
         if (!this.userRequestValidator.isValidId(id)) {
             res.status(400).send();
@@ -64,7 +56,7 @@ export class UserController extends BaseController {
         res.send(users);
     }
 
-    private async updateUser(req: express.Request, res: express.Response): Promise<void> {
+    public async updateUser(req: express.Request, res: express.Response): Promise<void> {
         const id = req.body['id'];
         const name = req.body['name'];
         const surname = req.body['surname'];
@@ -83,7 +75,7 @@ export class UserController extends BaseController {
         }
     }
 
-    private async deleteUser(req: express.Request, res: express.Response): Promise<void> {
+    public async deleteUser(req: express.Request, res: express.Response): Promise<void> {
         const id = req.params['id'];
         if (!this.userRequestValidator.isValidId(id)) {
             res.status(400).send();

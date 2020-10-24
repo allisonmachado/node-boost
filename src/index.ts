@@ -27,7 +27,7 @@ import { Logger } from "./lib/Logger";
 const app = express();
 app.use(bodyParser.json());
 
-/* init data access layer: */
+/** Init application definitions */
 const mysqlConnection = new Connection(
     Env.getMysqlHost(),
     Env.getMysqlUser(),
@@ -37,18 +37,26 @@ const mysqlConnection = new Connection(
 )
 const userRepository = new UserRepository(mysqlConnection);
 
-/* init business logic definition: */
 const userService = new UserService(userRepository);
 const authService = new AuthService(Env.getJwtSecret(), userRepository, new CircularCache<UserEntity>(10));
 
-/* init middlewares */
+const usercontroller = new UserController(userService, new UserInputFilter());
+const authController = new AuthController(authService, new AuthInputFilter());
+
 const authMiddleware = new AuthMiddleware(authService);
 
-/* init application api: */
-new UserController(app, userService, new UserInputFilter(), authMiddleware);
-new AuthController(app, authService, new AuthInputFilter());
+/** Define routes mapping */
+app.get("/users", usercontroller.getUsers.bind(usercontroller));
+app.get("/users/:id", usercontroller.getUser.bind(usercontroller));
+app.post("/users", authMiddleware.verify.bind(authMiddleware), usercontroller.createUser.bind(usercontroller));
+app.put("/users", authMiddleware.verify.bind(authMiddleware), usercontroller.updateUser.bind(usercontroller));
+app.delete("/users/:id", authMiddleware.verify.bind(authMiddleware), usercontroller.deleteUser.bind(usercontroller));
 
-/* listen */
+app.get("/auth", authController.verifyToken.bind(authController));
+app.post("/auth", authController.authenticateUser.bind(authController));
+
+
+/** Listen for requests */
 app.listen(Env.getPort(), () => {
     const logger = new Logger("index");
     logger.info(`App listening at ${Env.getPort()}`);
