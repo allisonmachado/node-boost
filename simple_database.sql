@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS `simple_db`.`user` (
   `name` VARCHAR(145) NOT NULL,
   `surname` VARCHAR(245) NOT NULL,
   `email` VARCHAR(145) NOT NULL,
-  `password` TEXT(200) NOT NULL,
+  `password` CHAR(60) NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 

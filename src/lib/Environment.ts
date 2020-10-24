@@ -1,3 +1,6 @@
+/**
+ * Should expose only static pure functions.
+ */
 export class Environment {
   public static getLocation(): string {
     return process.env.ENV;

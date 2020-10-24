@@ -13,10 +13,10 @@ export abstract class RespositoryTemplate {
 
     public query(sql: string, parameters: any[] = null): Promise<any> {
         let preparedStatement = sql;
+        this.logger.debug(`query(${preparedStatement})`);
         if (!CheckTypes.isNullOrUndefined(parameters)) {
             preparedStatement = mysql.format(sql, parameters);
         }
-        this.logger.debug(`query(${preparedStatement})`);
         return new Promise((resolve, reject) => {
             this.connection.getPool().getConnection((err, conn) => {
                 if (err) {

@@ -1,3 +1,4 @@
+import { SharedFunctions } from "../lib/SharedFunctions";
 import { UserRepository } from "../data/repositories/UserRepository";
 import { UserEntity } from "../data/entities/user/UserEntity";
 import { Logger } from "../lib/Logger";
@@ -11,7 +12,8 @@ export class UserService {
     }
 
     public async create(name: string, surname: string, email: string, password: string): Promise<number> {
-        return this.userRepository.create(name, surname, email, password);
+        const hashedPassword = await SharedFunctions.hashPassword(password);
+        return this.userRepository.create(name, surname, email, hashedPassword);
     }
 
     public async list(): Promise<UserAccessibleProps[]> {
