@@ -3,6 +3,7 @@ import { CheckTypes } from "../lib/CheckTypes";
 import { UserEntity } from "../data/entities/user/UserEntity";
 import { CircularCache } from "../lib/CircularCache";
 import { UserRepository } from "../data/repositories/UserRepository";
+import { SharedFunctions } from "../lib/SharedFunctions";
 
 import jwt from "jsonwebtoken";
 
@@ -21,21 +22,26 @@ export class AuthService {
 
     public async validateCredentials(email: string, password: string): Promise<boolean> {
         const user = await this.userRepository.findByEmail(email);
-        if (!CheckTypes.isNull(user) && user.getPassword() === password) {
-            this.cache.cache(email, user);
-            return true;
+        if (!CheckTypes.isNull(user)) {
+            if (await SharedFunctions.compareHashedPassword(password, user.getPassword())) {
+                this.cache.cache(email, user);
+                return true;
+            }
+            return false;
         }
         return false;
     }
 
     public async validateAccessToken(accessToken: string): Promise<UserJwtPayload> {
-        try {
-            const tokenValue = await this.verify(accessToken);
-            return tokenValue;
-        } catch (error) {
-            this.logger.debug(`invalid access token [${accessToken}]`);
-            return null;
+        const data = await this.verify(accessToken);
+        if (
+            CheckTypes.isTypeString(data.name) &&
+            CheckTypes.isTypeString(data.surname) &&
+            CheckTypes.isTypeString(data.email)
+        ) {
+            return data;
         }
+        throw new Error(`Invalid token Format`);
     }
 
     public async signTemporaryToken(email: string): Promise<string> {

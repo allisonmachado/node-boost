@@ -19,6 +19,7 @@ import { UserEntity } from "./data/entities/user/UserEntity";
 import { AuthController } from "./controllers/auth/AuthController";
 import { AuthService } from "./business/AuthService";
 import { AuthInputFilter } from "./controllers/auth/AuthInputFilter";
+import { AuthMiddleware } from "./middlewares/AuthMiddleware";
 
 import { Connection } from "./data/repositories/mysql/Connection";
 import { Logger } from "./lib/Logger";
@@ -40,8 +41,11 @@ const userRepository = new UserRepository(mysqlConnection);
 const userService = new UserService(userRepository);
 const authService = new AuthService(Env.getJwtSecret(), userRepository, new CircularCache<UserEntity>(10));
 
+/* init middlewares */
+const authMiddleware = new AuthMiddleware(authService);
+
 /* init application api: */
-new UserController(app, userService, new UserInputFilter());
+new UserController(app, userService, new UserInputFilter(), authMiddleware);
 new AuthController(app, authService, new AuthInputFilter());
 
 /* listen */

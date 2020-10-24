@@ -48,8 +48,11 @@ export class AuthController extends BaseController {
             return;
         }
         const token = req.body['accessToken'];
-        res.send({
-            value: await this.authService.validateAccessToken(token)
-        });
+        try {
+            const value = await this.authService.validateAccessToken(token);
+            res.send({ value })
+        } catch (error) {
+            res.send({ value: null })
+        }
     }
 }
