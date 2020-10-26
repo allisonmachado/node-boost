@@ -2,9 +2,10 @@ import { Logger } from "../../lib/Logger";
 import { Connection } from "./mysql/Connection";
 import { UserEntity } from "../entities/user/UserEntity";
 import { CheckTypes } from "../../lib/CheckTypes";
+import { IUserRepository } from "./IUserRepository";
 import { RespositoryTemplate } from "./mysql/RepositoryTemplate";
 
-export class UserRepository extends RespositoryTemplate {
+export class UserRepository extends RespositoryTemplate implements IUserRepository {
     private readonly llogger = new Logger(UserRepository.name);
 
     constructor(connection: Connection) {

@@ -1,9 +1,9 @@
 import express from "express";
 
-import { AuthService, UserJwtPayload } from "../services/AuthService";
+import { IAuthService, UserJwtPayload } from "../services/IAuthService";
 
 export class AuthMiddleware {
-    constructor(private authService: AuthService) { }
+    constructor(private authService: IAuthService) { }
 
     public async verify(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
         try {

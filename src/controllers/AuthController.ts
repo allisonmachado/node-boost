@@ -1,15 +1,15 @@
 import express from "express";
 
 import { Logger } from "../lib/Logger";
-import { AuthService } from "../services/AuthService";
+import { IAuthService } from "../services/IAuthService";
 import { BaseController } from "./BaseController";
-import { HandleExceptions } from "./Advices";
+import { HandleExceptions } from "./Decorators";
 
 @HandleExceptions
 export class AuthController extends BaseController {
     private readonly logger = new Logger(AuthController.name);
 
-    constructor(private authService: AuthService) {
+    constructor(private authService: IAuthService) {
         super();
     }
 

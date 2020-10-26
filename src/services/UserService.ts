@@ -1,13 +1,14 @@
+import { IUserService, UserAccessibleProps } from "./IUserService";
 import { SharedFunctions } from "../lib/SharedFunctions";
-import { UserRepository } from "../data/repositories/UserRepository";
+import { IUserRepository } from "../data/repositories/IUserRepository";
 import { BaseService } from "./BaseService";
 import { UserEntity } from "../data/entities/user/UserEntity";
 import { Logger } from "../lib/Logger";
 
-export class UserService extends BaseService {
+export class UserService extends BaseService implements IUserService {
     private readonly logger = new Logger(UserService.name);
 
-    constructor(private userRepository: UserRepository) {
+    constructor(private userRepository: IUserRepository) {
         super();
         this.userRepository = userRepository;
         this.logger.debug(`initialized`);
@@ -45,11 +46,4 @@ export class UserService extends BaseService {
             email: u.getEmail(),
         }));
     }
-}
-
-interface UserAccessibleProps {
-    id: number,
-    name: string;
-    surname: string;
-    email: string;
 }

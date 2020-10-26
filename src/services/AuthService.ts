@@ -2,19 +2,20 @@ import { Logger } from "../lib/Logger";
 import { CheckTypes } from "../lib/CheckTypes";
 import { UserEntity } from "../data/entities/user/UserEntity";
 import { BaseService } from "./BaseService";
-import { CircularCache } from "../lib/CircularCache";
-import { UserRepository } from "../data/repositories/UserRepository";
+import { ISimpleCache } from "../lib/ISimpleCache";
+import { IUserRepository } from "../data/repositories/IUserRepository";
 import { SharedFunctions } from "../lib/SharedFunctions";
+import { IAuthService, UserJwtPayload } from "./IAuthService";
 
 import jwt from "jsonwebtoken";
 
-export class AuthService extends BaseService {
+export class AuthService extends BaseService implements IAuthService {
     private readonly logger = new Logger(AuthService.name);
 
     constructor(
         private secret: string,
-        private userRepository: UserRepository,
-        private cache: CircularCache<UserEntity>,
+        private userRepository: IUserRepository,
+        private cache: ISimpleCache<UserEntity>,
     ) {
         super();
         if (!CheckTypes.hasContent(secret)) {
@@ -26,7 +27,7 @@ export class AuthService extends BaseService {
         const user = await this.userRepository.findByEmail(email);
         if (!CheckTypes.isNull(user)) {
             if (await SharedFunctions.compareHashedPassword(password, user.getPassword())) {
-                this.cache.cache(email, user);
+                this.cache.save(email, user);
                 return true;
             }
             return false;
@@ -81,10 +82,4 @@ export class AuthService extends BaseService {
             });
         });
     }
-}
-
-export interface UserJwtPayload {
-    name: string;
-    surname: string;
-    email: string;
 }

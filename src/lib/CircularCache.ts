@@ -1,6 +1,7 @@
 import { CheckTypes } from "./CheckTypes";
+import { ISimpleCache } from "./ISimpleCache";
 
-export class CircularCache<T> {
+export class CircularCache<T> implements ISimpleCache<T> {
     private currentIndex: number;
     private readonly keyToIndex: Map<string, number>;
     private readonly indexToKey: Map<number, string>;
@@ -27,7 +28,7 @@ export class CircularCache<T> {
         return this.data[dataIndex];
     }
 
-    public cache(key: string, data: T): void {
+    public save(key: string, data: T): void {
         // To avoid keyToIndex map grow big we delete the key related to index that will be cached:
         const currentKey = this.indexToKey.get(this.currentIndex);
         if (CheckTypes.hasContent(currentKey)) {

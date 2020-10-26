@@ -1,8 +1,8 @@
 import express from "express";
 
-import { HandleExceptions } from "./Advices";
+import { HandleExceptions } from "./Decorators";
 import { BaseController } from "./BaseController";
-import { UserService } from "../services/UserService";
+import { IUserService } from "../services/IUserService";
 import { CheckTypes } from "../lib/CheckTypes";
 import { Logger } from "../lib/Logger";
 
@@ -10,7 +10,7 @@ import { Logger } from "../lib/Logger";
 export class UserController extends BaseController {
     private readonly logger = new Logger(UserController.name);
 
-    constructor(private userService: UserService) {
+    constructor(private userService: IUserService) {
         super();
         this.logger.debug(`initialized`);
     }
