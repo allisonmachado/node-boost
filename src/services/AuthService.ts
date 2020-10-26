@@ -1,4 +1,4 @@
-import { Logger } from "../lib/Logger";
+import { ILogger } from "../lib/ILogger";
 import { CheckTypes } from "../lib/CheckTypes";
 import { UserEntity } from "../data/entities/user/UserEntity";
 import { BaseService } from "./BaseService";
@@ -10,17 +10,15 @@ import { IAuthService, UserJwtPayload } from "./IAuthService";
 import jwt from "jsonwebtoken";
 
 export class AuthService extends BaseService implements IAuthService {
-    private readonly logger = new Logger(AuthService.name);
 
     constructor(
         private secret: string,
         private userRepository: IUserRepository,
         private cache: ISimpleCache<UserEntity>,
+        private logger: ILogger,
     ) {
         super();
-        if (!CheckTypes.hasContent(secret)) {
-            throw new Error(`[${AuthService.name}]: jwt secret to sign or validate token is required`);
-        }
+        this.logger.debug(`initialized`);
     }
 
     public async validateCredentials(email: string, password: string): Promise<boolean> {

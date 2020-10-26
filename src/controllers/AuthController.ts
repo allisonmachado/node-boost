@@ -1,16 +1,16 @@
 import express from "express";
 
-import { Logger } from "../lib/Logger";
+import { ILogger } from "../lib/ILogger";
 import { IAuthService } from "../services/IAuthService";
 import { BaseController } from "./BaseController";
 import { HandleExceptions } from "./Decorators";
 
 @HandleExceptions
 export class AuthController extends BaseController {
-    private readonly logger = new Logger(AuthController.name);
 
-    constructor(private authService: IAuthService) {
+    constructor(private authService: IAuthService, private logger: ILogger) {
         super();
+        this.logger.debug(`initialized`);
     }
 
     public async authenticateUser(req: express.Request, res: express.Response): Promise<void> {

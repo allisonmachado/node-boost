@@ -1,10 +1,13 @@
 import express from "express";
 import validator from "validator";
 
-import { Logger } from "../lib/Logger";
+import { ILogger } from "../lib/ILogger";
 
 export class UserMiddleware {
-    private readonly logger = new Logger(UserMiddleware.name);
+
+    constructor(private logger: ILogger) {
+
+    }
 
     public async verifyCreateUserParams(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
         if (!req.body) {

@@ -1,11 +1,10 @@
 import mysql from "mysql";
 
-import { Environment } from "../../../lib/Environment";
-import { Logger } from "../../../lib/Logger";
+import { ILogger } from "../../../lib/ILogger";
 
 export class Connection {
-    private readonly logger = new Logger(Connection.name);
     private pool: mysql.Pool;
+    private logger: ILogger;
 
     constructor(
         host: string,
@@ -13,6 +12,7 @@ export class Connection {
         password: string,
         database: string,
         connectionLimit: number,
+        logger: ILogger,
     ) {
         this.pool = mysql.createPool({
             connectionLimit,
@@ -21,11 +21,8 @@ export class Connection {
             password,
             database,
         });
-        if (Environment.isLocal()) {
-            this.logger.debug(`initialized - [${host}][${user}][${password}][${database}]`);
-        } else {
-            this.logger.debug(`initialized`);
-        }
+        this.logger = logger;
+        this.logger.debug(`initialized`);
     }
 
     public getPool(): mysql.Pool {

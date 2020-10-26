@@ -3,12 +3,11 @@ import { SharedFunctions } from "../lib/SharedFunctions";
 import { IUserRepository } from "../data/repositories/IUserRepository";
 import { BaseService } from "./BaseService";
 import { UserEntity } from "../data/entities/user/UserEntity";
-import { Logger } from "../lib/Logger";
+import { ILogger } from "../lib/ILogger";
 
 export class UserService extends BaseService implements IUserService {
-    private readonly logger = new Logger(UserService.name);
 
-    constructor(private userRepository: IUserRepository) {
+    constructor(private userRepository: IUserRepository, private logger: ILogger) {
         super();
         this.userRepository = userRepository;
         this.logger.debug(`initialized`);

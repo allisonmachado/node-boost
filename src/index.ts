@@ -10,18 +10,18 @@ import bodyParser from "body-parser";
 import { Environment as Env } from "./lib/Environment";
 import { CircularCache } from "./lib/CircularCache";
 
+import { UserMiddleware } from "./middlewares/UserMiddleware";
 import { UserController } from "./controllers/UserController";
-import { UserRepository } from "./data/repositories/UserRepository";
 import { UserService } from "./services/UserService";
+import { UserRepository } from "./data/repositories/UserRepository";
 import { UserEntity } from "./data/entities/user/UserEntity";
 
+import { AuthMiddleware } from "./middlewares/AuthMiddleware";
 import { AuthController } from "./controllers/AuthController";
 import { AuthService } from "./services/AuthService";
-import { AuthMiddleware } from "./middlewares/AuthMiddleware";
 
 import { Connection } from "./data/repositories/mysql/Connection";
 import { Logger } from "./lib/Logger";
-import { UserMiddleware } from "./middlewares/UserMiddleware";
 
 const app = express();
 app.use(bodyParser.json());
@@ -33,17 +33,18 @@ const mysqlConnection = new Connection(
     Env.getMysqlPassword(),
     Env.getMysqlSchema(),
     Env.getMysqlConnectionPoolLimit(),
+    new Logger(Connection.name),
 )
-const userRepository = new UserRepository(mysqlConnection);
+const userRepository = new UserRepository(mysqlConnection, new Logger(UserRepository.name));
 
-const userService = new UserService(userRepository);
-const authService = new AuthService(Env.getJwtSecret(), userRepository, new CircularCache<UserEntity>(10));
+const userService = new UserService(userRepository, new Logger(UserService.name));
+const authService = new AuthService(Env.getJwtSecret(), userRepository, new CircularCache<UserEntity>(10), new Logger(AuthService.name));
 
-const usercontroller = new UserController(userService);
-const authController = new AuthController(authService);
+const usercontroller = new UserController(userService, new Logger(UserController.name));
+const authController = new AuthController(authService, new Logger(AuthController.name));
 
-const userMiddleware = new UserMiddleware();
-const authMiddleware = new AuthMiddleware(authService);
+const userMiddleware = new UserMiddleware(new Logger(UserMiddleware.name));
+const authMiddleware = new AuthMiddleware(authService, new Logger(AuthMiddleware.name));
 
 /** Define routes mapping */
 app.get("/users", usercontroller.getUsers.bind(usercontroller));

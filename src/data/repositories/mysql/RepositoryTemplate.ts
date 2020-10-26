@@ -2,14 +2,11 @@ import mysql from "mysql";
 
 import { CheckTypes } from "../../../lib/CheckTypes";
 import { Connection } from "./Connection";
-import { Logger } from "../../../lib/Logger";
+import { ILogger } from "../../../lib/ILogger";
 
 export abstract class RespositoryTemplate {
-    private readonly logger = new Logger(RespositoryTemplate.name);
 
-    constructor(private connection: Connection) {
-        this.logger.debug(`initialized`);
-    }
+    constructor(private connection: Connection, protected logger: ILogger) {}
 
     public query(sql: string, parameters: any[] = null): Promise<any> {
         let preparedStatement = sql;

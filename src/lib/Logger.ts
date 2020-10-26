@@ -1,7 +1,9 @@
 import winston from "winston";
+
+import { ILogger } from "./ILogger";
 import { Environment } from "./Environment";
 
-export class Logger {
+export class Logger implements ILogger {
     private static readonly level = Environment.getLogLevel();
     private logger: winston.Logger;
 

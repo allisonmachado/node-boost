@@ -4,13 +4,12 @@ import { HandleExceptions } from "./Decorators";
 import { BaseController } from "./BaseController";
 import { IUserService } from "../services/IUserService";
 import { CheckTypes } from "../lib/CheckTypes";
-import { Logger } from "../lib/Logger";
+import { ILogger } from "../lib/ILogger";
 
 @HandleExceptions
 export class UserController extends BaseController {
-    private readonly logger = new Logger(UserController.name);
 
-    constructor(private userService: IUserService) {
+    constructor(private userService: IUserService, private logger: ILogger) {
         super();
         this.logger.debug(`initialized`);
     }

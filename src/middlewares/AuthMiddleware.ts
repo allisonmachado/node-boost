@@ -1,9 +1,12 @@
 import express from "express";
 
+import { ILogger } from "../lib/ILogger";
 import { IAuthService, UserJwtPayload } from "../services/IAuthService";
 
 export class AuthMiddleware {
-    constructor(private authService: IAuthService) { }
+    constructor(private authService: IAuthService, private logger: ILogger) {
+        this.logger.debug(`initialized`);
+    }
 
     public async verify(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
         try {
