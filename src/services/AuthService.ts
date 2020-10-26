@@ -4,10 +4,11 @@ import { UserEntity } from "../data/entities/user/UserEntity";
 import { BaseService } from "./BaseService";
 import { ISimpleCache } from "../lib/ISimpleCache";
 import { IUserRepository } from "../data/repositories/IUserRepository";
-import { SharedFunctions } from "../lib/SharedFunctions";
 import { IAuthService, UserJwtPayload } from "./IAuthService";
 
 import jwt from "jsonwebtoken";
+
+import * as bcrypt from "bcryptjs";
 
 export class AuthService extends BaseService implements IAuthService {
 
@@ -24,7 +25,7 @@ export class AuthService extends BaseService implements IAuthService {
     public async validateCredentials(email: string, password: string): Promise<boolean> {
         const user = await this.userRepository.findByEmail(email);
         if (!CheckTypes.isNull(user)) {
-            if (await SharedFunctions.compareHashedPassword(password, user.getPassword())) {
+            if (await this.compareHashedPassword(password, user.getPassword())) {
                 this.cache.save(email, user);
                 return true;
             }
@@ -76,6 +77,18 @@ export class AuthService extends BaseService implements IAuthService {
                     reject(err);
                 } else {
                     resolve(token);
+                }
+            });
+        });
+    }
+
+    private async compareHashedPassword(password: string, hash: string): Promise<boolean> {
+        return new Promise((resolve, reject) => {
+            bcrypt.compare(password, hash, (err, res) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(res);
                 }
             });
         });

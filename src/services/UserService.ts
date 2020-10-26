@@ -1,9 +1,10 @@
 import { IUserService, UserAccessibleProps } from "./IUserService";
-import { SharedFunctions } from "../lib/SharedFunctions";
 import { IUserRepository } from "../data/repositories/IUserRepository";
 import { BaseService } from "./BaseService";
 import { UserEntity } from "../data/entities/user/UserEntity";
 import { ILogger } from "../lib/ILogger";
+
+import * as bcrypt from "bcryptjs";
 
 export class UserService extends BaseService implements IUserService {
 
@@ -14,7 +15,7 @@ export class UserService extends BaseService implements IUserService {
     }
 
     public async create(name: string, surname: string, email: string, password: string): Promise<number> {
-        const hashedPassword = await SharedFunctions.hashPassword(password);
+        const hashedPassword = await this.hashPassword(password);
         return this.userRepository.create(name, surname, email, hashedPassword);
     }
 
@@ -29,7 +30,7 @@ export class UserService extends BaseService implements IUserService {
     }
 
     public async update(id: string, name: string, surname: string, password: string): Promise<number> {
-        let hashedPassword = password ? await SharedFunctions.hashPassword(password) : "";
+        let hashedPassword = password ? await this.hashPassword(password) : "";
         return this.userRepository.update(id, name, surname, hashedPassword);
     }
 
@@ -44,5 +45,23 @@ export class UserService extends BaseService implements IUserService {
             surname: u.getSurname(),
             email: u.getEmail(),
         }));
+    }
+
+    private async hashPassword(password: string): Promise<string> {
+        return new Promise((resolve, reject) => {
+            bcrypt.genSalt(10, (err, salt) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    bcrypt.hash(password, salt, (err, hash) => {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            resolve(hash);
+                        }
+                    });
+                }
+            });
+        });
     }
 }
