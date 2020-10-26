@@ -1,6 +1,5 @@
 import mysql from "mysql";
 
-import { CheckTypes } from "../../../lib/CheckTypes";
 import { Connection } from "./Connection";
 import { ILogger } from "../../../lib/ILogger";
 
@@ -11,7 +10,7 @@ export abstract class RespositoryTemplate {
     public query(sql: string, parameters: any[] = null): Promise<any> {
         let preparedStatement = sql;
         this.logger.debug(`query(${preparedStatement})`);
-        if (!CheckTypes.isNullOrUndefined(parameters)) {
+        if (parameters) {
             preparedStatement = mysql.format(sql, parameters);
         }
         return new Promise((resolve, reject) => {

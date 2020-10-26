@@ -3,7 +3,6 @@ import express from "express";
 import { HandleExceptions } from "./Decorators";
 import { BaseController } from "./BaseController";
 import { IUserService } from "../services/IUserService";
-import { CheckTypes } from "../lib/CheckTypes";
 import { ILogger } from "../lib/ILogger";
 
 @HandleExceptions
@@ -32,7 +31,7 @@ export class UserController extends BaseController {
     public async getUser(req: express.Request, res: express.Response): Promise<void> {
         const id = parseInt(req.params.id);
         const users = await this.userService.findById(id);
-        if (!CheckTypes.hasContent(users)) {
+        if (!users) {
             res.status(404).send();
             return;
         }

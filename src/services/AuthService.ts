@@ -1,14 +1,15 @@
 import { ILogger } from "../lib/ILogger";
-import { CheckTypes } from "../lib/CheckTypes";
 import { UserEntity } from "../data/entities/user/UserEntity";
 import { BaseService } from "./BaseService";
 import { ISimpleCache } from "../lib/ISimpleCache";
 import { IUserRepository } from "../data/repositories/IUserRepository";
 import { IAuthService, UserJwtPayload } from "./IAuthService";
 
-import jwt from "jsonwebtoken";
-
 import * as bcrypt from "bcryptjs";
+
+import jwt from "jsonwebtoken";
+import check from "check-types";
+import validator from "validator";
 
 export class AuthService extends BaseService implements IAuthService {
 
@@ -24,7 +25,7 @@ export class AuthService extends BaseService implements IAuthService {
 
     public async validateCredentials(email: string, password: string): Promise<boolean> {
         const user = await this.userRepository.findByEmail(email);
-        if (!CheckTypes.isNull(user)) {
+        if (user) {
             if (await this.compareHashedPassword(password, user.getPassword())) {
                 this.cache.save(email, user);
                 return true;
@@ -37,9 +38,10 @@ export class AuthService extends BaseService implements IAuthService {
     public async validateAccessToken(accessToken: string): Promise<UserJwtPayload> {
         const data = await this.verify(accessToken);
         if (
-            CheckTypes.isTypeString(data.name) &&
-            CheckTypes.isTypeString(data.surname) &&
-            CheckTypes.isTypeString(data.email)
+            check.string(data.name) &&
+            check.string(data.surname) &&
+            check.string(data.email) &&
+            validator.isEmail(data.email)
         ) {
             return data;
         }
@@ -48,7 +50,7 @@ export class AuthService extends BaseService implements IAuthService {
 
     public async signTemporaryToken(email: string): Promise<string> {
         let user = this.cache.search(email);
-        if (!CheckTypes.hasContent(user)) {
+        if (!user) {
             user = await this.userRepository.findByEmail(email);
         }
         return this.sign({

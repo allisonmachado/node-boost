@@ -1,9 +1,10 @@
 import { ILogger } from "../../lib/ILogger";
 import { Connection } from "./mysql/Connection";
 import { UserEntity } from "../entities/user/UserEntity";
-import { CheckTypes } from "../../lib/CheckTypes";
 import { IUserRepository } from "./IUserRepository";
 import { RespositoryTemplate } from "./mysql/RepositoryTemplate";
+
+import check from "check-types";
 
 export class UserRepository extends RespositoryTemplate implements IUserRepository {
     constructor(connection: Connection, protected logger: ILogger) {
@@ -25,7 +26,7 @@ export class UserRepository extends RespositoryTemplate implements IUserReposito
 
     public async findByEmail(email: string): Promise<UserEntity> {
         const data = await this.query("SELECT * FROM simple_db.user WHERE email = ?", [email]);
-        if (CheckTypes.isEmptyArray(data) || !CheckTypes.isTypeArray(data)) {
+        if (!data || check.emptyArray(data)) {
             return null;
         }
         return data.map((d: any) => new UserEntity(d.id, d.name, d.surname, d.email, d.password))[0];
@@ -37,23 +38,23 @@ export class UserRepository extends RespositoryTemplate implements IUserReposito
     }
 
     public async update(id: string, name: string = "", surname: string = "", password: string = ""): Promise<number> {
-        if (!CheckTypes.hasContent(name) && !CheckTypes.hasContent(surname) && !CheckTypes.hasContent(password)) {
+        if (!name && !surname && !password) {
             return 0;
         }
-        if (CheckTypes.isNullOrUndefined(id)) {
+        if (!id) {
             throw new Error(`Id is mandatory parameter for updating user record`);
         }
         const columnsToUpdate = [];
         const valuesToUpdate = [];
-        if (CheckTypes.hasContent(name)) {
+        if (name) {
             columnsToUpdate.push("`name` = ?");
             valuesToUpdate.push(name);
         }
-        if (CheckTypes.hasContent(surname)) {
+        if (surname) {
             columnsToUpdate.push("`surname` = ?");
             valuesToUpdate.push(surname);
         }
-        if (CheckTypes.hasContent(password)) {
+        if (password) {
             columnsToUpdate.push("`password` = ?");
             valuesToUpdate.push(password);
         }
