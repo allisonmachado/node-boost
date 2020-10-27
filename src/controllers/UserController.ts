@@ -47,7 +47,7 @@ export class UserController extends BaseController {
 
         const affectedRows = await this.userService.update(id, name, surname, password);
         if (affectedRows === 1) {
-            res.send({ id, name, surname, password });
+            res.status(204).send();
         } else {
             res.status(404).send();
         }
