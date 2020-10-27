@@ -28,7 +28,7 @@ export class Logger implements ILogger {
     public debug(msg: string): void {
         this.logger.log({
             message: `[${this.prefix}]: ${msg}`,
-            level: 'debug',
+            level: "debug",
         });
     }
 }

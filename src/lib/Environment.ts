@@ -11,7 +11,7 @@ export class Environment {
   }
 
   public static getPort(): number {
-    return parseInt(process.env.PORT);
+    return parseInt(process.env.PORT, 10);
   }
 
   public static getMysqlHost(): string {
@@ -31,7 +31,7 @@ export class Environment {
   }
 
   public static getMysqlConnectionPoolLimit(): number {
-    return parseInt(process.env.MYSQL_CONNECTION_POOL_LIMIT);
+    return parseInt(process.env.MYSQL_CONNECTION_POOL_LIMIT, 10);
   }
 
   public static getJwtSecret(): string {
@@ -39,14 +39,14 @@ export class Environment {
   }
 
   public static isProd(): boolean {
-    return process.env.ENV == "prod";
+    return process.env.ENV === "prod";
   }
 
   public static isTest(): boolean {
-    return process.env.ENV == "test";
+    return process.env.ENV === "test";
   }
 
   public static isLocal(): boolean {
-    return process.env.ENV == "local";
+    return process.env.ENV === "local";
   }
 }

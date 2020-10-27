@@ -8,10 +8,10 @@ export class CircularCache<T> implements ISimpleCache<T> {
 
     constructor(private readonly size: number) {
         if (!this.size) {
-            throw new Error(`[${CircularCache.name}]: a size parameter is mandatory`)
+            throw new Error(`[${CircularCache.name}]: a size parameter is mandatory`);
         }
         if (this.size > 10) {
-            throw new Error(`[${CircularCache.name}]: this cache is supposed to be small, biggest size is 10`)
+            throw new Error(`[${CircularCache.name}]: this cache is supposed to be small, biggest size is 10`);
         }
         this.currentIndex = 0;
         this.keyToIndex = new Map();

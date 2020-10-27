@@ -1,4 +1,4 @@
-import { IUserService, UserAccessibleProps } from "./IUserService";
+import { IUserService, IUserAccessibleProps } from "./IUserService";
 import { IUserRepository } from "../data/repositories/IUserRepository";
 import { BaseService } from "./BaseService";
 import { UserEntity } from "../data/entities/user/UserEntity";
@@ -19,18 +19,18 @@ export class UserService extends BaseService implements IUserService {
         return this.userRepository.create(name, surname, email, hashedPassword);
     }
 
-    public async list(): Promise<UserAccessibleProps[]> {
+    public async list(): Promise<IUserAccessibleProps[]> {
         const users = await this.userRepository.findTop10();
         return this.visiblePropsMapper(users);
     }
 
-    public async findById(id: number): Promise<UserAccessibleProps> {
+    public async findById(id: number): Promise<IUserAccessibleProps> {
         const users = await this.userRepository.findById(id);
         return this.visiblePropsMapper(users)[0];
     }
 
     public async update(id: string, name: string, surname: string, password: string): Promise<number> {
-        let hashedPassword = password ? await this.hashPassword(password) : "";
+        const hashedPassword = password ? await this.hashPassword(password) : "";
         return this.userRepository.update(id, name, surname, hashedPassword);
     }
 
@@ -38,7 +38,7 @@ export class UserService extends BaseService implements IUserService {
         return this.userRepository.delete(id);
     }
 
-    private visiblePropsMapper(users: UserEntity[]): UserAccessibleProps[] {
+    private visiblePropsMapper(users: UserEntity[]): IUserAccessibleProps[] {
         return users.map(u => ({
             id: u.getId(),
             name: u.getName(),
@@ -49,13 +49,13 @@ export class UserService extends BaseService implements IUserService {
 
     private async hashPassword(password: string): Promise<string> {
         return new Promise((resolve, reject) => {
-            bcrypt.genSalt(10, (err, salt) => {
-                if (err) {
-                    reject(err);
+            bcrypt.genSalt(10, (genSaltErr, salt) => {
+                if (genSaltErr) {
+                    reject(genSaltErr);
                 } else {
-                    bcrypt.hash(password, salt, (err, hash) => {
-                        if (err) {
-                            reject(err);
+                    bcrypt.hash(password, salt, (hashErr, hash) => {
+                        if (hashErr) {
+                            reject(hashErr);
                         } else {
                             resolve(hash);
                         }

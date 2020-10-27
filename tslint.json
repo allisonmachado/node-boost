@@ -12,7 +12,7 @@
             "ban-keywords", "check-format"
         ],
         "max-line-length": [true, { 
-            "limit": 95, 
+            "limit": 115, 
             "ignore-multiline-template-literals": true 
         }],
         "comma-dangle": ["error", {

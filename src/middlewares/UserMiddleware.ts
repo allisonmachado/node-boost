@@ -9,7 +9,9 @@ export class UserMiddleware {
 
     }
 
-    public async verifyCreateUserParams(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
+    public async verifyCreateUserParams(
+        req: express.Request, res: express.Response, next: express.NextFunction,
+    ): Promise<void> {
         if (!req.body) {
             res.status(400).send();
             return;
@@ -31,7 +33,9 @@ export class UserMiddleware {
         }
     }
 
-    public async verifyGetUserParams(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
+    public async verifyGetUserParams(
+        req: express.Request, res: express.Response, next: express.NextFunction,
+    ): Promise<void> {
         if (!req.params) {
             res.status(400).send();
             return;
@@ -48,11 +52,15 @@ export class UserMiddleware {
         }
     }
 
-    public async verifyDeleteUserParams(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
+    public async verifyDeleteUserParams(
+        req: express.Request, res: express.Response, next: express.NextFunction,
+    ): Promise<void> {
         return this.verifyGetUserParams(req, res, next);
     }
 
-    public async verifyUpdateUserParams(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
+    public async verifyUpdateUserParams(
+        req: express.Request, res: express.Response, next: express.NextFunction,
+    ): Promise<void> {
         if (!req.body || !req.params) {
             res.status(400).send();
             return;

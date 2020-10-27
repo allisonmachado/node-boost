@@ -1,7 +1,7 @@
 import express from "express";
 
 import { ILogger } from "../lib/ILogger";
-import { IAuthService, UserJwtPayload } from "../services/IAuthService";
+import { IAuthService, IUserJwtPayload } from "../services/IAuthService";
 
 export class AuthMiddleware {
     constructor(private authService: IAuthService, private logger: ILogger) {
@@ -12,22 +12,22 @@ export class AuthMiddleware {
         try {
             const token = this.getTokenFromBearer(req);
             const contents = await this.authService.validateAccessToken(token);
-            (req as AuthRequestInfo).user = contents;
+            (req as IAuthRequestInfo).user = contents;
             next();
         } catch (error) {
             if (
-                error.message == "No Authorization Header" ||
-                error.message == "Invalid Token Format"
+                error.message === "No Authorization Header" ||
+                error.message === "Invalid Token Format"
             ) {
                 res.status(401).json({
                     message: "Invalid Auth Token",
-                    error: error.message
+                    error: error.message,
                 });
             } else {
                 res.status(500).send();
             }
         }
-    };
+    }
 
     private getTokenFromBearer(req: express.Request): string {
         const authorization = req.headers.authorization;
@@ -43,6 +43,6 @@ export class AuthMiddleware {
     }
 }
 
-export interface AuthRequestInfo extends express.Request {
-    user: UserJwtPayload;
+export interface IAuthRequestInfo extends express.Request {
+    user: IUserJwtPayload;
 }

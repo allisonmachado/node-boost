@@ -34,11 +34,16 @@ const mysqlConnection = new Connection(
     Env.getMysqlSchema(),
     Env.getMysqlConnectionPoolLimit(),
     new Logger(Connection.name),
-)
+);
 const userRepository = new UserRepository(mysqlConnection, new Logger(UserRepository.name));
 
 const userService = new UserService(userRepository, new Logger(UserService.name));
-const authService = new AuthService(Env.getJwtSecret(), userRepository, new CircularCache<UserEntity>(10), new Logger(AuthService.name));
+const authService = new AuthService(
+    Env.getJwtSecret(),
+    userRepository,
+    new CircularCache<UserEntity>(10),
+    new Logger(AuthService.name),
+);
 
 const usercontroller = new UserController(userService, new Logger(UserController.name));
 const authController = new AuthController(authService, new Logger(AuthController.name));
@@ -51,7 +56,7 @@ app.get("/users", usercontroller.getUsers.bind(usercontroller));
 app.get("/users/:id",
     userMiddleware.verifyGetUserParams.bind(userMiddleware),
     usercontroller.getUser.bind(usercontroller));
-app.post("/users", 
+app.post("/users",
     authMiddleware.verify.bind(authMiddleware),
     userMiddleware.verifyCreateUserParams.bind(userMiddleware),
     usercontroller.createUser.bind(usercontroller));

@@ -23,7 +23,7 @@ export abstract class RespositoryTemplate {
                     conn.release();
                     if (error) {
                         this.logger.error(`query: ${error}`);
-                        reject(error)
+                        reject(error);
                     }
                     resolve(results);
                 });

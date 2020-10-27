@@ -20,7 +20,7 @@ export class AuthController extends BaseController {
         if (await this.authService.validateCredentials(email, password)) {
             const token = await this.authService.signTemporaryToken(email);
             res.send({
-                auth: token
+                auth: token,
             });
         } else {
             this.logger.info(`invalid auth attempt: [${email}]`);

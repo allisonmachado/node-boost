@@ -37,7 +37,9 @@ export class UserRepository extends RespositoryTemplate implements IUserReposito
         return data.map((d: any) => new UserEntity(d.id, d.name, d.surname, d.email, d.password));
     }
 
-    public async update(id: string, name: string = "", surname: string = "", password: string = ""): Promise<number> {
+    public async update(
+        id: string, name: string = "", surname: string = "", password: string = "",
+    ): Promise<number> {
         if (!name && !surname && !password) {
             return 0;
         }

@@ -3,7 +3,7 @@ import { UserEntity } from "../data/entities/user/UserEntity";
 import { BaseService } from "./BaseService";
 import { ISimpleCache } from "../lib/ISimpleCache";
 import { IUserRepository } from "../data/repositories/IUserRepository";
-import { IAuthService, UserJwtPayload } from "./IAuthService";
+import { IAuthService, IUserJwtPayload } from "./IAuthService";
 
 import * as bcrypt from "bcryptjs";
 
@@ -35,7 +35,7 @@ export class AuthService extends BaseService implements IAuthService {
         return false;
     }
 
-    public async validateAccessToken(accessToken: string): Promise<UserJwtPayload> {
+    public async validateAccessToken(accessToken: string): Promise<IUserJwtPayload> {
         const data = await this.verify(accessToken);
         if (
             check.string(data.name) &&
@@ -60,9 +60,9 @@ export class AuthService extends BaseService implements IAuthService {
         });
     }
 
-    private async verify(payload: string): Promise<UserJwtPayload> {
+    private async verify(payload: string): Promise<IUserJwtPayload> {
         return new Promise((resolve, reject) => {
-            jwt.verify(payload, this.secret, (err: Error | null, decoded: UserJwtPayload | undefined,) => {
+            jwt.verify(payload, this.secret, (err: Error | null, decoded: IUserJwtPayload | undefined) => {
                 if (!!err) {
                     reject(err);
                 } else {
@@ -72,7 +72,7 @@ export class AuthService extends BaseService implements IAuthService {
         });
     }
 
-    private async sign(payload: UserJwtPayload): Promise<string> {
+    private async sign(payload: IUserJwtPayload): Promise<string> {
         return new Promise((resolve, reject) => {
             jwt.sign(payload, this.secret, (err: Error | null, token: string | undefined) => {
                 if (!!err) {

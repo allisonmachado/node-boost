@@ -14,7 +14,7 @@ export class UserController extends BaseController {
     }
 
     public async getUsers(req: express.Request, res: express.Response): Promise<void> {
-        let users = await this.userService.list();
+        const users = await this.userService.list();
         res.send(users);
     }
 
@@ -30,13 +30,13 @@ export class UserController extends BaseController {
     }
 
     public async getUser(req: express.Request, res: express.Response): Promise<void> {
-        const id = parseInt(req.params.id);
+        const id = parseInt(req.params.id, 10);
         const users = await this.userService.findById(id);
         if (!users) {
             res.status(404).send();
-            return;
+        } else {
+            res.send(users);
         }
-        res.send(users);
     }
 
     public async updateUser(req: express.Request, res: express.Response): Promise<void> {
@@ -45,22 +45,20 @@ export class UserController extends BaseController {
         const surname = req.body.surname;
         const password = req.body.password;
 
-        const affectedRows = await this.userService.update(id, name, surname, password)
+        const affectedRows = await this.userService.update(id, name, surname, password);
         if (affectedRows === 1) {
             res.send({ id, name, surname, password });
         } else {
             res.status(404).send();
-            return;
         }
     }
 
     public async deleteUser(req: express.Request, res: express.Response): Promise<void> {
-        const affectedRows = await this.userService.delete(parseInt(req.params.id));
+        const affectedRows = await this.userService.delete(parseInt(req.params.id, 10));
         if (affectedRows === 1) {
             res.status(204).send();
         } else {
             res.status(404).send();
-            return;
         }
     }
 }
