@@ -3,9 +3,9 @@ import express from "express";
 import { ILogger } from "../lib/ILogger";
 import { IAuthService } from "../services/IAuthService";
 import { BaseController } from "./BaseController";
-import { HandleExceptions } from "./Decorators";
+import { CatchUnexpected } from "./Decorators";
 
-@HandleExceptions
+@CatchUnexpected
 export class AuthController extends BaseController {
 
     constructor(private authService: IAuthService, private logger: ILogger) {

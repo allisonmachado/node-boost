@@ -1,11 +1,11 @@
 import express from "express";
 
-import { HandleExceptions } from "./Decorators";
+import { CatchDuplicateEntry, CatchUnexpected } from "./Decorators";
 import { BaseController } from "./BaseController";
 import { IUserService } from "../services/IUserService";
 import { ILogger } from "../lib/ILogger";
 
-@HandleExceptions
+@CatchUnexpected
 export class UserController extends BaseController {
 
     constructor(private userService: IUserService, private logger: ILogger) {
@@ -18,6 +18,7 @@ export class UserController extends BaseController {
         res.send(users);
     }
 
+    @CatchDuplicateEntry
     public async createUser(req: express.Request, res: express.Response): Promise<void> {
         const name = req.body.name;
         const surname = req.body.surname;
