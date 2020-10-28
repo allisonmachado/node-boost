@@ -7,8 +7,7 @@ import express from "express";
 import bodyParser from "body-parser";
 
 /* Import application definitions */
-import { Environment as Env } from "./lib/Environment";
-import { CircularCache } from "./lib/CircularCache";
+import { GlobalMiddleware } from "./middlewares/GlobalMiddleware";
 
 import { UserMiddleware } from "./middlewares/UserMiddleware";
 import { UserController } from "./controllers/UserController";
@@ -20,6 +19,8 @@ import { AuthMiddleware } from "./middlewares/AuthMiddleware";
 import { AuthController } from "./controllers/AuthController";
 import { AuthService } from "./services/AuthService";
 
+import { Environment as Env } from "./lib/Environment";
+import { CircularCache } from "./lib/CircularCache";
 import { Connection } from "./data/repositories/mysql/Connection";
 import { Logger } from "./lib/Logger";
 
@@ -48,33 +49,16 @@ const authController = new AuthController(authService, new Logger(AuthController
 const userMiddleware = new UserMiddleware(new Logger(UserMiddleware.name));
 const authMiddleware = new AuthMiddleware(authService, new Logger(AuthMiddleware.name));
 
-/** Create express aplication and global middlewares*/
+const globalMiddleware = new GlobalMiddleware(new Logger(GlobalMiddleware.name));
+
+/** Register application global middlewares */
 const app = express();
 const logger = new Logger("Main");
-app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const logger = new Logger("Request");
-    const start = Date.now();
-    res.on('finish', () => {
-        const duration = Date.now() - start;
-        const method = req.method;
-        const url = req.url;
-        const status = res.statusCode;
-        logger.info(`[${(new Date()).toUTCString()}] ${method}:${url} ${status} - ${duration}ms`);
-    });
-    next();
-});
+app.use(globalMiddleware.requestLogger.bind(globalMiddleware));
 app.use(bodyParser.json());
-app.use((error: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
-    if (error instanceof SyntaxError) {
-        logger.debug(`Unexpected JSON format, ${error}`);
-        return res.status(400).send();
-    } else {
-        logger.error(`${error}`);
-        return res.status(500).send();
-    }
-});
+app.use(globalMiddleware.errorHandler.bind(globalMiddleware));
 
-/** Define routes mapping and specific middlewares */
+/** Register application routes and specific middlewares */
 app.get("/users", usercontroller.getUsers.bind(usercontroller));
 app.get("/users/:id",
     userMiddleware.verifyGetUserParams.bind(userMiddleware),
