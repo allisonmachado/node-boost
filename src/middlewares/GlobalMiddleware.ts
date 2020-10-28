@@ -9,7 +9,7 @@ export class GlobalMiddleware {
 
     public requestLogger(req: express.Request, res: express.Response, next: express.NextFunction): void {
         const start = Date.now();
-        res.on('finish', () => {
+        res.on("finish", () => {
             const duration = Date.now() - start;
             const method = req.method;
             const url = req.url;
@@ -19,7 +19,9 @@ export class GlobalMiddleware {
         next();
     }
 
-    public errorHandler(error: any, req: express.Request, res: express.Response, next: express.NextFunction): void {
+    public errorHandler(
+        error: any, req: express.Request, res: express.Response, next: express.NextFunction,
+    ): void {
         if (error instanceof SyntaxError) {
             this.logger.debug(`Unexpected JSON format, ${error}`);
             res.status(400).send();

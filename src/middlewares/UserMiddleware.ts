@@ -1,8 +1,10 @@
 import express from "express";
 import validator from "validator";
+import { CatchUnexpected } from "../lib/Decorators";
 
 import { ILogger } from "../lib/ILogger";
 
+@CatchUnexpected(400)
 export class UserMiddleware {
 
     constructor(private logger: ILogger) {
@@ -16,19 +18,14 @@ export class UserMiddleware {
             res.status(400).send();
             return;
         }
-        try {
-            if (
-                validator.isLength(req.body.name, { min: 2, max: 145 }) &&
-                validator.isLength(req.body.surname, { min: 2, max: 145 }) &&
-                validator.isLength(req.body.password, { min: 8, max: 200 }) &&
-                validator.isEmail(req.body.email)
-            ) {
-                next();
-            } else {
-                res.status(400).send();
-            }
-        } catch (error) {
-            this.logger.error(error);
+        if (
+            validator.isLength(req.body.name, { min: 2, max: 145 }) &&
+            validator.isLength(req.body.surname, { min: 2, max: 145 }) &&
+            validator.isLength(req.body.password, { min: 8, max: 200 }) &&
+            validator.isEmail(req.body.email)
+        ) {
+            next();
+        } else {
             res.status(400).send();
         }
     }
@@ -40,14 +37,9 @@ export class UserMiddleware {
             res.status(400).send();
             return;
         }
-        try {
-            if (validator.isInt(req.params.id)) {
-                next();
-            } else {
-                res.status(400).send();
-            }
-        } catch (error) {
-            this.logger.error(error);
+        if (validator.isInt(req.params.id)) {
+            next();
+        } else {
             res.status(400).send();
         }
     }
@@ -65,19 +57,14 @@ export class UserMiddleware {
             res.status(400).send();
             return;
         }
-        try {
-            if (
-                validator.isInt(req.params.id) &&
-                validator.isLength(req.body.name, { min: 2, max: 145 }) &&
-                validator.isLength(req.body.surname, { min: 2, max: 145 }) &&
-                validator.isLength(req.body.password, { min: 8, max: 200 })
-            ) {
-                next();
-            } else {
-                res.status(400).send();
-            }
-        } catch (error) {
-            this.logger.error(error);
+        if (
+            validator.isInt(req.params.id) &&
+            validator.isLength(req.body.name, { min: 2, max: 145 }) &&
+            validator.isLength(req.body.surname, { min: 2, max: 145 }) &&
+            validator.isLength(req.body.password, { min: 8, max: 200 })
+        ) {
+            next();
+        } else {
             res.status(400).send();
         }
     }

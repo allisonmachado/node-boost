@@ -1,11 +1,12 @@
 import express from "express";
 
-import { CatchDuplicateEntry, CatchUnexpected } from "./Decorators";
+import { CatchDuplicateEntry } from "./Decorators";
+import { CatchUnexpected } from "../lib/Decorators";
 import { BaseController } from "./BaseController";
 import { IUserService } from "../services/IUserService";
 import { ILogger } from "../lib/ILogger";
 
-@CatchUnexpected
+@CatchUnexpected(500)
 export class UserController extends BaseController {
 
     constructor(private userService: IUserService, private logger: ILogger) {
