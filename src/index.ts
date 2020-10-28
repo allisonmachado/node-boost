@@ -23,9 +23,6 @@ import { AuthService } from "./services/AuthService";
 import { Connection } from "./data/repositories/mysql/Connection";
 import { Logger } from "./lib/Logger";
 
-const app = express();
-app.use(bodyParser.json());
-
 /** Init application definitions */
 const mysqlConnection = new Connection(
     Env.getMysqlHost(),
@@ -51,7 +48,21 @@ const authController = new AuthController(authService, new Logger(AuthController
 const userMiddleware = new UserMiddleware(new Logger(UserMiddleware.name));
 const authMiddleware = new AuthMiddleware(authService, new Logger(AuthMiddleware.name));
 
-/** Define routes mapping */
+/** Create express aplication and global middlewares*/
+const app = express();
+const logger = new Logger("Main");
+app.use(bodyParser.json());
+app.use((error: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (error instanceof SyntaxError) {
+        logger.debug(`Unexpected JSON format, ${error}`);
+        return res.status(400).send();
+    } else {
+        logger.error(`${error}`);
+        return res.status(500).send();
+    }
+});
+
+/** Define routes mapping and specific middlewares */
 app.get("/users", usercontroller.getUsers.bind(usercontroller));
 app.get("/users/:id",
     userMiddleware.verifyGetUserParams.bind(userMiddleware),
@@ -72,7 +83,6 @@ app.post("/auth", authController.authenticateUser.bind(authController));
 
 /** Listen for requests */
 app.listen(Env.getPort(), () => {
-    const logger = new Logger("index");
     logger.info(`App listening at ${Env.getPort()}`);
     logger.info(`App running in ${Env.getLocation()} environment`);
 });
