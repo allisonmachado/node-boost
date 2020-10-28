@@ -51,6 +51,18 @@ const authMiddleware = new AuthMiddleware(authService, new Logger(AuthMiddleware
 /** Create express aplication and global middlewares*/
 const app = express();
 const logger = new Logger("Main");
+app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
+    const logger = new Logger("Request");
+    const start = Date.now();
+    res.on('finish', () => {
+        const duration = Date.now() - start;
+        const method = req.method;
+        const url = req.url;
+        const status = res.statusCode;
+        logger.info(`[${(new Date()).toUTCString()}] ${method}:${url} ${status} - ${duration}ms`);
+    });
+    next();
+});
 app.use(bodyParser.json());
 app.use((error: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (error instanceof SyntaxError) {
