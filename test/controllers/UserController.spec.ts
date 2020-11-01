@@ -2,7 +2,6 @@
 import { expect } from "chai";
 import { ILogger } from "../../src/lib/ILogger";
 import { EmptyLogger } from "../../src/lib/EmptyLogger";
-
 import { UserController } from "../../src/controllers/UserController";
 
 import sinon from "sinon";

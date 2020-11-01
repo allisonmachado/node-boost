@@ -1,5 +1,3 @@
-import { Logger } from "../lib/Logger";
-
 /**
  * This is intended to be used as a Typescript decorator for request processor classes.
  * It should intercept exceptios and properly return 500 status code indicating an internal server error occured.
