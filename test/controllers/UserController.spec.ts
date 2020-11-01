@@ -1,5 +1,6 @@
 // tslint:disable: only-arrow-functions
 import { expect } from "chai";
+
 import { UserController } from "../../src/controllers/UserController";
 
 import sinon from "sinon";

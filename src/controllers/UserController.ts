@@ -41,7 +41,7 @@ export class UserController extends BaseController {
     }
 
     public async updateUser(req: express.Request, res: express.Response): Promise<void> {
-        const id = req.params.id;
+        const id = parseInt(req.params.id);
         const name = req.body.name;
         const surname = req.body.surname;
         const password = req.body.password;

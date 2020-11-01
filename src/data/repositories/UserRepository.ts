@@ -38,7 +38,7 @@ export class UserRepository extends RespositoryTemplate implements IUserReposito
     }
 
     public async update(
-        id: string, name: string = "", surname: string = "", password: string = "",
+        id: number, name: string = "", surname: string = "", password: string = "",
     ): Promise<number> {
         if (!name && !surname && !password) {
             return 0;

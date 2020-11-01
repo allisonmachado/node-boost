@@ -5,6 +5,6 @@ export interface IUserRepository {
     findById(id: number): Promise<UserEntity[]>;
     findByEmail(email: string): Promise<UserEntity>;
     findTop10(): Promise<UserEntity[]>;
-    update(id: string, name: string, surname: string, password: string): Promise<number>;
+    update(id: number, name: string, surname: string, password: string): Promise<number>;
     delete(id: number): Promise<number>;
 }

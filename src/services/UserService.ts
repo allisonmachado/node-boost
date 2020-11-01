@@ -29,7 +29,7 @@ export class UserService extends BaseService implements IUserService {
         return this.visiblePropsMapper(users)[0];
     }
 
-    public async update(id: string, name: string, surname: string, password: string): Promise<number> {
+    public async update(id: number, name: string, surname: string, password: string): Promise<number> {
         const hashedPassword = password ? await this.hashPassword(password) : "";
         return this.userRepository.update(id, name, surname, hashedPassword);
     }
