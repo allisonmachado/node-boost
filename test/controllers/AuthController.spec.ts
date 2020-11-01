@@ -1,11 +1,14 @@
 // tslint:disable: only-arrow-functions
+import { AuthController } from "../../src/controllers/AuthController";
+import { EmptyLogger } from "../../src/lib/EmptyLogger";
+import { ILogger } from "../../src/lib/ILogger";
 import { expect } from "chai";
 
 import sinon from "sinon";
 
-import { AuthController } from "../../src/controllers/AuthController";
-
 describe("Auth Controller", () => {
+    const logger: ILogger = new EmptyLogger();
+
     describe("user authentication", async () => {
         it("should send access token to user given valid credentials", async () => {
             const request = {
@@ -19,7 +22,7 @@ describe("Auth Controller", () => {
                 signTemporaryToken: sinon.stub().resolves("auth-token")
             }
             // @ts-ignore
-            const authController = new AuthController(authService, console);
+            const authController = new AuthController(authService, logger);
             const response = {
                 send: sinon.spy(),
                 status: sinon.stub().returnsThis()
@@ -45,7 +48,7 @@ describe("Auth Controller", () => {
                 validateCredentials: sinon.stub().resolves(false)
             }
             // @ts-ignore
-            const authController = new AuthController(authService, console);
+            const authController = new AuthController(authService, logger);
             const response = {
                 send: sinon.spy(),
                 status: sinon.stub().returnsThis()
@@ -71,7 +74,7 @@ describe("Auth Controller", () => {
                 validateCredentials: sinon.stub().rejects(new Error('unexpected error'))
             }
             // @ts-ignore
-            const authController = new AuthController(authService, console);
+            const authController = new AuthController(authService, logger);
             const response = {
                 send: sinon.spy(),
                 status: sinon.stub().returnsThis()

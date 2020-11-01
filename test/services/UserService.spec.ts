@@ -1,7 +1,9 @@
 // tslint:disable: only-arrow-functions
 import { expect } from "chai";
+import { ILogger } from "../../src/lib/ILogger";
 import { UserEntity } from "../../src/data/entities/user/UserEntity";
 import { UserService } from "../../src/services/UserService";
+import { EmptyLogger } from "../../src/lib/EmptyLogger";
 
 import sinon from "sinon";
 
@@ -9,9 +11,11 @@ import * as bcrypt from "bcryptjs";
 
 
 describe("User Service", () => {
+    const logger: ILogger = new EmptyLogger();
+
     describe("private implementations", async () => {
         it("should abstract bcrypt async password hashing method", async () => {
-            const userService = new UserService(null, console);
+            const userService = new UserService(null, logger);
             const password = 'abcdefg';
 
             // @ts-ignore
@@ -30,7 +34,7 @@ describe("User Service", () => {
         });
 
         it("should hide private user info", async () => {
-            const userService = new UserService(null, console);
+            const userService = new UserService(null, logger);
             const users = [
                 new UserEntity(
                     10, 'Foo', 'Bar', 'foo@email.com', '$2a$10$S2Ngy9xiORAOq9R6g.6N7.20E1Q0NXa32CJONY2WncY..lr9tTe0e',
@@ -54,7 +58,7 @@ describe("User Service", () => {
             create: sinon.stub().resolves(1)
         }
         // @ts-ignore
-        const userService = new UserService(userRepository, console);
+        const userService = new UserService(userRepository, logger);
         const userId = await userService.create('Foo', 'Bar', 'foo@email.com', '1234567')
 
         const [ name, surname, email, password ] = userRepository.create.firstCall.args;
@@ -89,7 +93,7 @@ describe("User Service", () => {
             ])
         }
         // @ts-ignore
-        const userService = new UserService(userRepository, console);
+        const userService = new UserService(userRepository, logger);
         const users = await userService.list();
 
         expect(users.length).to.equal(2);
@@ -106,7 +110,7 @@ describe("User Service", () => {
             ])
         }
         // @ts-ignore
-        const userService = new UserService(userRepository, console);
+        const userService = new UserService(userRepository, logger);
         const user = await userService.findById(1);
 
         expect(user.id).to.equal(1);
@@ -122,7 +126,7 @@ describe("User Service", () => {
                 update: sinon.stub().resolves(1)
             }
             // @ts-ignore
-            const userService = new UserService(userRepository, console);
+            const userService = new UserService(userRepository, logger);
             const userId = await userService.update(1, 'Foo', 'Bar', '1234567')
     
             const [ id, name, surname, password ] = userRepository.update.firstCall.args;
@@ -150,7 +154,7 @@ describe("User Service", () => {
                 update: sinon.stub().resolves(1)
             }
             // @ts-ignore
-            const userService = new UserService(userRepository, console);
+            const userService = new UserService(userRepository, logger);
             const userId = await userService.update(1, 'Foo', 'Bar', '')
     
             const [ id, name, surname, password ] = userRepository.update.firstCall.args;
@@ -169,7 +173,7 @@ describe("User Service", () => {
             delete: sinon.stub().resolves(1)
         }
         // @ts-ignore
-        const userService = new UserService(userRepository, console);
+        const userService = new UserService(userRepository, logger);
         
         const affectedRows = await userService.delete(4);
         const [ id ] = userRepository.delete.firstCall.args;

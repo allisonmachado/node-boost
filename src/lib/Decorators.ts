@@ -18,8 +18,7 @@ export function CatchUnexpected(statusCode: number) {
                 try {
                     await originalMethod.apply(this, args);
                 } catch (error) {
-                    const logger = new Logger("GenericErrorHandler");
-                    logger.error(error);
+                    this.logger.error(error);
                     res.status(statusCode).send();
                 }
             };

@@ -1,11 +1,15 @@
 // tslint:disable: only-arrow-functions
 import { expect } from "chai";
+import { ILogger } from "../../src/lib/ILogger";
+import { EmptyLogger } from "../../src/lib/EmptyLogger";
 
 import { UserController } from "../../src/controllers/UserController";
 
 import sinon from "sinon";
 
 describe("User Controller", () => {
+    const logger: ILogger = new EmptyLogger();
+
     describe("user listing request handling", async () => {
         it("should list users", async () => {
             const userList = [
@@ -16,7 +20,7 @@ describe("User Controller", () => {
                 list: sinon.stub().resolves(userList)
             }
             // @ts-ignore
-            const userController = new UserController(userService, console);
+            const userController = new UserController(userService, logger);
             const response = { send: sinon.spy() }
 
             // @ts-ignore
@@ -35,7 +39,7 @@ describe("User Controller", () => {
                 list: sinon.stub().rejects(new Error('unexpected error'))
             }
             // @ts-ignore
-            const userController = new UserController(userService, console);
+            const userController = new UserController(userService, logger);
             const response = { send: sinon.spy(), status: sinon.stub().returnsThis() }
 
             // @ts-ignore
@@ -62,7 +66,7 @@ describe("User Controller", () => {
                 create: sinon.stub().resolves(1)
             }
             // @ts-ignore
-            const userController = new UserController(userService, console);
+            const userController = new UserController(userService, logger);
             const response = {
                 send: sinon.spy(),
                 status: sinon.stub().returnsThis()
@@ -88,7 +92,7 @@ describe("User Controller", () => {
                 create: sinon.stub().rejects(new Error('Mysql err: ER_DUP_ENTRY'))
             }
             // @ts-ignore
-            const userController = new UserController(userService, console);
+            const userController = new UserController(userService, logger);
             const response = {
                 send: sinon.spy(),
                 status: sinon.stub().returnsThis()
@@ -116,7 +120,7 @@ describe("User Controller", () => {
                 create: sinon.stub().rejects(new Error('Mysql err: ER_DUP_ENTRY'))
             }
             // @ts-ignore
-            const userController = new UserController(userService, console);
+            const userController = new UserController(userService, logger);
             const response = {
                 send: sinon.spy(),
                 status: sinon.stub().returnsThis()
@@ -145,7 +149,7 @@ describe("User Controller", () => {
                 findById: sinon.stub().resolves(user)
             }
             // @ts-ignore
-            const userController = new UserController(userService, console);
+            const userController = new UserController(userService, logger);
             const response = {
                 send: sinon.spy(),
                 status: sinon.stub().returnsThis()
@@ -164,7 +168,7 @@ describe("User Controller", () => {
                 findById: sinon.stub().resolves()
             }
             // @ts-ignore
-            const userController = new UserController(userService, console);
+            const userController = new UserController(userService, logger);
             const response = {
                 send: sinon.spy(),
                 status: sinon.stub().returnsThis()
@@ -185,7 +189,7 @@ describe("User Controller", () => {
                 findById: sinon.stub().rejects(new Error('Unexpected error'))
             }
             // @ts-ignore
-            const userController = new UserController(userService, console);
+            const userController = new UserController(userService, logger);
             const response = {
                 send: sinon.spy(),
                 status: sinon.stub().returnsThis()
@@ -215,7 +219,7 @@ describe("User Controller", () => {
                 update: sinon.stub().resolves(1)
             }
             // @ts-ignore
-            const userController = new UserController(userService, console);
+            const userController = new UserController(userService, logger);
             const response = {
                 send: sinon.spy(),
                 status: sinon.stub().returnsThis()
@@ -243,7 +247,7 @@ describe("User Controller", () => {
                 update: sinon.stub().resolves(0)
             }
             // @ts-ignore
-            const userController = new UserController(userService, console);
+            const userController = new UserController(userService, logger);
             const response = {
                 send: sinon.spy(),
                 status: sinon.stub().returnsThis()
@@ -264,7 +268,7 @@ describe("User Controller", () => {
                 update: sinon.stub().rejects(new Error('Unexpected error'))
             }
             // @ts-ignore
-            const userController = new UserController(userService, console);
+            const userController = new UserController(userService, logger);
             const response = {
                 send: sinon.spy(),
                 status: sinon.stub().returnsThis()
@@ -287,7 +291,7 @@ describe("User Controller", () => {
                 delete: sinon.stub().resolves(1)
             }
             // @ts-ignore
-            const userController = new UserController(userService, console);
+            const userController = new UserController(userService, logger);
             const response = {
                 send: sinon.spy(),
                 status: sinon.stub().returnsThis()
@@ -308,7 +312,7 @@ describe("User Controller", () => {
                 delete: sinon.stub().resolves(0)
             }
             // @ts-ignore
-            const userController = new UserController(userService, console);
+            const userController = new UserController(userService, logger);
             const response = {
                 send: sinon.spy(),
                 status: sinon.stub().returnsThis()
@@ -329,7 +333,7 @@ describe("User Controller", () => {
                 delete: sinon.stub().rejects(new Error('Unexpected error'))
             }
             // @ts-ignore
-            const userController = new UserController(userService, console);
+            const userController = new UserController(userService, logger);
             const response = {
                 send: sinon.spy(),
                 status: sinon.stub().returnsThis()
