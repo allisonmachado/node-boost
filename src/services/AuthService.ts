@@ -35,19 +35,6 @@ export class AuthService extends BaseService implements IAuthService {
         return false;
     }
 
-    public async validateAccessToken(accessToken: string): Promise<IUserJwtPayload> {
-        const data = await this.verify(accessToken);
-        if (
-            check.string(data.name) &&
-            check.string(data.surname) &&
-            check.string(data.email) &&
-            validator.isEmail(data.email)
-        ) {
-            return data;
-        }
-        throw new Error(`Invalid token Format`);
-    }
-
     public async signTemporaryToken(email: string): Promise<string> {
         let user = this.cache.search(email);
         if (!user) {
@@ -57,24 +44,32 @@ export class AuthService extends BaseService implements IAuthService {
             name: user.getName(),
             surname: user.getSurname(),
             email: user.getEmail(),
-        });
+        }, "10h");
     }
 
-    private async verify(payload: string): Promise<IUserJwtPayload> {
+    public async validateAccessToken(payload: string): Promise<IUserJwtPayload> {
         return new Promise((resolve, reject) => {
             jwt.verify(payload, this.secret, (err: Error | null, decoded: IUserJwtPayload | undefined) => {
                 if (!!err) {
                     reject(err);
                 } else {
-                    resolve(decoded);
+                    if (
+                        check.string(decoded.name) &&
+                        check.string(decoded.surname) &&
+                        check.string(decoded.email) &&
+                        validator.isEmail(decoded.email)
+                    ) {
+                        resolve(decoded);
+                    }
+                    reject(new Error(`Invalid decoded jwt payload: ${JSON.stringify(decoded)}`))
                 }
             });
         });
     }
 
-    private async sign(payload: IUserJwtPayload): Promise<string> {
+    private async sign(payload: IUserJwtPayload, expiresIn: string | number): Promise<string> {
         return new Promise((resolve, reject) => {
-            jwt.sign(payload, this.secret, (err: Error | null, token: string | undefined) => {
+            jwt.sign(payload, this.secret, { expiresIn: expiresIn }, (err: Error | null, token: string | undefined) => {
                 if (!!err) {
                     reject(err);
                 } else {

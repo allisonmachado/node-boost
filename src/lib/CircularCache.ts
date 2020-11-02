@@ -21,7 +21,7 @@ export class CircularCache<T> implements ISimpleCache<T> {
 
     public search(key: string): T {
         const dataIndex = this.keyToIndex.get(key);
-        if (!dataIndex) {
+        if (!dataIndex && dataIndex !== 0) {
             return null;
         }
         return this.data[dataIndex];
