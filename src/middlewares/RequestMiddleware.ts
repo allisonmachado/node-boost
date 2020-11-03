@@ -2,12 +2,12 @@ import express from "express";
 
 import { ILogger } from "../lib/ILogger";
 
-export class GlobalMiddleware {
+export class RequestMiddleware {
     constructor(private logger: ILogger) {
         this.logger.debug(`initialized`);
     }
 
-    public requestLogger(req: express.Request, res: express.Response, next: express.NextFunction): void {
+    public log(req: express.Request, res: express.Response, next: express.NextFunction): void {
         const start = Date.now();
         res.on("finish", () => {
             const duration = Date.now() - start;
@@ -19,7 +19,7 @@ export class GlobalMiddleware {
         next();
     }
 
-    public errorHandler(
+    public handleErrors(
         error: any, req: express.Request, res: express.Response, next: express.NextFunction,
     ): void {
         if (error instanceof SyntaxError) {

@@ -7,7 +7,7 @@ import express from "express";
 import bodyParser from "body-parser";
 
 /* Import application definitions */
-import { GlobalMiddleware } from "./middlewares/GlobalMiddleware";
+import { RequestMiddleware } from "./middlewares/RequestMiddleware";
 
 import { UserMiddleware } from "./middlewares/UserMiddleware";
 import { UserController } from "./controllers/UserController";
@@ -49,14 +49,14 @@ const authController = new AuthController(authService, new Logger(AuthController
 const userMiddleware = new UserMiddleware(new Logger(UserMiddleware.name));
 const authMiddleware = new AuthMiddleware(authService, new Logger(AuthMiddleware.name));
 
-const globalMiddleware = new GlobalMiddleware(new Logger(GlobalMiddleware.name));
+const requestMiddleware = new RequestMiddleware(new Logger(RequestMiddleware.name));
 
 /** Register application global middlewares */
 const app = express();
 const logger = new Logger("Main");
-app.use(globalMiddleware.requestLogger.bind(globalMiddleware));
+app.use(requestMiddleware.log.bind(requestMiddleware));
 app.use(bodyParser.json());
-app.use(globalMiddleware.errorHandler.bind(globalMiddleware));
+app.use(requestMiddleware.handleErrors.bind(requestMiddleware));
 
 /** Register application routes and specific middlewares */
 app.get("/users", usercontroller.getUsers.bind(usercontroller));
