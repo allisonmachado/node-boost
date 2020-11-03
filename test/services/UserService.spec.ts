@@ -61,10 +61,10 @@ describe("User Service", () => {
         const userService = new UserService(userRepository, logger);
         const userId = await userService.create('Foo', 'Bar', 'foo@email.com', '1234567')
 
-        const [ name, surname, email, password ] = userRepository.create.firstCall.args;
+        const [name, surname, email, password] = userRepository.create.firstCall.args;
 
         expect(userId).to.equal(1);
-        
+
         expect(name).to.equal("Foo");
         expect(surname).to.equal("Bar");
         expect(email).to.equal("foo@email.com");
@@ -103,11 +103,9 @@ describe("User Service", () => {
 
     it("should request users from persistance layer by Id and retrieve them", async () => {
         const userRepository = {
-            findById: sinon.stub().resolves([
-                new UserEntity(
-                    1, 'Foo', 'Bar', 'foo1@email.com', '$2b$10$S2Ngy9xiORAOq9R6g.6N7.20E1Q0NXa32CJONY2WncY..lr9tTe0e',
-                )
-            ])
+            findById: sinon.stub().resolves(new UserEntity(
+                1, 'Foo', 'Bar', 'foo1@email.com', '$2b$10$S2Ngy9xiORAOq9R6g.6N7.20E1Q0NXa32CJONY2WncY..lr9tTe0e',
+            )),
         }
         // @ts-ignore
         const userService = new UserService(userRepository, logger);
@@ -118,7 +116,7 @@ describe("User Service", () => {
         expect(user.surname).to.equal("Bar");
         expect(user.email).to.equal('foo1@email.com');
     });
-    
+
 
     describe("request to update a user given its properties and id", async () => {
         it("update password if given", async () => {
@@ -128,15 +126,15 @@ describe("User Service", () => {
             // @ts-ignore
             const userService = new UserService(userRepository, logger);
             const userId = await userService.update(1, 'Foo', 'Bar', '1234567')
-    
-            const [ id, name, surname, password ] = userRepository.update.firstCall.args;
-    
+
+            const [id, name, surname, password] = userRepository.update.firstCall.args;
+
             expect(userId).to.equal(1);
-            
+
             expect(id).to.equal(1);
             expect(name).to.equal("Foo");
             expect(surname).to.equal("Bar");
-    
+
             const equal = await new Promise((resolve, reject) => {
                 bcrypt.compare('1234567', password, (err, res) => {
                     if (err) {
@@ -156,11 +154,11 @@ describe("User Service", () => {
             // @ts-ignore
             const userService = new UserService(userRepository, logger);
             const userId = await userService.update(1, 'Foo', 'Bar', '')
-    
-            const [ id, name, surname, password ] = userRepository.update.firstCall.args;
-    
+
+            const [id, name, surname, password] = userRepository.update.firstCall.args;
+
             expect(userId).to.equal(1);
-            
+
             expect(id).to.equal(1);
             expect(name).to.equal("Foo");
             expect(surname).to.equal("Bar");
@@ -174,9 +172,9 @@ describe("User Service", () => {
         }
         // @ts-ignore
         const userService = new UserService(userRepository, logger);
-        
+
         const affectedRows = await userService.delete(4);
-        const [ id ] = userRepository.delete.firstCall.args;
+        const [id] = userRepository.delete.firstCall.args;
 
         expect(affectedRows).to.equal(1);
         expect(id).to.equal(4);

@@ -19,9 +19,12 @@ export class UserRepository extends RespositoryTemplate implements IUserReposito
         return data.insertId;
     }
 
-    public async findById(id: number): Promise<UserEntity[]> {
+    public async findById(id: number): Promise<UserEntity> {
         const data = await this.query("SELECT * FROM simple_db.user WHERE id = ?", [id]);
-        return data.map((d: any) => new UserEntity(d.id, d.name, d.surname, d.email, d.password));
+        if (!data || check.emptyArray(data)) {
+            return null;
+        }
+        return data.map((d: any) => new UserEntity(d.id, d.name, d.surname, d.email, d.password))[0];
     }
 
     public async findByEmail(email: string): Promise<UserEntity> {

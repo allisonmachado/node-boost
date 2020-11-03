@@ -26,7 +26,10 @@ export class UserService extends BaseService implements IUserService {
 
     public async findById(id: number): Promise<IUserAccessibleProps> {
         const users = await this.userRepository.findById(id);
-        return this.visiblePropsMapper(users)[0];
+        if (!users) {
+            return null;
+        }
+        return this.visiblePropsMapper([users])[0];
     }
 
     public async update(id: number, name: string, surname: string, password: string): Promise<number> {
