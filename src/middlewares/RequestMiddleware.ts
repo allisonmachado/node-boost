@@ -9,13 +9,7 @@ export class RequestMiddleware {
 
     public log(req: express.Request, res: express.Response, next: express.NextFunction): void {
         const start = Date.now();
-        res.on("finish", () => {
-            const duration = Date.now() - start;
-            const method = req.method;
-            const url = req.url;
-            const status = res.statusCode;
-            this.logger.info(`[${(new Date()).toUTCString()}] ${method}:${url} ${status} - ${duration}ms`);
-        });
+        res.on("finish", () => this.logger.info(`${req.method}:${req.url} ${res.statusCode} - ${Date.now() - start}ms`));
         next();
     }
 
