@@ -1,9 +1,13 @@
 node_modules/
 dist/
+
 .npm
 .env
 .env.test
 .env.dev
-*.log
+.migrate
+
 npm-debug.log*
+
+*.log
 *.tmp

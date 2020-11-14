@@ -11,7 +11,8 @@
     "pretest": "npm run build",
     "test": "mocha dist/test/**/*.js",
     "prestart": "npm run build",
-    "start": "node dist/src/index"
+    "start": "node dist/src/index",
+    "migrate": "rm -rf ./dist && tsc --sourceMap false && migrate up --migrations-dir=dist/migrations"
   },
   "author": "Allison Machado Gonçalves",
   "license": "MIT",
@@ -30,6 +31,7 @@
     "@types/validator": "^13.1.0",
     "chai": "^4.2.0",
     "faker": "^5.1.0",
+    "migrate": "^1.7.0",
     "mocha": "^6.1.4",
     "sinon": "^7.3.2",
     "tslint": "^5.16.0",
