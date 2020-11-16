@@ -61,7 +61,7 @@ export class AuthService extends BaseService implements IAuthService {
                     ) {
                         resolve(decoded);
                     }
-                    reject(new Error(`Invalid decoded jwt payload: ${JSON.stringify(decoded)}`))
+                    reject(new Error(`Invalid decoded jwt payload: ${JSON.stringify(decoded)}`));
                 }
             });
         });
@@ -69,7 +69,7 @@ export class AuthService extends BaseService implements IAuthService {
 
     private async sign(payload: IUserJwtPayload, expiresIn: string | number): Promise<string> {
         return new Promise((resolve, reject) => {
-            jwt.sign(payload, this.secret, { expiresIn: expiresIn }, (err: Error | null, token: string | undefined) => {
+            jwt.sign(payload, this.secret, { expiresIn }, (err: Error | null, token: string | undefined) => {
                 if (!!err) {
                     reject(err);
                 } else {

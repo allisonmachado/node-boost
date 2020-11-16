@@ -1,6 +1,6 @@
 /***
  * Do not import this in the application.
- * This is supposed to be used by the migration scripts. 
+ * This is supposed to be used by the migration scripts.
  */
 import dotenv from "dotenv";
 dotenv.config();
