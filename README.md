@@ -1,35 +1,78 @@
-# Yet another Nodejs backend template (0.0.1)
+# Node Boost
 
-The objective of this project is to create a clean (but opinionated) template for a Nodejs backend REST application. (actually I just want to have some fun...)
+Opinionated and pragmatic blueprint for web [Node.js](http://nodejs.org) apps.
 
-## Why
-I want to create a clean and simple template that put into action a layered architecture with well-defined responsibilities to be able to accomodate a source code base that may grow big as time passes. Those layers listed from high level to low level are:
+## Quick Start
 
-1. ./src/middleware: this is a chain of processing that first interacts with the request and can block or add info to it.
-2. ./src/controllers: this layer accepts a request, invoke the underlying processing, and respond according to the result of the processing.
-3. ./src/business: this layer performs some business related processing and the business rules. 
-4. ./src/data: this layer contains elements responsible for providing access to an information source, such as a relational database in this case mysql given as an example.
-5. ./src/lib: this is a set of code shared among multiple distincs parts of the application and provide small reusable units.
+This is a not available through the [npm registry](https://www.npmjs.com/).
 
-## How
-To enable a good implementation of these layers, and to simplify the writing of tests, this template, levereged by the power Typescript language, applies the concept of Inversion of Control!
+To create a new project based on this blueprint use this repository as a basis:
 
-Although no specific auxiliar library for IoC is being used (such as inversify for example to enable Dependency Injection), the responsibility of a DI container for now is written in the index.js file which is the startup point of the application. Also, loosely coupled elements can be optionally achieved through the specification of well defined interfaces.
+```bash
+$ git clone https://github.com/allisonmachado/node-boost.git --depth 1
+$ cd node-boost/
+$ git remote set-url origin new.git.url/here
+$ cp .env.example .env
+$ npm install
+$ npm start
+```
 
-## What
+## Features
 
-This template also provides a small and simple set of features to bootstrap the creation of a new application:
+  * Comprehensive and decoupled layered architecture
+  * Test setup and coverage provided
+  * Structured and well defined logging
+  * Cross cutting concerns organized in middlewares and decorators
+  * Auxiliar scripts provided to bootstrap development cycle
+
+## Overview
+
+To be able to accomodate a source code base that may grow big as time passes, I've created this simple template that put into action a layered architecture with well-defined responsibilities decoupled by interface definitions:
+
+1. ./src/middleware: first chain of processing request processing.
+2. ./src/controllers: delegates the request to the underlying processing.
+3. ./src/services: eventual some business related processing and custom rules (optional).
+4. ./src/data: interaction with information source, such as a relational database (mysql given as an example).
+5. ./src/lib: shared and reusable code.
+
+## Philosophy
+
+To enable a good implementation of these layers, and to simplify the writing of tests, this template, levereged by the power Typescript language, applies the concept of Inversion of Control.
+
+Although no specific auxiliar library for IoC is being used (such as [inversify](https://github.com/inversify/InversifyJS)), the responsibility of a DI container for now is written in the [index.js](https://github.com/allisonmachado/node-boost/blob/master/src/index.ts) file which is the startup point of the application. 
+
+The implementation of loosely coupled elements can be optionally achieved through the specification of well defined interfaces.
+
+## Examples
+
+This template also provides a small and simple set of features to serve as an example:
 
 1. Simple CRUD of users
-2. Simple Auth mechanism
+2. Simple Jwt token based Auth
 
-The controller rest layer was built on top of the Express-js Framework.
+## Dependency Highlights
 
-The data layer exemplifies the connection to a mysql server and this template provides a Simple SQL schema initialization script.
+  * [ExpressJS](https://github.com/expressjs/express)
+  * [MySql](https://github.com/mysqljs/mysql)
+  * [Winston](https://github.com/winstonjs/winston)
+  * [Typescript](https://github.com/microsoft/TypeScript)
+  * [Mocha](https://github.com/mochajs/mocha)
 
-It also includes:
+## Tests
 
-1. Integration with tslint
-2. Build scripts
+To run the test suite, first install the dependencies, then run `npm test`:
 
-...still more is to came! ;)
+```bash
+$ npm install
+$ npm test
+```
+
+To check the coverage:
+
+```bash
+$ npm run test:coverage
+```
+
+## License
+
+  [MIT](LICENSE)
