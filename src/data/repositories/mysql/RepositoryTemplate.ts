@@ -18,15 +18,20 @@ export abstract class RespositoryTemplate {
                 if (err) {
                     this.logger.error(`get connection: ${err}`);
                     reject(err);
-                }
-                conn.query(preparedStatement, (error, results) => {
-                    conn.release();
-                    if (error) {
-                        this.logger.error(`query: ${error}`);
-                        reject(error);
+                } else {
+                    if (conn) {
+                        conn.query(preparedStatement, (error, results) => {
+                            conn.release();
+                            if (error) {
+                                this.logger.error(`query: ${error}`);
+                                reject(error);
+                            }
+                            resolve(results);
+                        });
+                    } else {
+                        reject(new Error(`Not possible to stablish connection with Database Server`));
                     }
-                    resolve(results);
-                });
+                }
             });
         });
     }
