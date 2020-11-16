@@ -8,10 +8,11 @@
     "lint:fix": "tslint --fix -c tslint.json 'src/**/*.ts'",
     "prebuild": "rm -rf ./dist",
     "build": "tsc",
-    "pretest": "npm run build",
-    "test": "mocha dist/test/**/*.js",
     "prestart": "npm run build",
     "start": "node dist/src/index",
+    "pretest": "npm run build",
+    "test": "mocha dist/test/**/*.js",
+    "test:coverage": "nyc mocha dist/test/**/*.js",
     "migrate": "rm -rf ./dist && tsc --sourceMap false && migrate up --migrations-dir=dist/migrations"
   },
   "author": "Allison Machado Gonçalves",
@@ -33,6 +34,7 @@
     "faker": "^5.1.0",
     "migrate": "^1.7.0",
     "mocha": "^6.1.4",
+    "nyc": "^15.1.0",
     "sinon": "^7.3.2",
     "tslint": "^5.16.0",
     "typescript": "^3.4.5"
