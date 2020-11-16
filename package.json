@@ -1,6 +1,6 @@
 {
   "name": "app",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "clean template for a nodejs backend REST application",
   "main": "index.js",
   "scripts": {
