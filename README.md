@@ -4,7 +4,7 @@ Opinionated and pragmatic blueprint for web [Node.js](http://nodejs.org) apps.
 
 ## Quick Start
 
-This is a not available through the [npm registry](https://www.npmjs.com/).
+This is not available through the [npm registry](https://www.npmjs.com/).
 
 To create a new project based on this blueprint use this repository as a basis:
 
@@ -32,14 +32,14 @@ To be able to accomodate a source code base that may grow big as time passes, I'
 1. ./src/middleware: first chain of processing request processing.
 2. ./src/controllers: delegates the request to the underlying processing.
 3. ./src/services: eventual some business related processing and custom rules (optional).
-4. ./src/data: interaction with information source, such as a relational database (mysql given as an example).
+4. ./src/data: interaction with data sources, such as a relational database (mysql given as an example).
 5. ./src/lib: shared and reusable code.
 
 ## Philosophy
 
-To enable a good implementation of these layers, and to simplify the writing of tests, this template, levereged by the power Typescript language, applies the concept of Inversion of Control.
+To enable a good implementation of these layers, and to simplify the writing of tests, this template, leveraged by the power Typescript language, applies the concept of Inversion of Control.
 
-Although no specific auxiliar library for IoC is being used (such as [inversify](https://github.com/inversify/InversifyJS)), the responsibility of a DI container for now is written in the [index.js](https://github.com/allisonmachado/node-boost/blob/master/src/index.ts) file which is the startup point of the application. 
+Although no auxiliary library for IoC is being used (such as [inversify](https://github.com/inversify/InversifyJS)), the responsibility of a DI container for now is written in the [index.js](https://github.com/allisonmachado/node-boost/blob/master/src/index.ts) file which is the startup point of the application. 
 
 The implementation of loosely coupled elements can be optionally achieved through the specification of well defined interfaces.
 
