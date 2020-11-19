@@ -1,4 +1,5 @@
 # Node Boost
+[![Coverage Status](https://coveralls.io/repos/github/allisonmachado/node-boost/badge.svg?branch=master)](https://coveralls.io/github/allisonmachado/node-boost?branch=master)
 
 Opinionated and pragmatic blueprint for web [Node.js](http://nodejs.org) apps.
 
