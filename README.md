@@ -23,7 +23,7 @@ $ npm start
   * Test setup and coverage provided
   * Structured and well defined logging
   * Cross cutting concerns organized in middlewares and decorators
-  * Auxiliar scripts provided to bootstrap development cycle
+  * Auxiliar scripts to power the development cycle
 
 ## Overview
 

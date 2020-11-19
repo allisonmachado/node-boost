@@ -12,7 +12,7 @@
     "start": "node dist/src/index",
     "pretest": "npm run build",
     "test": "mocha dist/test/**/*.js",
-    "test:coverage": "nyc mocha dist/test/**/*.js",
+    "test:coverage": "nyc --reporter=lcov --reporter=text-summary mocha dist/test/**/*.js",
     "migrate": "rm -rf ./dist && tsc --sourceMap false && migrate up --migrations-dir=dist/migrations"
   },
   "author": "Allison Machado Gonçalves",
