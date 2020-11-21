@@ -39,14 +39,14 @@ export class Environment {
   }
 
   public static isProd(): boolean {
-    return process.env.ENV === "prod";
+    return process.env.ENV === "production";
   }
 
-  public static isTest(): boolean {
-    return process.env.ENV === "test";
+  public static isStaging(): boolean {
+    return process.env.ENV === "staging";
   }
 
-  public static isLocal(): boolean {
-    return process.env.ENV === "local";
+  public static isDev(): boolean {
+    return process.env.ENV === "development";
   }
 }
