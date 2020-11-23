@@ -6,8 +6,8 @@ WORKDIR /app
 
 COPY "package.json" .
 COPY "package-lock.json" .
-COPY "dist/src/" .
+COPY "dist/src/" ./src
 
 RUN npm install --production
 
-CMD [ "node", "index" ]
+CMD [ "node", "src/index" ]

@@ -3,7 +3,7 @@
  */
 export class Environment {
   public static getLocation(): string {
-    return process.env.ENV;
+    return process.env.NODE_ENV;
   }
 
   public static getLogLevel(): string {
@@ -39,14 +39,14 @@ export class Environment {
   }
 
   public static isProd(): boolean {
-    return process.env.ENV === "production";
+    return process.env.NODE_ENV === "production";
   }
 
   public static isStaging(): boolean {
-    return process.env.ENV === "staging";
+    return process.env.NODE_ENV === "staging";
   }
 
   public static isDev(): boolean {
-    return process.env.ENV === "development";
+    return process.env.NODE_ENV === "development";
   }
 }
