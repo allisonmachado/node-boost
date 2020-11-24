@@ -79,6 +79,6 @@ app.post("/auth", authController.authenticateUser.bind(authController));
 
 /** Listen for requests */
 app.listen(Env.getPort(), () => {
-    logger.info(`App listening at ${Env.getPort()}`);
+    logger.info(`App listening at port ${Env.getPort()}`);
     logger.info(`App running in ${Env.getLocation()} environment`);
 });

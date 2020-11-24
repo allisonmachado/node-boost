@@ -27,7 +27,7 @@ export class Environment {
   }
 
   public static getMysqlSchema(): string {
-    return process.env.MYSQL_SCHEMA;
+    return process.env.MYSQL_DATABASE;
   }
 
   public static getMysqlConnectionPoolLimit(): number {

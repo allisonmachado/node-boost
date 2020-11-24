@@ -1,8 +1,14 @@
 {
   "name": "app",
   "version": "1.0.0",
-  "description": "clean template for a nodejs backend REST application",
+  "author": "Allison Machado Gonçalves",
+  "description": "Clean template for a nodejs backend REST application",
   "main": "index.js",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/allisonmachado/node-boost.git"
+  },
   "scripts": {
     "lint": "tslint -c tslint.json 'src/**/*.ts'",
     "lint:fix": "tslint --fix -c tslint.json 'src/**/*.ts'",
@@ -15,8 +21,6 @@
     "test:coverage": "nyc --reporter=lcov --reporter=text-summary mocha dist/test/**/*.js",
     "migrate": "rm -rf ./dist && tsc --sourceMap false && migrate up --migrations-dir=dist/migrations"
   },
-  "author": "Allison Machado Gonçalves",
-  "license": "MIT",
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
     "@types/chai": "^4.1.7",

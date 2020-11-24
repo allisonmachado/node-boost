@@ -2,7 +2,7 @@ import migrationsRepository from "../src/data/repositories/mysql/MigrationsRepos
 
 export async function up() {
     await migrationsRepository.query("\
-        CREATE TABLE IF NOT EXISTS `simple_db`.`user` ( \
+        CREATE TABLE `simple_db`.`user` ( \
             `id` INT NOT NULL AUTO_INCREMENT, \
             `name` VARCHAR(145) NOT NULL, \
             `surname` VARCHAR(245) NOT NULL, \
