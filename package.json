@@ -19,7 +19,9 @@
     "pretest": "npm run build",
     "test": "mocha dist/test/**/*.js",
     "test:coverage": "nyc --reporter=lcov --reporter=text-summary mocha dist/test/**/*.js",
-    "migrate": "rm -rf ./dist && tsc --sourceMap false && migrate up --migrations-dir=dist/migrations"
+    "migrate": "rm -rf ./dist && tsc --sourceMap false && migrate up --migrations-dir=dist/migrations",
+    "compose:start": "docker-compose up",
+    "compose:restart": "npm run build && docker-compose restart web"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
