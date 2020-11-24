@@ -5,21 +5,6 @@
 
 Opinionated and pragmatic blueprint for web [Node.js](http://nodejs.org) apps.
 
-## Quick Start
-
-This is not available through the [npm registry](https://www.npmjs.com/).
-
-To create a new project based on this blueprint use this repository as a basis:
-
-```bash
-$ git clone https://github.com/allisonmachado/node-boost.git --depth 1
-$ cd node-boost/
-$ git remote set-url origin new.git.url/here
-$ cp .env.example .env
-$ npm install
-$ npm start
-```
-
 ## Features
 
   * Comprehensive and decoupled layered architecture
@@ -60,6 +45,21 @@ This template also provides a small and simple set of features to serve as an ex
   * [Winston](https://github.com/winstonjs/winston)
   * [Typescript](https://github.com/microsoft/TypeScript)
   * [Mocha](https://github.com/mochajs/mocha)
+
+## Quick Start
+
+This is not available through the [npm registry](https://www.npmjs.com/).
+
+To create a new project based on this blueprint use this repository as a basis:
+
+```bash
+$ git clone https://github.com/allisonmachado/node-boost.git --depth 1
+$ cd node-boost/
+$ git remote set-url origin new.git.url/here
+$ cp .env.example .env
+$ npm install
+$ npm start
+```
 
 ## Tests
 
