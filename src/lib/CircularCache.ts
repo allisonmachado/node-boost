@@ -6,10 +6,7 @@ export class CircularCache<T> implements ISimpleCache<T> {
     private readonly indexToKey: Map<number, string>;
     private readonly data: T[];
 
-    constructor(private readonly size: number) {
-        if (!this.size) {
-            throw new Error(`[${CircularCache.name}]: a size parameter is mandatory`);
-        }
+    constructor(private readonly size: number = 3) {
         if (this.size > 10) {
             throw new Error(`[${CircularCache.name}]: this cache is supposed to be small, biggest size is 10`);
         }
@@ -21,9 +18,6 @@ export class CircularCache<T> implements ISimpleCache<T> {
 
     public search(key: string): T {
         const dataIndex = this.keyToIndex.get(key);
-        if (!dataIndex && dataIndex !== 0) {
-            return null;
-        }
         return this.data[dataIndex];
     }
 
