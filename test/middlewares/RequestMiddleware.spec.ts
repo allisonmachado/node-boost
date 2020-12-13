@@ -77,8 +77,9 @@ describe("Request Middleware", () => {
             // @ts-ignore
             expect(logger.info.calledOnce).to.be.true;
 
+            const regex = /GET:http:\/\/myapp\.com 200 -.\dms$/g;
             // @ts-ignore
-            expect(logger.info.firstCall.lastArg).to.equal('GET:http://myapp.com 200 - 0ms');
+            expect(regex.test(logger.info.firstCall.lastArg)).to.be.true;
         });
     });
 });
