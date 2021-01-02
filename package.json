@@ -21,7 +21,9 @@
     "test:coverage": "nyc --reporter=lcov --reporter=text-summary mocha dist/test/**/*.js",
     "migrate": "rm -rf ./dist && tsc --sourceMap false && migrate up --migrations-dir=dist/migrations",
     "compose:start": "docker-compose up",
-    "compose:restart": "npm run build && docker-compose restart web"
+    "compose:stop": "docker-compose stop",
+    "compose:restart": "npm run build && docker-compose restart web",
+    "compose:clean": "docker-compose down"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",

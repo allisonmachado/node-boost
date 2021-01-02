@@ -48,8 +48,6 @@ This template also provides a small and simple set of features to serve as an ex
 
 ## Get started in 5 easy steps
 
-This is not available through the [npm registry](https://www.npmjs.com/).
-
 1. To create a new project based on this blueprint:
 
 ```bash
