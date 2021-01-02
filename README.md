@@ -46,27 +46,62 @@ This template also provides a small and simple set of features to serve as an ex
   * [Typescript](https://github.com/microsoft/TypeScript)
   * [Mocha](https://github.com/mochajs/mocha)
 
-## Quick Start
+## Get started in 5 easy steps
 
 This is not available through the [npm registry](https://www.npmjs.com/).
 
-To create a new project based on this blueprint use this repository as a basis:
+1. To create a new project based on this blueprint:
 
 ```bash
 $ git clone https://github.com/allisonmachado/node-boost.git --depth 1
 $ cd node-boost/
 $ git remote set-url origin new.git.url/here
+```
+
+2. Then use .env.example as a starting point for the environment variables:
+
+```bash
 $ cp .env.example .env
+```
+
+3. Install the web project dependencies and compile the source code:
+
+```bash
 $ npm install
-$ npm start
+$ npm run build
+```
+
+4. Use Docker Compose to set up the development environment:
+
+```bash
+npm run compose:start
+```
+
+5. At this point you should have a service with a web and db process running. In addition to that, it is required to set up the database schema:
+
+```bash
+npm run migrate
+```
+
+After the steps above, you should be able to interact with the app via the rest interface:
+
+```bash
+curl --location --request GET 'http://localhost:8080/users'
+```
+
+## Development
+
+Throughout development time you may modify the source code, then use the following script to see the changes reflected in the app:
+
+```bash
+npm run compose:restart
 ```
 
 ## Tests
 
-To run the test suite, first install the dependencies, then run `npm test`:
+To run the test suite:
 
 ```bash
-$ npm install
 $ npm test
 ```
 
