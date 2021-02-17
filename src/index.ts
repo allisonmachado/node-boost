@@ -5,6 +5,7 @@ dotenv.config();
 /* Import express for web interface */
 import express from "express";
 import bodyParser from "body-parser";
+import cors from "cors";
 
 /* Import application definitions */
 import { RequestMiddleware } from "./middlewares/RequestMiddleware";
@@ -57,6 +58,7 @@ const logger = new Logger("Main");
 app.use(requestMiddleware.log.bind(requestMiddleware));
 app.use(bodyParser.json());
 app.use(requestMiddleware.handleErrors.bind(requestMiddleware));
+app.use(cors())
 
 /** Register application routes and specific middlewares */
 app.get("/users", usercontroller.getUsers.bind(usercontroller));
