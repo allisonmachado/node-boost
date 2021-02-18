@@ -285,7 +285,7 @@ describe("User Controller", () => {
 
     describe("user delete by id request handling", async () => {
         it("should delete user by given id", async () => {
-            const request = { params: { id: "10" } };
+            const request = { params: { id: "10" }, user: { id: 1 } };
             const userService = {
                 delete: sinon.stub().resolves(1)
             }
@@ -306,7 +306,7 @@ describe("User Controller", () => {
         });
 
         it("should return 404 status code in case user is not found", async () => {
-            const request = { params: { id: "10" } };
+            const request = { params: { id: "10" }, user: { id: 1 } };
             const userService = {
                 delete: sinon.stub().resolves(0)
             }

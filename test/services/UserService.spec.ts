@@ -179,4 +179,14 @@ describe("User Service", () => {
         expect(affectedRows).to.equal(1);
         expect(id).to.equal(4);
     });
+
+    it("should not allow the requester to remove itself", async () => {
+        const userService = new UserService(null, logger);
+        try {
+            await userService.delete(4, 4);
+            expect.fail();
+        } catch (error) {
+            expect(error.message).to.equal("Action forbidden");
+        }
+    });
 });
