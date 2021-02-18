@@ -1,7 +1,7 @@
 import express from "express";
 
+import { CatchActionForbidden, CatchDuplicateEntry } from "./Decorators";
 import { IAuthenticatedRequest } from "../middlewares/AuthMiddleware";
-import { CatchDuplicateEntry } from "./Decorators";
 import { CatchUnexpected } from "../lib/Decorators";
 import { BaseController } from "./BaseController";
 import { IUserService } from "../services/IUserService";
@@ -55,6 +55,7 @@ export class UserController extends BaseController {
         }
     }
 
+    @CatchActionForbidden
     public async deleteUser(req: IAuthenticatedRequest, res: express.Response): Promise<void> {
         const affectedRows = await this.userService.delete(parseInt(req.params.id, 10), req.user.id);
         if (affectedRows === 1) {
