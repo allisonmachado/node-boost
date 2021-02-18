@@ -12,10 +12,11 @@ export class AuthMiddleware {
         try {
             const token = this.getTokenFromBearer(req);
             const contents = await this.authService.validateAccessToken(token);
-            (req as IAuthRequestInfo).user = contents;
+            (req as IAuthenticatedRequest).user = contents;
             next();
         } catch (error) {
             if (
+                error.message === "jwt malformed" ||
                 error.message === "No Authorization Header" ||
                 error.message === "Invalid Token Format"
             ) {
@@ -43,6 +44,6 @@ export class AuthMiddleware {
     }
 }
 
-export interface IAuthRequestInfo extends express.Request {
+export interface IAuthenticatedRequest extends express.Request {
     user: IUserJwtPayload;
 }

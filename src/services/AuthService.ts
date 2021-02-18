@@ -41,6 +41,7 @@ export class AuthService extends BaseService implements IAuthService {
             user = await this.userRepository.findByEmail(email);
         }
         return this.sign({
+            id: user.getId(),
             name: user.getName(),
             surname: user.getSurname(),
             email: user.getEmail(),
@@ -54,6 +55,7 @@ export class AuthService extends BaseService implements IAuthService {
                     reject(err);
                 } else {
                     if (
+                        check.number(decoded.id) &&
                         check.string(decoded.name) &&
                         check.string(decoded.surname) &&
                         check.string(decoded.email) &&

@@ -173,7 +173,7 @@ describe("User Service", () => {
         // @ts-ignore
         const userService = new UserService(userRepository, logger);
 
-        const affectedRows = await userService.delete(4);
+        const affectedRows = await userService.delete(4, 1);
         const [id] = userRepository.delete.firstCall.args;
 
         expect(affectedRows).to.equal(1);

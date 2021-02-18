@@ -37,7 +37,8 @@ export class UserService extends BaseService implements IUserService {
         return this.userRepository.update(id, name, surname, hashedPassword);
     }
 
-    public async delete(id: number): Promise<number> {
+    public async delete(id: number, requesterId: number): Promise<number> {
+        if (id === requesterId) throw new Error(`Action forbidden`)
         return this.userRepository.delete(id);
     }
 

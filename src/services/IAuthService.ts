@@ -5,6 +5,7 @@ export interface IAuthService {
 }
 
 export interface IUserJwtPayload {
+    id: number;
     name: string;
     surname: string;
     email: string;
