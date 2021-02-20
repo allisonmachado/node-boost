@@ -12,7 +12,7 @@
   "scripts": {
     "lint": "tslint -c tslint.json 'src/**/*.ts'",
     "lint:fix": "tslint --fix -c tslint.json 'src/**/*.ts'",
-    "prebuild": "rm -rf ./dist",
+    "prebuild": "npm run lint && rm -rf ./dist",
     "build": "tsc",
     "prestart": "npm run build",
     "start": "node dist/src/index",
