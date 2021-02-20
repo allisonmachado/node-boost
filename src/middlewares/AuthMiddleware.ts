@@ -46,7 +46,7 @@ export class AuthMiddleware {
             "Invalid Token Format",
             "Invalid decoded jwt payload",
         ];
-        return knownErrors.find(e => error.message.includes(e) || error.name === e)
+        return knownErrors.find(e => error.message.includes(e) || error.name === e);
     }
 }
 

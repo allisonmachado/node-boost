@@ -14,7 +14,7 @@ class MigrationsRepository extends RespositoryTemplate {
     constructor() {
         const logger = new EmptyLogger();
         super(new Connection(
-            'localhost',
+            "localhost",
             Env.getMysqlUser(),
             Env.getMysqlPassword(),
             undefined,

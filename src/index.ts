@@ -58,7 +58,7 @@ const logger = new Logger("Main");
 app.use(requestMiddleware.log.bind(requestMiddleware));
 app.use(bodyParser.json());
 app.use(requestMiddleware.handleErrors.bind(requestMiddleware));
-app.use(cors())
+app.use(cors());
 
 /** Register application routes and specific middlewares */
 app.get("/users", usercontroller.getUsers.bind(usercontroller));
