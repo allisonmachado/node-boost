@@ -14,8 +14,7 @@ export class AuthController extends BaseController {
     }
 
     public async authenticateUser(req: express.Request, res: express.Response): Promise<void> {
-        const email = req.body.email;
-        const password = req.body.password;
+        const { email, password } = req.body;
 
         if (await this.authService.validateCredentials(email, password)) {
             const token = await this.authService.signTemporaryToken(email);

@@ -1,4 +1,5 @@
 import express from "express";
+import { JsonWebTokenError } from "jsonwebtoken";
 
 import { ILogger } from "../lib/ILogger";
 import { IAuthService, IUserJwtPayload } from "../services/IAuthService";
@@ -15,15 +16,8 @@ export class AuthMiddleware {
             (req as IAuthenticatedRequest).user = contents;
             next();
         } catch (error) {
-            if (
-                error.message === "jwt malformed" ||
-                error.message === "No Authorization Header" ||
-                error.message === "Invalid Token Format"
-            ) {
-                res.status(401).json({
-                    message: "Invalid Auth Token",
-                    error: error.message,
-                });
+            if (this.isTokenError(error)) {
+                res.status(401).json({ message: "Invalid Auth Token", error: error.message });
             } else {
                 res.status(500).send();
             }
@@ -41,6 +35,18 @@ export class AuthMiddleware {
         } catch {
             throw new Error("Invalid Token Format");
         }
+    }
+
+    private isTokenError(error: Error) {
+        const knownErrors = [
+            "JsonWebTokenError",
+            "TokenExpiredError",
+            "NotBeforeError",
+            "No Authorization Header",
+            "Invalid Token Format",
+            "Invalid decoded jwt payload",
+        ];
+        return knownErrors.find(e => error.message.includes(e) || error.name === e)
     }
 }
 

@@ -22,10 +22,7 @@ export class UserController extends BaseController {
 
     @CatchDuplicateEntry
     public async createUser(req: express.Request, res: express.Response): Promise<void> {
-        const name = req.body.name;
-        const surname = req.body.surname;
-        const email = req.body.email;
-        const password = req.body.password;
+        const { name, surname, email, password } = req.body;
 
         const userId = await this.userService.create(name, surname, email, password);
         res.status(201).send({ id: userId, name, surname, email });
@@ -43,9 +40,7 @@ export class UserController extends BaseController {
 
     public async updateUser(req: express.Request, res: express.Response): Promise<void> {
         const id = parseInt(req.params.id, 10);
-        const name = req.body.name;
-        const surname = req.body.surname;
-        const password = req.body.password;
+        const { name, surname, password } = req.body;
 
         const affectedRows = await this.userService.update(id, name, surname, password);
         if (affectedRows === 1) {
