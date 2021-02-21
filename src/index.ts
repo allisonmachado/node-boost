@@ -20,6 +20,9 @@ import { AuthMiddleware } from "./middlewares/AuthMiddleware";
 import { AuthController } from "./controllers/AuthController";
 import { AuthService } from "./services/AuthService";
 
+import { HealthService } from "./services/HealthService";
+import { HealthController } from "./controllers/HealthController";
+
 import { Environment as Env } from "./lib/Environment";
 import { CircularCache } from "./lib/CircularCache";
 import { Connection } from "./data/repositories/mysql/Connection";
@@ -36,6 +39,10 @@ const mysqlConnection = new Connection(
 );
 const userRepository = new UserRepository(mysqlConnection, new Logger(UserRepository.name));
 
+const healthService = new HealthService(
+    [{ label: "mysql", reporter: mysqlConnection}],
+    new Logger(HealthService.name),
+);
 const userService = new UserService(userRepository, new Logger(UserService.name));
 const authService = new AuthService(
     Env.getJwtSecret(),
@@ -44,6 +51,7 @@ const authService = new AuthService(
     new Logger(AuthService.name),
 );
 
+const healthController = new HealthController(healthService, new Logger(HealthController.name));
 const usercontroller = new UserController(userService, new Logger(UserController.name));
 const authController = new AuthController(authService, new Logger(AuthController.name));
 
@@ -77,6 +85,7 @@ app.delete("/users/:id",
     userMiddleware.verifyDeleteUserParams.bind(userMiddleware),
     usercontroller.deleteUser.bind(usercontroller));
 
+app.get("/health", healthController.getReport.bind(healthController));
 app.post("/auth", authController.authenticateUser.bind(authController));
 
 /** Listen for requests */
