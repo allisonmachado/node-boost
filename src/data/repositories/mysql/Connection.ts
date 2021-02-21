@@ -32,14 +32,14 @@ export class Connection implements IHealthReporter {
 
     public isActive(): Promise<boolean> {
         const query = "SELECT version()";
-        return new Promise((resolve, _reject) => {
+        return new Promise((resolve) => {
             this.pool.getConnection((err, conn) => {
                 if (err) {
                     this.logger.error(`get connection: ${err}`);
                     resolve(false);
                 } else {
                     if (conn) {
-                        conn.query(query, (error, _results) => {
+                        conn.query(query, (error) => {
                             conn.release();
                             if (error) {
                                 this.logger.error(`query: ${error}`);
