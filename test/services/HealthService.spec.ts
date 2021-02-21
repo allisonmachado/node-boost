@@ -1,12 +1,10 @@
 // tslint:disable: only-arrow-functions
 import { ILogger } from "../../src/lib/ILogger";
 import { EmptyLogger } from "../../src/lib/EmptyLogger";
-
-
-import { HealthService } from "../../src/services/HealthService";
-import { expect } from "chai";
 import { HealthStatus } from "../../src/services/IHealthService";
+import { HealthService } from "../../src/services/HealthService";
 
+import { expect } from "chai";
 
 describe("Health Service", () => {
     const logger: ILogger = new EmptyLogger();
