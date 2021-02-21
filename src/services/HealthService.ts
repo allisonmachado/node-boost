@@ -26,7 +26,12 @@ export class HealthService extends BaseService implements IHealthService {
             });
         }
         const report = { timestamp, status, dependencies };
-        this.logger.info(JSON.stringify(report));
+        this.logger.info(this.stringifyReport(report));
         return report;
+    }
+
+    private stringifyReport(report: IHealthReport): string {
+        return `[${report.status.toUpperCase()}]`
+            + `${report.dependencies.map(d => `'${d.name}': ${d.status}`).join(", ")}`;
     }
 }

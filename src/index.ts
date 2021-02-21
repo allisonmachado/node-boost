@@ -85,7 +85,9 @@ app.delete("/users/:id",
     userMiddleware.verifyDeleteUserParams.bind(userMiddleware),
     usercontroller.deleteUser.bind(usercontroller));
 
-app.get("/health", healthController.getReport.bind(healthController));
+app.get("/health",
+    authMiddleware.verify.bind(authMiddleware),
+    healthController.getReport.bind(healthController));
 app.post("/auth", authController.authenticateUser.bind(authController));
 
 /** Listen for requests */
