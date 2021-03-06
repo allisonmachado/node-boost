@@ -1,7 +1,15 @@
+.gcloudignore
+.git
+.gitignore
+.github/
+
 node_modules/
 dist/
 coverage/
 tmp/
+
+Dockerfile
+docker-compose.yml
 
 .nyc_output/
 
@@ -15,5 +23,3 @@ npm-debug.log*
 
 *.log
 *.tmp
-
-app.yaml

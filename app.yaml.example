@@ -1,0 +1,19 @@
+runtime: nodejs12
+env: standard
+
+manual_scaling:
+  instances: 1
+resources:
+  cpu: 1
+  memory_gb: 0.5
+  disk_size_gb: 10
+
+env_variables:
+  LOG_LEVEL: silly
+  MYSQL_HOST: db
+  MYSQL_USER: application
+  MYSQL_PASSWORD: 123456
+  MYSQL_ROOT_PASSWORD: 123456
+  MYSQL_DATABASE: simple_db
+  MYSQL_CONNECTION_POOL_LIMIT: 3
+  JWT_SECRET: ptiZgdhSdndmDdudjsHwiwpPalskdYdjcdndhuDdiedjsCshdA
