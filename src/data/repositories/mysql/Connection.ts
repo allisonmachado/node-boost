@@ -13,6 +13,7 @@ export class Connection implements IHealthReporter {
         password: string,
         database: string,
         connectionLimit: number,
+        socketPath: string,
         logger: ILogger,
     ) {
         this.pool = mysql.createPool({
@@ -21,6 +22,7 @@ export class Connection implements IHealthReporter {
             user,
             password,
             database,
+            socketPath,
         });
         this.logger = logger;
         this.logger.debug(`initialized`);

@@ -35,6 +35,7 @@ const mysqlConnection = new Connection(
     Env.getMysqlPassword(),
     Env.getMysqlSchema(),
     Env.getMysqlConnectionPoolLimit(),
+    Env.getMysqlSocketPath(),
     new Logger(Connection.name),
 );
 const userRepository = new UserRepository(mysqlConnection, new Logger(UserRepository.name));

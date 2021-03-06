@@ -19,6 +19,7 @@ class MigrationsRepository extends RespositoryTemplate {
             Env.getMysqlPassword(),
             undefined,
             Env.getMysqlConnectionPoolLimit(),
+            Env.getMysqlSocketPath(),
             logger,
         ), logger);
         this.logger.debug(`initialized`);

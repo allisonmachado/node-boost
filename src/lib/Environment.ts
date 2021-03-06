@@ -18,6 +18,10 @@ export class Environment {
     return process.env.MYSQL_HOST;
   }
 
+  public static getMysqlSocketPath(): string {
+    return process.env.MYSQL_SOCKET_PATH;
+  }
+
   public static getMysqlUser(): string {
     return process.env.MYSQL_USER;
   }
