@@ -25,7 +25,7 @@ import { HealthController } from "./controllers/HealthController";
 
 import { Environment as Env } from "./lib/Environment";
 import { CircularCache } from "./lib/CircularCache";
-import { Connection } from "./data/repositories/mysql/Connection";
+import { Connection } from "./data/connection/mysql/Connection";
 import { Logger } from "./lib/Logger";
 
 /** Init application definitions */
@@ -34,11 +34,10 @@ const mysqlConnection = new Connection(
     Env.getMysqlUser(),
     Env.getMysqlPassword(),
     Env.getMysqlSchema(),
-    Env.getMysqlConnectionPoolLimit(),
     Env.getMysqlSocketPath(),
     new Logger(Connection.name),
 );
-const userRepository = new UserRepository(mysqlConnection, new Logger(UserRepository.name));
+const userRepository = new UserRepository(undefined, new Logger(UserRepository.name));
 
 const healthService = new HealthService(
     [{ label: "mysql", reporter: mysqlConnection}],
