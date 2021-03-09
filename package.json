@@ -16,7 +16,7 @@
   "scripts": {
     "lint": "tslint -c tslint.json 'src/**/*.ts'",
     "lint:fix": "tslint --fix -c tslint.json 'src/**/*.ts'",
-    "prebuild": "npm run lint && rm -rf ./dist",
+    "prebuild": "npm run lint:fix && rm -rf ./dist",
     "build": "tsc",
     "gcp-build": "tsc -p .",
     "prestart": "npm run build",
@@ -60,7 +60,7 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
-    "knex": "^0.95.1",
+    "knex": "^0.21.6",
     "lodash": "^4.17.20",
     "mysql": "^2.18.1",
     "validator": "^13.1.17",

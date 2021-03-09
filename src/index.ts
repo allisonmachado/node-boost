@@ -37,7 +37,7 @@ const mysqlConnection = new Connection(
     Env.getMysqlSocketPath(),
     new Logger(Connection.name),
 );
-const userRepository = new UserRepository(undefined, new Logger(UserRepository.name));
+const userRepository = new UserRepository(mysqlConnection, new Logger(UserRepository.name));
 
 const healthService = new HealthService(
     [{ label: "mysql", reporter: mysqlConnection}],
