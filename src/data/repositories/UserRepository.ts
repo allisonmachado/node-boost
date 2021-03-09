@@ -3,6 +3,7 @@ import { Connection } from "../connection/mysql/Connection";
 import { UserEntity } from "../entities/user/UserEntity";
 import { IUserRepository } from "./IUserRepository";
 
+import lodash from "lodash";
 import check from "check-types";
 import Knex from "knex";
 
@@ -23,7 +24,7 @@ export class UserRepository implements IUserRepository {
         if (!user || check.emptyArray(user)) {
             return null;
         }
-        return new UserEntity(user.id, user.name, user.surname, user.email, user.password);
+        return this.mapRecordToUser(user);
     }
 
     public async findByEmail(email: string): Promise<UserEntity> {
@@ -31,12 +32,12 @@ export class UserRepository implements IUserRepository {
         if (!user || check.emptyArray(user)) {
             return null;
         }
-        return new UserEntity(user.id, user.name, user.surname, user.email, user.password);
+        return this.mapRecordToUser(user);
     }
 
     public async findTop10(): Promise<UserEntity[]> {
         const users = await this.knex("user").limit(10);
-        return users.map((u: any) => new UserEntity(u.id, u.name, u.surname, u.email, u.password));
+        return users.map(this.mapRecordToUser);
     }
 
     public async update(
@@ -48,28 +49,15 @@ export class UserRepository implements IUserRepository {
         if (!id) {
             throw new Error(`Id is mandatory parameter for updating user record`);
         }
-        let updateValues = {};
-        if (name) {
-            updateValues = {
-                name,
-            };
-        }
-        if (surname) {
-            updateValues = {
-                ...updateValues,
-                surname,
-            };
-        }
-        if (password) {
-            updateValues = {
-                ...updateValues,
-                password,
-            };
-        }
+        const updateValues = lodash.pickBy({ name, surname, password });
         return await this.knex("user").where("id", id).update(updateValues);
     }
 
     public async delete(id: number): Promise<number> {
         return await this.knex("user").where("id", id).del();
+    }
+
+    private mapRecordToUser(user: any): UserEntity {
+        return new UserEntity(user.id, user.name, user.surname, user.email, user.password);
     }
 }
