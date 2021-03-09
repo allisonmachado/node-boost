@@ -1,9 +1,11 @@
+import Knex from "knex";
 import knex from "knex";
+
 import { ILogger } from "../../../lib/ILogger";
 import { IHealthReporter } from "../../../services/IHealthReporter";
 
 export class Connection implements IHealthReporter {
-    private queryBuilder;
+    private queryBuilder: Knex;
     private logger: ILogger;
 
     constructor(
@@ -29,7 +31,7 @@ export class Connection implements IHealthReporter {
         this.logger.debug(`initialized`);
     }
 
-    public getQueryBuilder() {
+    public getQueryBuilder(): Knex {
         return this.queryBuilder;
     }
 

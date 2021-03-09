@@ -77,7 +77,8 @@ app.post("/users",
     authMiddleware.verify.bind(authMiddleware),
     userMiddleware.verifyCreateUserParams.bind(userMiddleware),
     usercontroller.createUser.bind(usercontroller));
-app.put("/users/:id", authMiddleware.verify.bind(authMiddleware),
+app.put("/users/:id",
+    authMiddleware.verify.bind(authMiddleware),
     userMiddleware.verifyUpdateUserParams.bind(userMiddleware),
     usercontroller.updateUser.bind(usercontroller));
 app.delete("/users/:id",

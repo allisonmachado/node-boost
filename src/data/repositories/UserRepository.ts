@@ -4,85 +4,72 @@ import { UserEntity } from "../entities/user/UserEntity";
 import { IUserRepository } from "./IUserRepository";
 
 import check from "check-types";
+import Knex from "knex";
 
 export class UserRepository implements IUserRepository {
-    constructor(connection: Connection, protected logger: ILogger) {
+    private knex: Knex;
+    constructor(private connection: Connection, protected logger: ILogger) {
+        this.knex = this.connection.getQueryBuilder();
         this.logger.debug(`initialized`);
     }
 
     public async create(name: string, surname: string, email: string, password: string): Promise<number> {
-        // const sql = "INSERT INTO `simple_db`.`user` (`name`, `surname`, `email`, `password`) "
-        //     + "VALUES (?, ?, ?, ?)";
-        // const data = await this.query(sql, [name, surname, email, password]);
-        // return data.insertId;
-        // TODO: migrate to knex
-        return 0;
+        const [ id ] = await this.knex("user").insert({ name, surname, email, password });
+        return id;
     }
 
     public async findById(id: number): Promise<UserEntity> {
-        // const data = await this.query("SELECT * FROM simple_db.user WHERE id = ?", [id]);
-        // if (!data || check.emptyArray(data)) {
-        //     return null;
-        // }
-        // return data.map((d: any) => new UserEntity(d.id, d.name, d.surname, d.email, d.password))[0];
-        // TODO: migrate to knex
-        return new UserEntity(0, "", "", "", "");
+        const [ user ] = await this.knex("user").where("id", id);
+        if (!user || check.emptyArray(user)) {
+            return null;
+        }
+        return new UserEntity(user.id, user.name, user.surname, user.email, user.password);
     }
 
     public async findByEmail(email: string): Promise<UserEntity> {
-        // const data = await this.query("SELECT * FROM simple_db.user WHERE email = ?", [email]);
-        // if (!data || check.emptyArray(data)) {
-        //     return null;
-        // }
-        // return data.map((d: any) => new UserEntity(d.id, d.name, d.surname, d.email, d.password))[0];
-        // TODO: migrate to knex
-        return new UserEntity(0, "", "", "", "");
+        const [ user ] = await this.knex("user").where("email", email);
+        if (!user || check.emptyArray(user)) {
+            return null;
+        }
+        return new UserEntity(user.id, user.name, user.surname, user.email, user.password);
     }
 
     public async findTop10(): Promise<UserEntity[]> {
-        // const data = await this.query("SELECT * FROM simple_db.user LIMIT 10");
-        // return data.map((d: any) => new UserEntity(d.id, d.name, d.surname, d.email, d.password));
-        // TODO: migrate to knex
-        return [new UserEntity(0, "", "", "", "")];
+        const users = await this.knex("user").limit(10);
+        return users.map((u: any) => new UserEntity(u.id, u.name, u.surname, u.email, u.password));
     }
 
     public async update(
         id: number, name: string = "", surname: string = "", password: string = "",
     ): Promise<number> {
-        // if (!name && !surname && !password) {
-        //     return 0;
-        // }
-        // if (!id) {
-        //     throw new Error(`Id is mandatory parameter for updating user record`);
-        // }
-        // const columnsToUpdate = [];
-        // const valuesToUpdate = [];
-        // if (name) {
-        //     columnsToUpdate.push("`name` = ?");
-        //     valuesToUpdate.push(name);
-        // }
-        // if (surname) {
-        //     columnsToUpdate.push("`surname` = ?");
-        //     valuesToUpdate.push(surname);
-        // }
-        // if (password) {
-        //     columnsToUpdate.push("`password` = ?");
-        //     valuesToUpdate.push(password);
-        // }
-        // const sql = "UPDATE `simple_db`.`user` SET "
-        //     + columnsToUpdate.join(", ")
-        //     + " WHERE (`id` = ?)";
-        // valuesToUpdate.push(id);
-        // const result = await this.query(sql, valuesToUpdate);
-        // return result.affectedRows;
-        // TODO: migrate to knex
-        return 0;
+        if (!name && !surname && !password) {
+            return 0;
+        }
+        if (!id) {
+            throw new Error(`Id is mandatory parameter for updating user record`);
+        }
+        let updateValues = {};
+        if (name) {
+            updateValues = {
+                name,
+            };
+        }
+        if (surname) {
+            updateValues = {
+                ...updateValues,
+                surname,
+            };
+        }
+        if (password) {
+            updateValues = {
+                ...updateValues,
+                password,
+            };
+        }
+        return await this.knex("user").where("id", id).update(updateValues);
     }
 
     public async delete(id: number): Promise<number> {
-        // const result = await this.query("DELETE FROM `simple_db`.`user` WHERE (`id` = ?)", [id]);
-        // return result.affectedRows;
-        // TODO: migrate to knex
-        return 0;
+        return await this.knex("user").where("id", id).del();
     }
 }

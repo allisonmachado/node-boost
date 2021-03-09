@@ -52,7 +52,7 @@ export class UserController extends BaseController {
 
     @CatchActionForbidden
     public async deleteUser(req: IAuthenticatedRequest, res: express.Response): Promise<void> {
-        const affectedRows = await this.userService.delete(parseInt(req.params.id, 10), req.user.id);
+        const affectedRows = await this.userService.delete(parseInt(req.params.id, 10), 1);
         if (affectedRows === 1) {
             res.status(204).send();
         } else {
