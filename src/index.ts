@@ -1,7 +1,3 @@
-/* Load environment configuration */
-import dotenv from "dotenv";
-dotenv.config();
-
 /* Import express for web interface */
 import express from "express";
 import bodyParser from "body-parser";
@@ -27,6 +23,20 @@ import { Environment as Env } from "./lib/Environment";
 import { CircularCache } from "./lib/CircularCache";
 import { Connection } from "./data/connection/mysql/Connection";
 import { Logger } from "./lib/Logger";
+
+/** Display environment info */
+const logger = new Logger("Main");
+
+logger.info("Location: " + Env.getLocation());
+logger.info("LogLevel: " + Env.getLogLevel());
+logger.info("Port: " + Env.getPort());
+logger.info("MysqlHost: " + Env.getMysqlHost());
+logger.info("MysqlSocketPath: " + Env.getMysqlSocketPath());
+logger.info("MysqlSchema: " + Env.getMysqlSchema());
+logger.info("MysqlConnectionPoolLimit: " + Env.getMysqlConnectionPoolLimit());
+logger.info("isProd: " + Env.isProd());
+logger.info("isStaging: " + Env.isStaging());
+logger.info("isDev: " + Env.isDev());
 
 /** Init application definitions */
 const mysqlConnection = new Connection(
@@ -62,7 +72,7 @@ const requestMiddleware = new RequestMiddleware(new Logger(RequestMiddleware.nam
 
 /** Register application global middlewares */
 const app = express();
-const logger = new Logger("Main");
+
 app.use(requestMiddleware.log.bind(requestMiddleware));
 app.use(bodyParser.json());
 app.use(requestMiddleware.handleErrors.bind(requestMiddleware));

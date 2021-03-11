@@ -9,6 +9,7 @@ tmp/
 .env
 .env.test
 .env.dev
+.env.export
 .migrate
 
 npm-debug.log*
