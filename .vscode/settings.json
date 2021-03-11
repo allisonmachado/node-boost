@@ -1,4 +1,6 @@
 {
+    "editor.tabSize": 4,
     "typescript.referencesCodeLens.enabled": true,
-    "typescript.implementationsCodeLens.enabled": true
+    "typescript.implementationsCodeLens.enabled": true,
+    "editor.detectIndentation": false
 }
