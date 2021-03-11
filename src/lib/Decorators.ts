@@ -12,7 +12,7 @@ export function CatchUnexpected(statusCode: number) {
             }
             const originalMethod = descriptor.value;
             descriptor.value = async function(...args: any[]) {
-                const res = args[1]; // second arg provided by express
+                const res = args[1]; /* second arg provided by express */
                 try {
                     await originalMethod.apply(this, args);
                 } catch (error) {

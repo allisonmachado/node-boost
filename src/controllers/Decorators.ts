@@ -6,7 +6,7 @@
 export function CatchDuplicateEntry(target: any, propertyKey: string, descriptor: PropertyDescriptor) {
     const originalMethod = descriptor.value;
     descriptor.value = async function(...args: any[]) {
-        const res = args[1]; // second arg provided by express
+        const res = args[1]; /* second arg provided by express */
         try {
             await originalMethod.apply(this, args);
         } catch (error) {
@@ -27,7 +27,7 @@ export function CatchDuplicateEntry(target: any, propertyKey: string, descriptor
 export function CatchActionForbidden(target: any, propertyKey: string, descriptor: PropertyDescriptor) {
     const originalMethod = descriptor.value;
     descriptor.value = async function(...args: any[]) {
-        const res = args[1]; // second arg provided by express
+        const res = args[1]; /* second arg provided by express */
         try {
             await originalMethod.apply(this, args);
         } catch (error) {

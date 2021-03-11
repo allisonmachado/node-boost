@@ -22,22 +22,22 @@ export class CircularCache<T> implements ISimpleCache<T> {
     }
 
     public save(key: string, data: T): void {
-        // To avoid keyToIndex map grow big we delete the key related to index that will be cached:
+        /* To avoid keyToIndex map grow big we delete the key related to index that will be cached: */
         const currentKey = this.indexToKey.get(this.currentIndex);
         if (currentKey) {
             this.keyToIndex.delete(currentKey);
         }
 
-        // To find data quickly we need a map to the index:
+        /* To find data quickly we need a map to the index: */
         this.keyToIndex.set(key, this.currentIndex);
 
-        // Keep track of key related to index later to avoid keyToIndex map grow big:
+        /* Keep track of key related to index later to avoid keyToIndex map grow big: */
         this.indexToKey.set(this.currentIndex, key);
 
-        // Cache core:
+        /* Cache core: */
         this.data[this.currentIndex] = data;
 
-        // Circular overwrite data:
+        /* Circular overwrite data: */
         this.currentIndex = (this.currentIndex + 1) % this.size;
     }
 }
