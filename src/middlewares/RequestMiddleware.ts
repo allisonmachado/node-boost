@@ -9,12 +9,16 @@ export class RequestMiddleware {
 
     public log(req: express.Request, res: express.Response, next: express.NextFunction): void {
         const start = Date.now();
-        res.on("finish", () => this.logger.info(`${req.method}:${req.url} ${res.statusCode} - ${Date.now() - start}ms`));
+        res.on("finish", () => this.logger
+            .info(`${req.method}:${req.url} ${res.statusCode} - ${Date.now() - start}ms`));
         next();
     }
 
     public handleErrors(
-        error: any, req: express.Request, res: express.Response, next: express.NextFunction,
+        error: unknown,
+        _req: express.Request,
+        res: express.Response,
+        _next: express.NextFunction,
     ): void {
         if (error instanceof SyntaxError) {
             this.logger.debug(`Unexpected JSON format, ${error}`);

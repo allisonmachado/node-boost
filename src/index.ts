@@ -9,7 +9,7 @@ import { UserMiddleware } from "./middlewares/UserMiddleware";
 import { UserController } from "./controllers/UserController";
 import { UserService } from "./services/UserService";
 import { UserRepository } from "./data/repositories/UserRepository";
-import { UserEntity } from "./data/entities/user/UserEntity";
+import { UserEntity } from "./data/entities/UserEntity";
 
 import { AuthMiddleware } from "./middlewares/AuthMiddleware";
 import { AuthController } from "./controllers/AuthController";

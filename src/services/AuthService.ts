@@ -1,5 +1,5 @@
 import { ILogger } from "../lib/ILogger";
-import { UserEntity } from "../data/entities/user/UserEntity";
+import { UserEntity } from "../data/entities/UserEntity";
 import { BaseService } from "./BaseService";
 import { ISimpleCache } from "../lib/ISimpleCache";
 import { IUserRepository } from "../data/repositories/IUserRepository";
@@ -21,7 +21,7 @@ export class AuthService extends BaseService implements IAuthService {
     ) => Promise<boolean>;
 
     private sign: (
-        payload: string | Buffer | object,
+        payload: string | Buffer | unknown,
         secretOrPrivateKey: Secret,
         options: SignOptions,
     ) => Promise<string | undefined>;
@@ -29,7 +29,7 @@ export class AuthService extends BaseService implements IAuthService {
     private verify: (
         token: string,
         secretOrPublicKey: Secret | GetPublicKeyOrSecret,
-    ) => Promise<object>;
+    ) => Promise<unknown>;
 
     constructor(
         private secret: string,
@@ -77,13 +77,17 @@ export class AuthService extends BaseService implements IAuthService {
         throw new Error(`Invalid decoded jwt payload: ${JSON.stringify(decoded)}`);
     }
 
-    private isUserJwtToken(obj: any): obj is IUserJwtPayload {
-        return (
-            check.number(obj.id) &&
-            check.string(obj.name) &&
-            check.string(obj.surname) &&
-            check.string(obj.email) &&
-            validator.isEmail(obj.email)
-        );
+    private isUserJwtToken(obj: unknown): obj is IUserJwtPayload {
+        try {
+            return (
+                check.number(obj["id"]) &&
+                check.string(obj["name"]) &&
+                check.string(obj["surname"]) &&
+                check.string(obj["email"]) &&
+                validator.isEmail(obj["email"])
+            );
+        } catch (error) {
+            return false;
+        }
     }
 }

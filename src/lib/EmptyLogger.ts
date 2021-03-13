@@ -1,7 +1,7 @@
 import { ILogger } from "./ILogger";
 
 export class EmptyLogger implements ILogger {
-    public error(msg: string): void {/** */}
-    public info(msg: string): void {/** */}
-    public debug(msg: string): void {/** */}
+    public error(msg: string): void { msg; }
+    public info(msg: string): void { msg; }
+    public debug(msg: string): void { msg; }
 }

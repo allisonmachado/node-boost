@@ -14,8 +14,8 @@
     "url": "https://github.com/allisonmachado/node-boost.git"
   },
   "scripts": {
-    "lint": "tslint -c tslint.json 'src/**/*.ts'",
-    "lint:fix": "tslint --fix -c tslint.json 'src/**/*.ts'",
+    "lint": "eslint src/**/*.ts",
+    "lint:fix": "eslint --fix src/**/*.ts",
     "prebuild": "npm run lint:fix && rm -rf ./dist",
     "build": "tsc",
     "gcp-build": "tsc -p .",
@@ -46,12 +46,14 @@
     "@types/node": "^12.0.0",
     "@types/sinon": "^7.0.11",
     "@types/validator": "^13.1.0",
+    "@typescript-eslint/eslint-plugin": "^4.17.0",
+    "@typescript-eslint/parser": "^4.17.0",
     "chai": "^4.2.0",
+    "eslint": "^7.22.0",
     "faker": "^5.1.0",
     "mocha": "^6.1.4",
     "nyc": "^15.1.0",
     "sinon": "^7.3.2",
-    "tslint": "^5.16.0",
     "typescript": "^3.4.5"
   },
   "dependencies": {

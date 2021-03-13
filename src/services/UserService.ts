@@ -1,7 +1,7 @@
 import { IUserService, IUserAccessibleProps } from "./IUserService";
 import { IUserRepository } from "../data/repositories/IUserRepository";
 import { BaseService } from "./BaseService";
-import { UserEntity } from "../data/entities/user/UserEntity";
+import { UserEntity } from "../data/entities/UserEntity";
 import { ILogger } from "../lib/ILogger";
 
 import * as bcrypt from "bcryptjs";
@@ -45,7 +45,7 @@ export class UserService extends BaseService implements IUserService {
     }
 
     public async delete(id: number, requesterId: number): Promise<number> {
-        if (id === requesterId) { throw new Error(`Action forbidden`); }
+        if (id === requesterId) { throw new Error("Action forbidden"); }
         return this.userRepository.delete(id);
     }
 

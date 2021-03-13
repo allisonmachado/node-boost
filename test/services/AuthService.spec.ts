@@ -1,7 +1,7 @@
 // tslint:disable: only-arrow-functions
 import { expect } from "chai";
 import { ILogger } from "../../src/lib/ILogger";
-import { UserEntity } from "../../src/data/entities/user/UserEntity";
+import { UserEntity } from "../../src/data/entities/UserEntity";
 import { EmptyLogger } from "../../src/lib/EmptyLogger";
 import { AuthService } from "../../src/services/AuthService";
 import { CircularCache } from "../../src/lib/CircularCache";
