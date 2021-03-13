@@ -18,7 +18,8 @@ export class RequestMiddleware {
         error: unknown,
         _req: express.Request,
         res: express.Response,
-        _next: express.NextFunction,
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        _next: express.NextFunction, // express requires except error-handling functions have four arguments
     ): void {
         if (error instanceof SyntaxError) {
             this.logger.debug(`Unexpected JSON format, ${error}`);

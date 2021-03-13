@@ -1,9 +1,13 @@
+import express from "express";
+import { BaseController } from "../controllers/BaseController";
+import { IAuthenticatedRequest } from "../middlewares/AuthMiddleware";
+
 /**
  * This is intended to be used as a Typescript decorator for request processor classes.
  * It should intercept exceptios and properly return 500 status code indicating an internal server error occured.
  */
 export function CatchUnexpected(statusCode: number) {
-    return (target: any) => {
+    return (target: BaseController & { prototype: unknown }): void => {
         for (const propertyName of Object.getOwnPropertyNames(target.prototype)) {
             const descriptor = Object.getOwnPropertyDescriptor(target.prototype, propertyName);
             const isMethod = descriptor.value instanceof Function;
@@ -11,10 +15,9 @@ export function CatchUnexpected(statusCode: number) {
                 continue;
             }
             const originalMethod = descriptor.value;
-            descriptor.value = async function(...args: any[]) {
-                const res = args[1]; /* second arg provided by express */
+            descriptor.value = async function(req: IAuthenticatedRequest, res: express.Response, ...args: unknown[]) {
                 try {
-                    await originalMethod.apply(this, args);
+                    await originalMethod.apply(this, [req, res, ...args]);
                 } catch (error) {
                     this.logger.error(error);
                     res.status(statusCode).send();
@@ -30,12 +33,11 @@ export function CatchUnexpected(statusCode: number) {
  * It should intercept duplicate entry exceptios and properly return 409 status code.
  * Indicating a conflict with the current state of the resource.
  */
-export function CatchDuplicateEntry(target: any, propertyKey: string, descriptor: PropertyDescriptor) {
+export function CatchDuplicateEntry(_target: unknown, _propertyKey: string, descriptor: PropertyDescriptor): void {
     const originalMethod = descriptor.value;
-    descriptor.value = async function(...args: any[]) {
-        const res = args[1]; /* second arg provided by express */
+    descriptor.value = async function(req: express.Request, res: express.Response, ...args: unknown[]) {
         try {
-            await originalMethod.apply(this, args);
+            await originalMethod.apply(this, [req, res, ...args]);
         } catch (error) {
             if (error.message.includes("ER_DUP_ENTRY")) {
                 res.status(409).send();
@@ -51,12 +53,11 @@ export function CatchDuplicateEntry(target: any, propertyKey: string, descriptor
  * It should intercept forbidden exceptios and properly return 403 status code.
  * Indicating the lack of permissions to perform the action.
  */
-export function CatchActionForbidden(target: any, propertyKey: string, descriptor: PropertyDescriptor) {
+export function CatchActionForbidden(_target: unknown, _propertyKey: string, descriptor: PropertyDescriptor): void {
     const originalMethod = descriptor.value;
-    descriptor.value = async function(...args: any[]) {
-        const res = args[1]; /* second arg provided by express */
+    descriptor.value = async function(req: IAuthenticatedRequest, res: express.Response, ...args: unknown[]) {
         try {
-            await originalMethod.apply(this, args);
+            await originalMethod.apply(this, [req, res, ...args]);
         } catch (error) {
             if (error.message.includes("Action forbidden")) {
                 res.status(403).send();

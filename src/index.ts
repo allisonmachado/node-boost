@@ -65,9 +65,9 @@ const requestMiddleware = new RequestMiddleware(new Logger(RequestMiddleware.nam
 const app = express();
 
 app.use(requestMiddleware.log.bind(requestMiddleware));
+app.use(cors());
 app.use(express.json());
 app.use(requestMiddleware.handleErrors.bind(requestMiddleware));
-app.use(cors());
 
 /** Register application routes and specific middlewares */
 app.get("/users", usercontroller.getUsers.bind(usercontroller));
