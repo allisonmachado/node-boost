@@ -34,10 +34,6 @@ export class Environment {
     return process.env.MYSQL_DATABASE;
   }
 
-  public static getMysqlConnectionPoolLimit(): number {
-    return parseInt(process.env.MYSQL_CONNECTION_POOL_LIMIT, 10);
-  }
-
   public static getJwtSecret(): string {
     return process.env.JWT_SECRET;
   }

@@ -33,20 +33,12 @@ logger.info("Port: " + Env.getPort());
 logger.info("MysqlHost: " + Env.getMysqlHost());
 logger.info("MysqlSocketPath: " + Env.getMysqlSocketPath());
 logger.info("MysqlSchema: " + Env.getMysqlSchema());
-logger.info("MysqlConnectionPoolLimit: " + Env.getMysqlConnectionPoolLimit());
 logger.info("isProd: " + Env.isProd());
 logger.info("isStaging: " + Env.isStaging());
 logger.info("isDev: " + Env.isDev());
 
 /** Init application definitions */
-const mysqlConnection = new Connection(
-    Env.getMysqlHost(),
-    Env.getMysqlUser(),
-    Env.getMysqlPassword(),
-    Env.getMysqlSchema(),
-    Env.getMysqlSocketPath(),
-    new Logger(Connection.name),
-);
+const mysqlConnection = new Connection(new Logger(Connection.name));
 const userRepository = new UserRepository(mysqlConnection, new Logger(UserRepository.name));
 
 const healthService = new HealthService(

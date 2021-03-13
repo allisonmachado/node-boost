@@ -24,11 +24,13 @@
     "pretest": "npm run build",
     "test": "mocha dist/test/**/*.js",
     "test:coverage": "nyc --reporter=lcov --reporter=text-summary mocha dist/test/**/*.js",
-    "migrate": "echo \"Error: knex adoption in progress\" && exit 1",
-    "compose:start": "docker-compose up",
+    "compose:start": "docker-compose up --build",
     "compose:stop": "docker-compose stop",
     "compose:restart": "npm run build && docker-compose restart web",
-    "compose:clean": "docker-compose down"
+    "compose:clean": "docker-compose down",
+    "migrate:up": "cd ./dist/src/migrations && npx knex@0.21.6 migrate:up",
+    "migrate:down": "cd ./dist/src/migrations && npx knex@0.21.6 migrate:down",
+    "migrate:latest": "cd ./dist/src/migrations && npx knex@0.21.6 migrate:latest"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",

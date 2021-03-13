@@ -75,7 +75,7 @@ $ npm run build
 npm run compose:start
 ```
 
-5. At this point you should have a service with a web and db process running. In addition to that, it is required to set up the database schema:
+5. In addition to that, it is required to set up the database schema. When a mysql container is started for the first time, a new schema with the name specified in the MYSQL_HOST env variable will be created. To create the tables make sure you have the correct env variables and run:
 
 ```bash
 npm run migrate

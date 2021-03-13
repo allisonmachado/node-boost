@@ -1,5 +1,6 @@
 import Knex from "knex";
 import knex from "knex";
+import envConnection from "../../../knexfile";
 
 import { ILogger } from "../../../lib/ILogger";
 import { IHealthReporter } from "../../../services/IHealthReporter";
@@ -8,25 +9,8 @@ export class Connection implements IHealthReporter {
     private queryBuilder: Knex;
     private logger: ILogger;
 
-    constructor(
-        host: string,
-        user: string,
-        password: string,
-        database: string,
-        socketPath: string,
-        logger: ILogger,
-    ) {
-        this.queryBuilder = knex({
-            client: "mysql",
-            connection: {
-              host,
-              user,
-              password,
-              database,
-              socketPath,
-            },
-            acquireConnectionTimeout: 10000,
-          });
+    constructor(logger: ILogger) {
+        this.queryBuilder = knex(envConnection);
         this.logger = logger;
         this.logger.debug(`initialized`);
     }
@@ -37,7 +21,7 @@ export class Connection implements IHealthReporter {
 
     public async isActive(): Promise<boolean> {
         try {
-            const [ [ { version } ] ] = await this.queryBuilder.raw("SELECT version() as version");
+            const [[{ version }]] = await this.queryBuilder.raw("SELECT version() as version");
             return version.startsWith("8");
         } catch (error) {
             this.logger.error(`not active: ${error}`);
