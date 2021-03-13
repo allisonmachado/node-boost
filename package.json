@@ -24,10 +24,10 @@
     "pretest": "npm run build",
     "test": "mocha dist/test/**/*.js",
     "test:coverage": "nyc --reporter=lcov --reporter=text-summary mocha dist/test/**/*.js",
-    "compose:start": "docker-compose up --build",
+    "compose:up": "docker-compose up --build",
     "compose:stop": "docker-compose stop",
     "compose:restart": "npm run build && docker-compose restart web",
-    "compose:clean": "docker-compose down",
+    "compose:down": "docker-compose down",
     "migrate:up": "cd ./dist/src/migrations && npx knex@0.21.6 migrate:up",
     "migrate:down": "cd ./dist/src/migrations && npx knex@0.21.6 migrate:down",
     "migrate:latest": "cd ./dist/src/migrations && npx knex@0.21.6 migrate:latest"
@@ -56,7 +56,6 @@
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
-    "body-parser": "^1.19.0",
     "check-types": "^11.1.2",
     "cors": "^2.8.5",
     "express": "^4.17.1",

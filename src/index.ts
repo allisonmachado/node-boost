@@ -1,6 +1,5 @@
 /* Import express for web interface */
 import express from "express";
-import bodyParser from "body-parser";
 import cors from "cors";
 
 /* Import application definitions */
@@ -66,7 +65,7 @@ const requestMiddleware = new RequestMiddleware(new Logger(RequestMiddleware.nam
 const app = express();
 
 app.use(requestMiddleware.log.bind(requestMiddleware));
-app.use(bodyParser.json());
+app.use(express.json());
 app.use(requestMiddleware.handleErrors.bind(requestMiddleware));
 app.use(cors());
 
