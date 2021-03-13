@@ -6,11 +6,18 @@ import { ILogger } from "../lib/ILogger";
 
 import * as bcrypt from "bcryptjs";
 
+import util from "util";
+
 export class UserService extends BaseService implements IUserService {
+    private genSalt: (rounds: number) => Promise<string>;
+
+    private hash: (s: string, salt: number | string) => Promise<string>;
 
     constructor(private userRepository: IUserRepository, private logger: ILogger) {
         super();
         this.userRepository = userRepository;
+        this.genSalt = util.promisify(bcrypt.genSalt);
+        this.hash = util.promisify(bcrypt.hash);
         this.logger.debug("initialized");
     }
 
@@ -52,20 +59,7 @@ export class UserService extends BaseService implements IUserService {
     }
 
     private async hashPassword(password: string): Promise<string> {
-        return new Promise((resolve, reject) => {
-            bcrypt.genSalt(10, (genSaltErr, salt) => {
-                if (genSaltErr) {
-                    reject(genSaltErr);
-                } else {
-                    bcrypt.hash(password, salt, (hashErr, hash) => {
-                        if (hashErr) {
-                            reject(hashErr);
-                        } else {
-                            resolve(hash);
-                        }
-                    });
-                }
-            });
-        });
+        const salt = await this.genSalt(10);
+        return this.hash(password, salt);
     }
 }

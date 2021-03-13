@@ -4,14 +4,32 @@ import { BaseService } from "./BaseService";
 import { ISimpleCache } from "../lib/ISimpleCache";
 import { IUserRepository } from "../data/repositories/IUserRepository";
 import { IAuthService, IUserJwtPayload } from "./IAuthService";
+import { GetPublicKeyOrSecret, Secret, SignOptions } from "jsonwebtoken";
 
 import * as bcrypt from "bcryptjs";
 
+import util from "util";
 import jwt from "jsonwebtoken";
 import check from "check-types";
 import validator from "validator";
 
 export class AuthService extends BaseService implements IAuthService {
+
+    private compareHashedPassword: (
+        passwd1: string,
+        passwd2: string,
+    ) => Promise<boolean>;
+
+    private sign: (
+        payload: string | Buffer | object,
+        secretOrPrivateKey: Secret,
+        options: SignOptions,
+    ) => Promise<string | undefined>;
+
+    private verify: (
+        token: string,
+        secretOrPublicKey: Secret | GetPublicKeyOrSecret,
+    ) => Promise<object>;
 
     constructor(
         private secret: string,
@@ -20,6 +38,9 @@ export class AuthService extends BaseService implements IAuthService {
         private logger: ILogger,
     ) {
         super();
+        this.compareHashedPassword = util.promisify(bcrypt.compare);
+        this.sign = util.promisify(jwt.sign);
+        this.verify = util.promisify(jwt.verify);
         this.logger.debug("initialized");
     }
 
@@ -45,51 +66,24 @@ export class AuthService extends BaseService implements IAuthService {
             name: user.getName(),
             surname: user.getSurname(),
             email: user.getEmail(),
-        }, "10h");
+        }, this.secret, { expiresIn: "10h" });
     }
 
     public async validateAccessToken(payload: string): Promise<IUserJwtPayload> {
-        return new Promise((resolve, reject) => {
-            jwt.verify(payload, this.secret, (err: Error | null, decoded: IUserJwtPayload | undefined) => {
-                if (!!err) {
-                    reject(err);
-                } else {
-                    if (
-                        check.number(decoded.id) &&
-                        check.string(decoded.name) &&
-                        check.string(decoded.surname) &&
-                        check.string(decoded.email) &&
-                        validator.isEmail(decoded.email)
-                    ) {
-                        resolve(decoded);
-                    }
-                    reject(new Error(`Invalid decoded jwt payload: ${JSON.stringify(decoded)}`));
-                }
-            });
-        });
+        const decoded = await this.verify(payload, this.secret);
+        if (this.isUserJwtToken(decoded)) {
+            return decoded;
+        }
+        throw new Error(`Invalid decoded jwt payload: ${JSON.stringify(decoded)}`);
     }
 
-    private async sign(payload: IUserJwtPayload, expiresIn: string | number): Promise<string> {
-        return new Promise((resolve, reject) => {
-            jwt.sign(payload, this.secret, { expiresIn }, (err: Error | null, token: string | undefined) => {
-                if (!!err) {
-                    reject(err);
-                } else {
-                    resolve(token);
-                }
-            });
-        });
-    }
-
-    private async compareHashedPassword(password: string, hash: string): Promise<boolean> {
-        return new Promise((resolve, reject) => {
-            bcrypt.compare(password, hash, (err, res) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(res);
-                }
-            });
-        });
+    private isUserJwtToken(obj: any): obj is IUserJwtPayload {
+        return (
+            check.number(obj.id) &&
+            check.string(obj.name) &&
+            check.string(obj.surname) &&
+            check.string(obj.email) &&
+            validator.isEmail(obj.email)
+        );
     }
 }

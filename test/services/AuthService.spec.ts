@@ -61,7 +61,7 @@ describe("Auth Service", () => {
         it("should abstract jwt signing process", async () => {
             const authService = new AuthService(secret, null, cache, logger);
             // @ts-ignore
-            const token = await authService.sign({ data: 'any' }, "10h");
+            const token = await authService.sign({ data: 'any' }, secret, { expiresIn: "10h"});
             const decodedJwt: any = await jwtVerify(token, secret);
 
             expect(decodedJwt.data).to.equal('any');
@@ -105,7 +105,7 @@ describe("Auth Service", () => {
 
             try {
                 // @ts-ignore
-                const token = await authService.sign(tokenPayload, "10h");
+                const token = await authService.sign(tokenPayload, secret, { expiresIn: "10h"});
                 const decoded = await authService.validateAccessToken(token);
                 expect.fail("this token has an invalid format");
             } catch (error) {
