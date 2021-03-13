@@ -1,17 +1,17 @@
-import { ILogger } from "../lib/ILogger";
-import { UserEntity } from "../data/entities/UserEntity";
-import { BaseService } from "./BaseService";
-import { ISimpleCache } from "../lib/ISimpleCache";
-import { IUserRepository } from "../data/repositories/IUserRepository";
-import { IAuthService, IUserJwtPayload } from "./IAuthService";
-import { GetPublicKeyOrSecret, Secret, SignOptions } from "jsonwebtoken";
+import { ILogger } from '../lib/ILogger';
+import { UserEntity } from '../data/entities/UserEntity';
+import { BaseService } from './BaseService';
+import { ISimpleCache } from '../lib/ISimpleCache';
+import { IUserRepository } from '../data/repositories/IUserRepository';
+import { IAuthService, IUserJwtPayload } from './IAuthService';
+import { GetPublicKeyOrSecret, Secret, SignOptions } from 'jsonwebtoken';
 
-import * as bcrypt from "bcryptjs";
+import * as bcrypt from 'bcryptjs';
 
-import util from "util";
-import jwt from "jsonwebtoken";
-import check from "check-types";
-import validator from "validator";
+import util from 'util';
+import jwt from 'jsonwebtoken';
+import check from 'check-types';
+import validator from 'validator';
 
 export class AuthService extends BaseService implements IAuthService {
 
@@ -41,7 +41,7 @@ export class AuthService extends BaseService implements IAuthService {
         this.compareHashedPassword = util.promisify(bcrypt.compare);
         this.sign = util.promisify(jwt.sign);
         this.verify = util.promisify(jwt.verify);
-        this.logger.debug("initialized");
+        this.logger.debug('initialized');
     }
 
     public async validateCredentials(email: string, password: string): Promise<boolean> {
@@ -66,7 +66,7 @@ export class AuthService extends BaseService implements IAuthService {
             name: user.getName(),
             surname: user.getSurname(),
             email: user.getEmail(),
-        }, this.secret, { expiresIn: "10h" });
+        }, this.secret, { expiresIn: '10h' });
     }
 
     public async validateAccessToken(payload: string): Promise<IUserJwtPayload> {
@@ -80,11 +80,11 @@ export class AuthService extends BaseService implements IAuthService {
     private isUserJwtToken(obj: unknown): obj is IUserJwtPayload {
         try {
             return (
-                check.number(obj["id"]) &&
-                check.string(obj["name"]) &&
-                check.string(obj["surname"]) &&
-                check.string(obj["email"]) &&
-                validator.isEmail(obj["email"])
+                check.number(obj['id']) &&
+                check.string(obj['name']) &&
+                check.string(obj['surname']) &&
+                check.string(obj['email']) &&
+                validator.isEmail(obj['email'])
             );
         } catch (error) {
             return false;

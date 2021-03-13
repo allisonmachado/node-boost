@@ -1,12 +1,12 @@
-import { IUserService, IUserAccessibleProps } from "./IUserService";
-import { IUserRepository } from "../data/repositories/IUserRepository";
-import { BaseService } from "./BaseService";
-import { UserEntity } from "../data/entities/UserEntity";
-import { ILogger } from "../lib/ILogger";
+import { IUserService, IUserAccessibleProps } from './IUserService';
+import { IUserRepository } from '../data/repositories/IUserRepository';
+import { BaseService } from './BaseService';
+import { UserEntity } from '../data/entities/UserEntity';
+import { ILogger } from '../lib/ILogger';
 
-import * as bcrypt from "bcryptjs";
+import * as bcrypt from 'bcryptjs';
 
-import util from "util";
+import util from 'util';
 
 export class UserService extends BaseService implements IUserService {
     private genSalt: (rounds: number) => Promise<string>;
@@ -18,7 +18,7 @@ export class UserService extends BaseService implements IUserService {
         this.userRepository = userRepository;
         this.genSalt = util.promisify(bcrypt.genSalt);
         this.hash = util.promisify(bcrypt.hash);
-        this.logger.debug("initialized");
+        this.logger.debug('initialized');
     }
 
     public async create(name: string, surname: string, email: string, password: string): Promise<number> {
@@ -40,12 +40,12 @@ export class UserService extends BaseService implements IUserService {
     }
 
     public async update(id: number, name: string, surname: string, password: string): Promise<number> {
-        const hashedPassword = password ? await this.hashPassword(password) : "";
+        const hashedPassword = password ? await this.hashPassword(password) : '';
         return this.userRepository.update(id, name, surname, hashedPassword);
     }
 
     public async delete(id: number, requesterId: number): Promise<number> {
-        if (id === requesterId) { throw new Error("Action forbidden"); }
+        if (id === requesterId) { throw new Error('Action forbidden'); }
         return this.userRepository.delete(id);
     }
 

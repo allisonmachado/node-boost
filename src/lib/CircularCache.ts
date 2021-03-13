@@ -1,4 +1,4 @@
-import { ISimpleCache } from "./ISimpleCache";
+import { ISimpleCache } from './ISimpleCache';
 
 export class CircularCache<T> implements ISimpleCache<T> {
     private currentIndex: number;

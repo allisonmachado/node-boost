@@ -1,8 +1,8 @@
-import express from "express";
-import validator from "validator";
+import express from 'express';
+import validator from 'validator';
 
-import { CatchUnexpected } from "../lib/Decorators";
-import { ILogger } from "../lib/ILogger";
+import { CatchUnexpected } from '../lib/Decorators';
+import { ILogger } from '../lib/ILogger';
 
 @CatchUnexpected(400)
 export class UserMiddleware {

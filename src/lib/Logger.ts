@@ -1,7 +1,7 @@
-import winston from "winston";
+import winston from 'winston';
 
-import { ILogger } from "./ILogger";
-import { Environment } from "./Environment";
+import { ILogger } from './ILogger';
+import { Environment } from './Environment';
 
 export class Logger implements ILogger {
     private static readonly level = Environment.getLogLevel();
@@ -28,7 +28,7 @@ export class Logger implements ILogger {
     public debug(msg: string): void {
         this.logger.log({
             message: `[${this.prefix}]: ${msg}`,
-            level: "debug",
+            level: 'debug',
         });
     }
 }

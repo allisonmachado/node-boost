@@ -1,4 +1,4 @@
-import { ILogger } from "./ILogger";
+import { ILogger } from './ILogger';
 
 export class EmptyLogger implements ILogger {
     public error(msg: string): void { msg; }

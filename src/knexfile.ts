@@ -1,7 +1,7 @@
-import { Environment as Env } from "./lib/Environment";
+import { Environment as Env } from './lib/Environment';
 
 const envConnection = {
-    client: "mysql",
+    client: 'mysql',
     connection: {
         host: Env.getMysqlHost(),
         user: Env.getMysqlUser(),

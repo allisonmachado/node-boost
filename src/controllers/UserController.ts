@@ -1,17 +1,17 @@
-import express from "express";
+import express from 'express';
 
-import { CatchActionForbidden, CatchDuplicateEntry, CatchUnexpected } from "../lib/Decorators";
-import { IAuthenticatedRequest } from "../middlewares/AuthMiddleware";
-import { BaseController } from "./BaseController";
-import { IUserService } from "../services/IUserService";
-import { ILogger } from "../lib/ILogger";
+import { CatchActionForbidden, CatchDuplicateEntry, CatchUnexpected } from '../lib/Decorators';
+import { IAuthenticatedRequest } from '../middlewares/AuthMiddleware';
+import { BaseController } from './BaseController';
+import { IUserService } from '../services/IUserService';
+import { ILogger } from '../lib/ILogger';
 
 @CatchUnexpected(500)
 export class UserController extends BaseController {
 
     constructor(private userService: IUserService, private logger: ILogger) {
         super();
-        this.logger.debug("initialized");
+        this.logger.debug('initialized');
     }
 
     public async getUsers(req: express.Request, res: express.Response): Promise<void> {

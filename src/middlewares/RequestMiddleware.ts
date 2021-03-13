@@ -1,15 +1,15 @@
-import express from "express";
+import express from 'express';
 
-import { ILogger } from "../lib/ILogger";
+import { ILogger } from '../lib/ILogger';
 
 export class RequestMiddleware {
     constructor(private logger: ILogger) {
-        this.logger.debug("initialized");
+        this.logger.debug('initialized');
     }
 
     public log(req: express.Request, res: express.Response, next: express.NextFunction): void {
         const start = Date.now();
-        res.on("finish", () => this.logger
+        res.on('finish', () => this.logger
             .info(`${req.method}:${req.url} ${res.statusCode} - ${Date.now() - start}ms`));
         next();
     }

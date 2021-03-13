@@ -1,7 +1,7 @@
-import { ILogger } from "../lib/ILogger";
-import { BaseService } from "./BaseService";
-import { IHealthReporter } from "./IHealthReporter";
-import { HealthStatus, IHealthReport, IHealthService } from "./IHealthService";
+import { ILogger } from '../lib/ILogger';
+import { BaseService } from './BaseService';
+import { IHealthReporter } from './IHealthReporter';
+import { HealthStatus, IHealthReport, IHealthService } from './IHealthService';
 
 export class HealthService extends BaseService implements IHealthService {
 
@@ -10,7 +10,7 @@ export class HealthService extends BaseService implements IHealthService {
         private logger: ILogger,
     ) {
         super();
-        this.logger.debug("initialized");
+        this.logger.debug('initialized');
     }
 
     public async getStatus(): Promise<IHealthReport> {
@@ -32,6 +32,6 @@ export class HealthService extends BaseService implements IHealthService {
 
     private stringifyReport(report: IHealthReport): string {
         return `[${report.status.toUpperCase()}]`
-            + `${report.dependencies.map(d => `'${d.name}': ${d.status}`).join(", ")}`;
+            + `${report.dependencies.map(d => `'${d.name}': ${d.status}`).join(', ')}`;
     }
 }

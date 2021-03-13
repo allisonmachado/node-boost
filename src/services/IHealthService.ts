@@ -3,8 +3,8 @@ export interface IHealthService {
 }
 
 export enum HealthStatus {
-    UP = "up",
-    DOWN = "down",
+    UP = 'up',
+    DOWN = 'down',
 }
 
 export interface IHealthReport {
