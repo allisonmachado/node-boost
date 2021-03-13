@@ -1,24 +1,24 @@
-// tslint:disable: only-arrow-functions
-import { RequestMiddleware } from "../../src/middlewares/RequestMiddleware";
-import { EmptyLogger } from "../../src/lib/EmptyLogger";
-import { ILogger } from "../../src/lib/ILogger";
-import { expect } from "chai";
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+import { RequestMiddleware } from '../../src/middlewares/RequestMiddleware';
+import { EmptyLogger } from '../../src/lib/EmptyLogger';
+import { ILogger } from '../../src/lib/ILogger';
+import { expect } from 'chai';
 
-import sinon from "sinon";
+import sinon from 'sinon';
 
-describe("Request Middleware", () => {
+describe('Request Middleware', () => {
     const logger: ILogger = new EmptyLogger();
 
-    describe("global error handling", async () => {
-        it("for body-parser json syntax error should return 400 status code", async () => {
-            const error = new SyntaxError(`unexpected string at JSON in position...`);
+    describe('global error handling', async () => {
+        it('for body-parser json syntax error should return 400 status code', async () => {
+            const error = new SyntaxError('unexpected string at JSON in position...');
 
             // @ts-ignore
             const middleware = new RequestMiddleware(logger);
             const response = {
                 send: sinon.spy(),
                 status: sinon.stub().returnsThis()
-            }
+            };
             const next = sinon.spy();
 
             // @ts-ignore
@@ -31,7 +31,7 @@ describe("Request Middleware", () => {
             expect(next.notCalled).to.be.true;
         });
 
-        it("for unexpected errors should return 500 status code", async () => {
+        it('for unexpected errors should return 500 status code', async () => {
             const error = new Error();
 
             // @ts-ignore
@@ -39,7 +39,7 @@ describe("Request Middleware", () => {
             const response = {
                 send: sinon.spy(),
                 status: sinon.stub().returnsThis()
-            }
+            };
             const next = sinon.spy();
 
             // @ts-ignore
@@ -53,8 +53,8 @@ describe("Request Middleware", () => {
         });
     });
 
-    describe("request logging", async () => {
-        it("should log method, url, status code and duration given a request response", async () => {
+    describe('request logging', async () => {
+        it('should log method, url, status code and duration given a request response', async () => {
             const next = sinon.spy();
             const req = {
                 method: 'GET',
@@ -63,7 +63,7 @@ describe("Request Middleware", () => {
             const res = {
                 statusCode: 200,
                 on(event: string, callback: () => void) {
-                    expect(event).to.equal("finish");
+                    expect(event).to.equal('finish');
                     callback();
                 }
             };
