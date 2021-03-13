@@ -1,8 +1,7 @@
 import express from "express";
 
-import { CatchActionForbidden, CatchDuplicateEntry } from "./Decorators";
+import { CatchActionForbidden, CatchDuplicateEntry, CatchUnexpected } from "../lib/Decorators";
 import { IAuthenticatedRequest } from "../middlewares/AuthMiddleware";
-import { CatchUnexpected } from "../lib/Decorators";
 import { BaseController } from "./BaseController";
 import { IUserService } from "../services/IUserService";
 import { ILogger } from "../lib/ILogger";
