@@ -12,7 +12,7 @@ export class UserController extends BaseController {
 
     constructor(private userService: IUserService, private logger: ILogger) {
         super();
-        this.logger.debug(`initialized`);
+        this.logger.debug("initialized");
     }
 
     public async getUsers(req: express.Request, res: express.Response): Promise<void> {

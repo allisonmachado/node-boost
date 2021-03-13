@@ -10,7 +10,7 @@ export class HealthService extends BaseService implements IHealthService {
         private logger: ILogger,
     ) {
         super();
-        this.logger.debug(`initialized`);
+        this.logger.debug("initialized");
     }
 
     public async getStatus(): Promise<IHealthReport> {

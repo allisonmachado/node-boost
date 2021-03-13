@@ -20,7 +20,7 @@ export class AuthService extends BaseService implements IAuthService {
         private logger: ILogger,
     ) {
         super();
-        this.logger.debug(`initialized`);
+        this.logger.debug("initialized");
     }
 
     public async validateCredentials(email: string, password: string): Promise<boolean> {

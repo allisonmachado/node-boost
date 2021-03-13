@@ -10,7 +10,7 @@ export class AuthController extends BaseController {
 
     constructor(private authService: IAuthService, private logger: ILogger) {
         super();
-        this.logger.debug(`initialized`);
+        this.logger.debug("initialized");
     }
 
     public async authenticateUser(req: express.Request, res: express.Response): Promise<void> {

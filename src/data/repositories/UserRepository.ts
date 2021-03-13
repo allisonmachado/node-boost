@@ -11,7 +11,7 @@ export class UserRepository implements IUserRepository {
     private knex: Knex;
     constructor(private connection: Connection, protected logger: ILogger) {
         this.knex = this.connection.getQueryBuilder();
-        this.logger.debug(`initialized`);
+        this.logger.debug("initialized");
     }
 
     public async create(name: string, surname: string, email: string, password: string): Promise<number> {

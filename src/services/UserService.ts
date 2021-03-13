@@ -11,7 +11,7 @@ export class UserService extends BaseService implements IUserService {
     constructor(private userRepository: IUserRepository, private logger: ILogger) {
         super();
         this.userRepository = userRepository;
-        this.logger.debug(`initialized`);
+        this.logger.debug("initialized");
     }
 
     public async create(name: string, surname: string, email: string, password: string): Promise<number> {

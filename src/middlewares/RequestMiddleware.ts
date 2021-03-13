@@ -4,7 +4,7 @@ import { ILogger } from "../lib/ILogger";
 
 export class RequestMiddleware {
     constructor(private logger: ILogger) {
-        this.logger.debug(`initialized`);
+        this.logger.debug("initialized");
     }
 
     public log(req: express.Request, res: express.Response, next: express.NextFunction): void {

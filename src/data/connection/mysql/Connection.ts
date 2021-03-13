@@ -12,7 +12,7 @@ export class Connection implements IHealthReporter {
     constructor(logger: ILogger) {
         this.queryBuilder = knex(envConnection);
         this.logger = logger;
-        this.logger.debug(`initialized`);
+        this.logger.debug("initialized");
     }
 
     public getQueryBuilder(): Knex {
