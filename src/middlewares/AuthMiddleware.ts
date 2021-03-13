@@ -1,5 +1,4 @@
 import express from "express";
-import { JsonWebTokenError } from "jsonwebtoken";
 
 import { ILogger } from "../lib/ILogger";
 import { IAuthService, IUserJwtPayload } from "../services/IAuthService";
