@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { expect } from 'chai';
+import { Logger } from '../../../src/lib/Logger';
 import { ILogger } from '../../../src/lib/ILogger';
-import { EmptyLogger } from '../../../src/lib/EmptyLogger';
 import { UserRepository } from '../../../src/data/repositories/UserRepository';
 
 import sinon from 'sinon';
 
 describe('User Repository', () => {
-    const logger: ILogger = new EmptyLogger();
+    const logger: ILogger = new Logger('User Repository Spec');
     const fakeUser = {
         id: 1,
         name: 'Foo',

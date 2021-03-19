@@ -1,13 +1,12 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { ILogger } from '../../src/lib/ILogger';
-import { EmptyLogger } from '../../src/lib/EmptyLogger';
 import { HealthStatus } from '../../src/services/IHealthService';
 import { HealthService } from '../../src/services/HealthService';
 
 import { expect } from 'chai';
+import { Logger } from '../../src/lib/Logger';
 
 describe('Health Service', () => {
-    const logger: ILogger = new EmptyLogger();
+    const logger = new Logger('Health Service Spec');
 
     it('should return simple report if there are no dependencies', async () => {
         const healthService = new HealthService([], logger);

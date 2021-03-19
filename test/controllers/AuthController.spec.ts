@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { AuthController } from '../../src/controllers/AuthController';
-import { EmptyLogger } from '../../src/lib/EmptyLogger';
-import { ILogger } from '../../src/lib/ILogger';
+import { Logger } from '../../src/lib/Logger';
 import { expect } from 'chai';
 
 import sinon from 'sinon';
 
 describe('Auth Controller', () => {
-    const logger: ILogger = new EmptyLogger();
+    const logger = new Logger('Auth Controller Spec');
+    
 
     describe('user authentication', async () => {
         it('should send access token to user given valid credentials', async () => {

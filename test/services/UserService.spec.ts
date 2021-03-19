@@ -1,17 +1,16 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { expect } from 'chai';
-import { ILogger } from '../../src/lib/ILogger';
 import { UserEntity } from '../../src/data/entities/UserEntity';
 import { UserService } from '../../src/services/UserService';
-import { EmptyLogger } from '../../src/lib/EmptyLogger';
 
 import sinon from 'sinon';
 
 import * as bcrypt from 'bcryptjs';
+import { Logger } from '../../src/lib/Logger';
 
 
 describe('User Service', () => {
-    const logger: ILogger = new EmptyLogger();
+    const logger = new Logger('User Service Spec');
 
     describe('private implementations', async () => {
         it('should abstract bcrypt async password hashing method', async () => {

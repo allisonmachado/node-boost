@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { expect } from 'chai';
-import { ILogger } from '../../src/lib/ILogger';
 import { UserEntity } from '../../src/data/entities/UserEntity';
-import { EmptyLogger } from '../../src/lib/EmptyLogger';
 import { AuthService } from '../../src/services/AuthService';
 import { CircularCache } from '../../src/lib/CircularCache';
 
@@ -10,9 +8,10 @@ import jwt from 'jsonwebtoken';
 import sinon from 'sinon';
 
 import * as bcrypt from 'bcryptjs';
+import { Logger } from '../../src/lib/Logger';
 
 describe('Auth Service', () => {
-    const logger: ILogger = new EmptyLogger();
+    const logger = new Logger('Auth Service Spec');
     const secret = 'abcd-1234';
     const cache = new CircularCache<UserEntity>(3);
 
