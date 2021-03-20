@@ -3,9 +3,10 @@ import knex from 'knex';
 import envConnection from '../../../knexfile';
 
 import { ILogger } from '../../../lib/ILogger';
+import { ISQLConnection } from '../ISQLConnection';
 import { IHealthReporter } from '../../../services/IHealthReporter';
 
-export class Connection implements IHealthReporter {
+export class MySQLConnection implements ISQLConnection, IHealthReporter {
     private queryBuilder: Knex;
     private logger: ILogger;
 
