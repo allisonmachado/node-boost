@@ -20,7 +20,7 @@ import { HealthController } from './controllers/HealthController';
 
 import { Environment as Env } from './lib/Environment';
 import { CircularCache } from './lib/CircularCache';
-import { Connection } from './data/connection/mysql/Connection';
+import { MySQLConnection } from './data/connection/mysql/Connection';
 import { Logger } from './lib/Logger';
 
 /** Display environment info */
@@ -37,7 +37,7 @@ logger.info('isStaging: ' + Env.isStaging());
 logger.info('isDev: ' + Env.isDev());
 
 /** Init application definitions */
-const mysqlConnection = new Connection(new Logger(Connection.name));
+const mysqlConnection = new MySQLConnection(new Logger(MySQLConnection.name));
 const userRepository = new UserRepository(mysqlConnection, new Logger(UserRepository.name));
 
 const healthService = new HealthService(

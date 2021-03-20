@@ -1,6 +1,6 @@
 import { ILogger } from '../../lib/ILogger';
-import { Connection } from '../connection/mysql/Connection';
 import { UserEntity } from '../entities/UserEntity';
+import { ISQLConnection } from '../connection/ISQLConnection';
 import { IUserRepository } from './IUserRepository';
 
 import validator from 'validator';
@@ -10,7 +10,7 @@ import Knex from 'knex';
 
 export class UserRepository implements IUserRepository {
     private knex: Knex;
-    constructor(private connection: Connection, protected logger: ILogger) {
+    constructor(private connection: ISQLConnection, protected logger: ILogger) {
         this.knex = this.connection.getQueryBuilder();
         this.logger.debug('initialized');
     }
