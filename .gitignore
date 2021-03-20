@@ -10,6 +10,7 @@ tmp/
 .env.test
 .env.dev
 .env.export
+.env.export*
 .migrate
 
 npm-debug.log*
