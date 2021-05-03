@@ -19,7 +19,6 @@
     "prebuild": "npm run lint:fix && rm -rf ./dist",
     "build": "tsc",
     "gcp-build": "tsc -p .",
-    "prestart": "npm run build",
     "start": "node dist/src/index",
     "pretest": "npm run build",
     "test": "export LOG_LEVEL=test || set LOG_LEVEL=test && mocha dist/test/**/*.js",
