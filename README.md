@@ -66,13 +66,13 @@ $ npm run build
 4. Use Docker Compose to set up the development environment:
 
 ```bash
-npm run compose:start
+npm run compose:up
 ```
 
 5. In addition to that, it is required to set up the database schema. When a mysql container is started for the first time, a new schema with the name specified in the MYSQL_DATABASE env variable will be created. To create the tables make sure you have the correct env variables and run:
 
 ```bash
-npm run migrate
+npm run migrate:latest
 ```
 
 After the steps above, you should be able to interact with the app via the rest interface:
