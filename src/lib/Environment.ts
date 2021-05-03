@@ -18,6 +18,15 @@ export class Environment {
         return process.env.MYSQL_HOST;
     }
 
+    public static getMysqlPort(): number {
+        return parseInt(process.env.MYSQL_PORT, 10);
+    }
+
+    public static getMysqlSSLConnection(): boolean {
+        if (process.env.MYSQL_SSL_CONNECTION === 'true') return true;
+        return false;
+    }
+
     public static getMysqlSocketPath(): string {
         return process.env.MYSQL_SOCKET_PATH;
     }
