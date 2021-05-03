@@ -12,6 +12,8 @@ Opinionated and coherent blueprint for web [Node.js](http://nodejs.org) apps.
   * Structured and well defined logging
   * Cross cutting concerns organized in middlewares and decorators
   * Auxiliar scripts to power the development cycle
+  * Docker files & compose examples
+  * GCP AppEngine file example
 
 ## Overview
 
@@ -33,18 +35,10 @@ The implementation of loosely coupled elements can be optionally achieved throug
 
 ## Examples
 
-This template also provides a small and simple set of features to serve as an example:
+This template also provides a small and simple set of features to serve as implementation examples:
 
 1. Simple CRUD of users
 2. Simple Jwt token based Auth
-
-## Dependency Highlights
-
-  * [ExpressJS](https://github.com/expressjs/express)
-  * [MySql](https://github.com/mysqljs/mysql)
-  * [Winston](https://github.com/winstonjs/winston)
-  * [Typescript](https://github.com/microsoft/TypeScript)
-  * [Mocha](https://github.com/mochajs/mocha)
 
 ## Get started in 5 easy steps
 
@@ -75,7 +69,7 @@ $ npm run build
 npm run compose:start
 ```
 
-5. In addition to that, it is required to set up the database schema. When a mysql container is started for the first time, a new schema with the name specified in the MYSQL_HOST env variable will be created. To create the tables make sure you have the correct env variables and run:
+5. In addition to that, it is required to set up the database schema. When a mysql container is started for the first time, a new schema with the name specified in the MYSQL_DATABASE env variable will be created. To create the tables make sure you have the correct env variables and run:
 
 ```bash
 npm run migrate
