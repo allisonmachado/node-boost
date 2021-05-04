@@ -4,6 +4,8 @@ const envConnection = {
     client: 'mysql',
     connection: {
         host: Env.getMysqlHost(),
+        port: Env.getMysqlPort(),
+        ssl: Env.getMysqlSSLConnection(),
         user: Env.getMysqlUser(),
         password: Env.getMysqlPassword(),
         database: Env.getMysqlSchema(),

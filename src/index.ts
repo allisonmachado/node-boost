@@ -30,6 +30,8 @@ logger.info('Location: ' + Env.getLocation());
 logger.info('LogLevel: ' + Env.getLogLevel());
 logger.info('Port: ' + Env.getPort());
 logger.info('MysqlHost: ' + Env.getMysqlHost());
+logger.info('MysqlPort: ' + Env.getMysqlPort());
+logger.info('MysqlSSLConnection: ' + Env.getMysqlSSLConnection());
 logger.info('MysqlSocketPath: ' + Env.getMysqlSocketPath());
 logger.info('MysqlSchema: ' + Env.getMysqlSchema());
 logger.info('isProd: ' + Env.isProd());

@@ -16,4 +16,5 @@ env_variables:
   MYSQL_ROOT_PASSWORD: 123456
   MYSQL_DATABASE: simple_db
   MYSQL_CONNECTION_POOL_LIMIT: 3
+  MYSQL_SOCKET_PATH: /cloudsql/project:location:node-boost-prod
   JWT_SECRET: ptiZgdhSdndmDdudjsHwiwpPalskdYdjcdndhuDdiedjsCshdA
