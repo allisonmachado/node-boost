@@ -3,7 +3,7 @@
 
 [![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/allisonmachado/node-boost.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/allisonmachado/node-boost/context:javascript) [![Total alerts](https://img.shields.io/lgtm/alerts/g/allisonmachado/node-boost.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/allisonmachado/node-boost/alerts/) ![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/allisonmachado/node-boost) ![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/allisonmachado/node-boost/Node.js%20CI/master) [![Coverage Status](https://coveralls.io/repos/github/allisonmachado/node-boost/badge.svg?branch=master)](https://coveralls.io/github/allisonmachado/node-boost?branch=master) ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/allisonmachado/node-boost) ![GitHub](https://img.shields.io/github/license/allisonmachado/node-boost)
 
-Opinionated and coherent blueprint for web [Node.js](http://nodejs.org) apps.
+[Opinionated and coherent](http://allison.bsb.br/node-boost/) blueprint for web [Node.js](http://nodejs.org) apps.
 
 ## Features
 
