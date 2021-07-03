@@ -1,12 +1,14 @@
-import { IUserService, IUserAccessibleProps } from './IUserService';
 import { IUserRepository } from '../data/repositories/IUserRepository';
+import { IUserService } from './IUserService';
 import { BaseService } from './BaseService';
-import { UserEntity } from '../data/entities/UserEntity';
 import { ILogger } from '../lib/ILogger';
 
 import * as bcrypt from 'bcryptjs';
 
 import util from 'util';
+
+import { first } from 'lodash';
+import { User } from '../data/entities/User';
 
 export class UserService extends BaseService implements IUserService {
     private genSalt: (rounds: number) => Promise<string>;
@@ -21,27 +23,37 @@ export class UserService extends BaseService implements IUserService {
         this.logger.debug('initialized');
     }
 
-    public async create(name: string, surname: string, email: string, password: string): Promise<number> {
-        const hashedPassword = await this.hashPassword(password);
-        return this.userRepository.create(name, surname, email, hashedPassword);
+    public async create(user: Omit<User, 'id'>): Promise<number> {
+        const hashedPassword = await this.hashPassword(user.password);
+        return this.userRepository.create({
+            name: user.name,
+            surname: user.surname,
+            email: user.email,
+            password: hashedPassword
+        });
     }
 
-    public async list(): Promise<IUserAccessibleProps[]> {
+    public async list(): Promise<Omit<User, 'password'>[]> {
         const users = await this.userRepository.findTop10();
-        return this.visiblePropsMapper(users);
+        return this.omitPassword(users);
     }
 
-    public async findById(id: number): Promise<IUserAccessibleProps> {
+    public async findById(id: number): Promise<Omit<User, 'password'>> {
         const users = await this.userRepository.findById(id);
         if (!users) {
             return null;
         }
-        return this.visiblePropsMapper([users])[0];
+        return first(this.omitPassword([users]));
     }
 
-    public async update(id: number, name: string, surname: string, password: string): Promise<number> {
-        const hashedPassword = password ? await this.hashPassword(password) : '';
-        return this.userRepository.update(id, name, surname, hashedPassword);
+    public async update(user: Partial<Omit<User, 'email'>>): Promise<number> {
+        const hashedPassword = user.password ? await this.hashPassword(user.password) : null;
+        return this.userRepository.update({
+            id: user.id,
+            name: user.name,
+            surname: user.surname,
+            password: hashedPassword
+        });
     }
 
     public async delete(id: number, requesterId: number): Promise<number> {
@@ -49,12 +61,12 @@ export class UserService extends BaseService implements IUserService {
         return this.userRepository.delete(id);
     }
 
-    private visiblePropsMapper(users: UserEntity[]): IUserAccessibleProps[] {
+    private omitPassword(users: User[]): Omit<User, 'password'>[] {
         return users.map(u => ({
-            id: u.getId(),
-            name: u.getName(),
-            surname: u.getSurname(),
-            email: u.getEmail(),
+            id: u.id,
+            name: u.name,
+            surname: u.surname,
+            email: u.email,
         }));
     }
 

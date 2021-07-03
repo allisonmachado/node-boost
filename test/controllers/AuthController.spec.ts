@@ -11,29 +11,28 @@ describe('Auth Controller', () => {
 
     describe('user authentication', async () => {
         it('should send access token to user given valid credentials', async () => {
+            const authService = {
+                validateCredentials: sinon.stub().resolves(true),
+                signAccessToken: sinon.stub().resolves('auth-token')
+            };
+            // @ts-ignore
+            const authController = new AuthController(authService, logger);
             const request = {
                 body: {
                     email: 'email@test.com',
                     password: '123456'
                 }
             };
-            const authService = {
-                validateCredentials: sinon.stub().resolves(true),
-                signTemporaryToken: sinon.stub().resolves('auth-token')
-            };
-            // @ts-ignore
-            const authController = new AuthController(authService, logger);
             const response = {
                 send: sinon.spy(),
                 status: sinon.stub().returnsThis()
             };
-
             // @ts-ignore
             await authController.authenticateUser(request, response);
 
             expect(response.send.calledOnce).to.be.true;
             expect(response.send.calledWithMatch({
-                auth: 'auth-token',
+                token: 'auth-token',
             })).to.be.true;
         });
 

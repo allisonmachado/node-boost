@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { expect } from 'chai';
-import { UserEntity } from '../../src/data/entities/UserEntity';
 import { UserService } from '../../src/services/UserService';
 
 import sinon from 'sinon';
@@ -34,14 +33,16 @@ describe('User Service', () => {
 
         it('should hide private user info', async () => {
             const userService = new UserService(null, logger);
-            const users = [
-                new UserEntity(
-                    10, 'Foo', 'Bar', 'foo@email.com', '$2a$10$S2Ngy9xiORAOq9R6g.6N7.20E1Q0NXa32CJONY2WncY..lr9tTe0e',
-                )
-            ];
+            const users = [{
+                id: 10,
+                name: 'Foo',
+                surname: 'Bar',
+                email: 'foo@email.com',
+                password: '$2a$10$S2Ngy9xiORAOq9R6g.6N7.20E1Q0NXa32CJONY2WncY..lr9tTe0e'
+            }];
 
             // @ts-ignore
-            const userVisibleInfo = userService.visiblePropsMapper(users)[0];
+            const userVisibleInfo = userService.omitPassword(users)[0];
 
             expect(userVisibleInfo.id).to.equal(10);
             expect(userVisibleInfo.name).to.equal('Foo');
@@ -58,9 +59,11 @@ describe('User Service', () => {
         };
         // @ts-ignore
         const userService = new UserService(userRepository, logger);
-        const userId = await userService.create('Foo', 'Bar', 'foo@email.com', '1234567');
+        const userId = await userService.create({
+            name: 'Foo', surname: 'Bar', email: 'foo@email.com', password: '1234567'
+        });
 
-        const [name, surname, email, password] = userRepository.create.firstCall.args;
+        const [[{ name, surname, email, password }]] = userRepository.create.args;
 
         expect(userId).to.equal(1);
 
@@ -82,14 +85,19 @@ describe('User Service', () => {
 
     it('should request users from persistance layer and retrieve them', async () => {
         const userRepository = {
-            findTop10: sinon.stub().resolves([
-                new UserEntity(
-                    1, 'Foo', 'Bar', 'foo1@email.com', '$2b$10$S2Ngy9xiORAOq9R6g.6N7.20E1Q0NXa32CJONY2WncY..lr9tTe0e',
-                ),
-                new UserEntity(
-                    2, 'Foo', 'Bar', 'foo2@email.com', '$2a$10$S2Ngy9xiORAOq9R6g.6N7.20E1Q0NXa32CJONY2WncY..lr9tTe0e',
-                )
-            ])
+            findTop10: sinon.stub().resolves([{
+                id: 1,
+                name: 'Foo',
+                surname: 'Bar',
+                email: 'foo1@email.com',
+                password: '$2b$10$S2Ngy9xiORAOq9R6g.6N7.20E1Q0NXa32CJONY2WncY..lr9tTe0e',
+            }, {
+                id: 2,
+                name: 'Foo',
+                surname: 'Bar',
+                email: 'foo2@email.com',
+                password: '$2a$10$S2Ngy9xiORAOq9R6g.6N7.20E1Q0NXa32CJONY2WncY..lr9tTe0e',
+            }]),
         };
         // @ts-ignore
         const userService = new UserService(userRepository, logger);
@@ -102,9 +110,13 @@ describe('User Service', () => {
 
     it('should request users from persistance layer by Id and retrieve them', async () => {
         const userRepository = {
-            findById: sinon.stub().resolves(new UserEntity(
-                1, 'Foo', 'Bar', 'foo1@email.com', '$2b$10$S2Ngy9xiORAOq9R6g.6N7.20E1Q0NXa32CJONY2WncY..lr9tTe0e',
-            )),
+            findById: sinon.stub().resolves({
+                id: 1,
+                name: 'Foo',
+                surname: 'Bar',
+                email: 'foo1@email.com',
+                password: '$2b$10$S2Ngy9xiORAOq9R6g.6N7.20E1Q0NXa32CJONY2WncY..lr9tTe0e',
+            }),
         };
         // @ts-ignore
         const userService = new UserService(userRepository, logger);
@@ -124,11 +136,14 @@ describe('User Service', () => {
             };
             // @ts-ignore
             const userService = new UserService(userRepository, logger);
-            const userId = await userService.update(1, 'Foo', 'Bar', '1234567');
+            await userService.update({
+                id: 1,
+                name: 'Foo',
+                surname: 'Bar',
+                password: '1234567',
+            });
 
-            const [id, name, surname, password] = userRepository.update.firstCall.args;
-
-            expect(userId).to.equal(1);
+            const [[{ id, name, surname, password }]] = userRepository.update.args;
 
             expect(id).to.equal(1);
             expect(name).to.equal('Foo');
@@ -152,16 +167,20 @@ describe('User Service', () => {
             };
             // @ts-ignore
             const userService = new UserService(userRepository, logger);
-            const userId = await userService.update(1, 'Foo', 'Bar', '');
+            const userId = await userService.update({
+                id: 1,
+                name: 'Foo',
+                surname: 'Bar',
+            });
 
-            const [id, name, surname, password] = userRepository.update.firstCall.args;
+            const [[{ id, name, surname, password }]] = userRepository.update.args;
 
             expect(userId).to.equal(1);
 
             expect(id).to.equal(1);
             expect(name).to.equal('Foo');
             expect(surname).to.equal('Bar');
-            expect(password).to.equal('');
+            expect(password).to.equal(null);
         });
     });
 

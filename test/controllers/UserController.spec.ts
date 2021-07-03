@@ -73,9 +73,6 @@ describe('User Controller', () => {
             expect(response.send.calledOnce).to.be.true;
             expect(response.send.calledWithMatch({
                 id: 1,
-                name: request.body.name,
-                surname: request.body.surname,
-                email: request.body.email,
             })).to.be.true;
             expect(response.status.calledOnce).to.be.true;
             expect(response.status.calledWithExactly(201)).to.be.true;
@@ -84,7 +81,7 @@ describe('User Controller', () => {
         it('should return 500 status code in case internal error', async () => {
             const request = {};
             const userService = {
-                create: sinon.stub().rejects(new Error('Mysql err: ER_DUP_ENTRY'))
+                create: sinon.stub().rejects(new Error('This is an unknown error'))
             };
             // @ts-ignore
             const userController = new UserController(userService, logger);

@@ -1,10 +1,10 @@
-import { UserEntity } from '../entities/UserEntity';
+import { User } from '../entities/User';
 
 export interface IUserRepository {
-    create(name: string, surname: string, email: string, password: string): Promise<number>;
-    findById(id: number): Promise<UserEntity>;
-    findByEmail(email: string): Promise<UserEntity>;
-    findTop10(): Promise<UserEntity[]>;
-    update(id: number, name: string, surname: string, password: string): Promise<number>;
+    create(user: Omit<User, 'id'>): Promise<number>;
+    findById(id: number): Promise<User>;
+    findByEmail(email: string): Promise<User>;
+    findTop10(): Promise<User[]>;
+    update(user: Omit<User, 'email'>): Promise<number>;
     delete(id: number): Promise<number>;
 }

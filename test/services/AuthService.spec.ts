@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
+import { User } from '../../src/data/entities/User';
 import { expect } from 'chai';
-import { UserEntity } from '../../src/data/entities/UserEntity';
 import { AuthService } from '../../src/services/AuthService';
 import { CircularCache } from '../../src/lib/CircularCache';
 
@@ -13,7 +13,7 @@ import { Logger } from '../../src/lib/Logger';
 describe('Auth Service', () => {
     const logger = new Logger('Auth Service Spec');
     const secret = 'abcd-1234';
-    const cache = new CircularCache<UserEntity>(3);
+    const cache = new CircularCache<User>(3);
 
     const genSalt = (str: string): Promise<string> => {
         return new Promise((resolve, reject) => {
@@ -60,7 +60,7 @@ describe('Auth Service', () => {
         it('should abstract jwt signing process', async () => {
             const authService = new AuthService(secret, null, cache, logger);
             // @ts-ignore
-            const token = await authService.sign({ data: 'any' }, secret, { expiresIn: '10h'});
+            const token = await authService.sign({ data: 'any' }, secret, { expiresIn: '10h' });
             const decodedJwt = await jwtVerify(token, secret);
 
             expect(decodedJwt['data']).to.equal('any');
@@ -69,11 +69,17 @@ describe('Auth Service', () => {
 
     describe('access token generation and validation', async () => {
         it('should sign and verify a valid token format', async () => {
-            const cache = new CircularCache<UserEntity>(3);
-            cache.save('foobar@email.com', new UserEntity(1, 'Foo', 'Bar', 'foobar@email.com', '12345'));
+            const cache = new CircularCache<User>(3);
+            cache.save('foobar@email.com', {
+                id: 1,
+                name: 'Foo',
+                surname: 'Bar',
+                email: 'foobar@email.com',
+                password: '12345'
+            });
             const authService = new AuthService(secret, null, cache, logger);
 
-            const token = await authService.signTemporaryToken('foobar@email.com');
+            const token = await authService.signAccessToken('foobar@email.com');
             const decoded = await authService.validateAccessToken(token);
 
             expect(decoded.name).to.equal('Foo');
@@ -84,8 +90,8 @@ describe('Auth Service', () => {
         it('should not verify token not signed by the system', async () => {
             const authService = new AuthService(secret, null, cache, logger);
             const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9' +
-            '.eyJuYW1lIjoiSm9obiIsInN1cm5hbWUiOiJEb2UiLCJlbWFpbCI6ImpvaG5kb2VAZW1haWwuY29tIiwiaWF0IjoxNTE2MjM5MDIyfQ' +
-            '.PKyYB3UlAyDnDKlUSl7IHkAiqplvY_nKw1nLUbqj3i0';
+                '.eyJuYW1lIjoiSm9obiIsInN1cm5hbWUiOiJEb2UiLCJlbWFpbCI6ImpvaG5kb2VAZW1haWwuY29tIiwiaWF0IjoxNTE2MjM5MDIyfQ' +
+                '.PKyYB3UlAyDnDKlUSl7IHkAiqplvY_nKw1nLUbqj3i0';
 
             try {
                 await authService.validateAccessToken(token);
@@ -104,7 +110,7 @@ describe('Auth Service', () => {
 
             try {
                 // @ts-ignore
-                const token = await authService.sign(tokenPayload, secret, { expiresIn: '10h'});
+                const token = await authService.sign(tokenPayload, secret, { expiresIn: '10h' });
                 await authService.validateAccessToken(token);
                 expect.fail('this token has an invalid format');
             } catch (error) {
@@ -116,7 +122,13 @@ describe('Auth Service', () => {
     describe('user credentials validation', async () => {
         it('should return true for found user and a valid given password', async () => {
             const password = '123456';
-            const user = new UserEntity(1, 'Foo', 'Bar', 'foobar@email.com', await genSalt(password));
+            const user = {
+                id: 1,
+                name: 'Foo',
+                surname: 'Bar',
+                email: 'foobar@email.com',
+                password: await genSalt(password)
+            };
             const userRepository = {
                 findByEmail: sinon.stub().resolves(user)
             };
@@ -130,7 +142,13 @@ describe('Auth Service', () => {
 
         it('should return false for found user and a invalid given password', async () => {
             const password = '123456';
-            const user = new UserEntity(1, 'Foo', 'Bar', 'foobar@email.com', await genSalt(password));
+            const user = {
+                id: 1,
+                name: 'Foo',
+                surname: 'Bar',
+                email: 'foobar@email.com',
+                password: await genSalt(password)
+            };
             const userRepository = {
                 findByEmail: sinon.stub().resolves(user)
             };

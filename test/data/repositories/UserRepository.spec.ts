@@ -23,7 +23,12 @@ describe('User Repository', () => {
             const connection = { getQueryBuilder: () => knex };
             // @ts-ignore
             const repository = new UserRepository(connection, logger);
-            const userId = await repository.create('Foo', 'Bar', 'foobar@email.com', '123456');
+            const userId = await repository.create({
+                name: 'Foo',
+                surname: 'Bar',
+                email: 'foobar@email.com',
+                password: '123456'
+            });
 
             expect(knex.calledWith('user')).to.be.true;
             expect(userId).to.equal(777);
@@ -41,11 +46,11 @@ describe('User Repository', () => {
 
             expect(knex.calledWith('user')).to.be.true;
             expect(where.calledWith('id', 1)).to.be.true;
-            expect(user.getId()).to.equal(1);
-            expect(user.getName()).to.equal('Foo');
-            expect(user.getSurname()).to.equal('Bar');
-            expect(user.getEmail()).to.equal('baz@email.com');
-            expect(user.getPassword()).to.equal('123456');
+            expect(user.id).to.equal(1);
+            expect(user.name).to.equal('Foo');
+            expect(user.surname).to.equal('Bar');
+            expect(user.email).to.equal('baz@email.com');
+            expect(user.password).to.equal('123456');
         });
 
         it('should retrieve user by email', async () => {
@@ -59,11 +64,11 @@ describe('User Repository', () => {
 
             expect(knex.calledWith('user')).to.be.true;
             expect(where.calledWith('email', 'baz@email.com')).to.be.true;
-            expect(user.getId()).to.equal(1);
-            expect(user.getName()).to.equal('Foo');
-            expect(user.getSurname()).to.equal('Bar');
-            expect(user.getEmail()).to.equal('baz@email.com');
-            expect(user.getPassword()).to.equal('123456');
+            expect(user.id).to.equal(1);
+            expect(user.name).to.equal('Foo');
+            expect(user.surname).to.equal('Bar');
+            expect(user.email).to.equal('baz@email.com');
+            expect(user.password).to.equal('123456');
         });
 
         it('should retrieve retrieve first 10 users in database', async () => {
@@ -79,11 +84,11 @@ describe('User Repository', () => {
             expect(users.length).to.equal(1);
 
             const user = users.pop();
-            expect(user.getId()).to.equal(1);
-            expect(user.getName()).to.equal('Foo');
-            expect(user.getSurname()).to.equal('Bar');
-            expect(user.getEmail()).to.equal('baz@email.com');
-            expect(user.getPassword()).to.equal('123456');
+            expect(user.id).to.equal(1);
+            expect(user.name).to.equal('Foo');
+            expect(user.surname).to.equal('Bar');
+            expect(user.email).to.equal('baz@email.com');
+            expect(user.password).to.equal('123456');
         });
 
         it('should delete existing users', async () => {
@@ -109,7 +114,7 @@ describe('User Repository', () => {
                 // @ts-ignore
                 const repository = new UserRepository(connection, logger);
 
-                const affectedRows = await repository.update(1);
+                const affectedRows = await repository.update({});
 
                 expect(affectedRows).to.equal(0);
 
@@ -126,11 +131,11 @@ describe('User Repository', () => {
                 // @ts-ignore
                 const repository = new UserRepository(connection, logger);
 
-                const affectedRows = await repository.update(1, 'Son');
+                const affectedRows = await repository.update({ id: 1, name: 'Son' });
 
                 expect(affectedRows).to.equal(1);
 
-                expect(update.calledWith({ name: 'Son' })).to.be.true;
+                expect(update.calledWith({ id: 1, name: 'Son' })).to.be.true;
                 expect(where.calledWith('id', 1)).to.be.true;
                 expect(knex.calledWith('user')).to.be.true;
             });
@@ -143,11 +148,13 @@ describe('User Repository', () => {
                 // @ts-ignore
                 const repository = new UserRepository(connection, logger);
 
-                const affectedRows = await repository.update(1, '', 'Goku');
+                const affectedRows = await repository.update({
+                    id: 1, name: '', surname: 'Goku'
+                });
 
                 expect(affectedRows).to.equal(1);
 
-                expect(update.calledWith({ surname: 'Goku' })).to.be.true;
+                expect(update.calledWith({ id: 1, surname: 'Goku' })).to.be.true;
                 expect(where.calledWith('id', 1)).to.be.true;
                 expect(knex.calledWith('user')).to.be.true;
             });
@@ -160,11 +167,13 @@ describe('User Repository', () => {
                 // @ts-ignore
                 const repository = new UserRepository(connection, logger);
 
-                const affectedRows = await repository.update(1, '', '', '12341234');
+                const affectedRows = await repository.update({
+                    id: 1, name: '', surname: '', password: '12341234'
+                });
 
                 expect(affectedRows).to.equal(1);
 
-                expect(update.calledWith({ password: '12341234' })).to.be.true;
+                expect(update.calledWith({ id: 1, password: '12341234' })).to.be.true;
                 expect(where.calledWith('id', 1)).to.be.true;
                 expect(knex.calledWith('user')).to.be.true;
             });
@@ -177,11 +186,13 @@ describe('User Repository', () => {
                 // @ts-ignore
                 const repository = new UserRepository(connection, logger);
 
-                const affectedRows = await repository.update(1, 'Son', 'Goku', '12341234');
+                const affectedRows = await repository.update({
+                    id: 1, name: 'Son', surname: 'Goku', password: '12341234'
+                });
 
                 expect(affectedRows).to.equal(1);
 
-                expect(update.calledWith({ name: 'Son', surname: 'Goku', password: '12341234' })).to.be.true;
+                expect(update.calledWith({ id: 1, name: 'Son', surname: 'Goku', password: '12341234' })).to.be.true;
                 expect(where.calledWith('id', 1)).to.be.true;
                 expect(knex.calledWith('user')).to.be.true;
             });

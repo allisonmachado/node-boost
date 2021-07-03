@@ -9,7 +9,6 @@ import { UserMiddleware } from './middlewares/UserMiddleware';
 import { UserController } from './controllers/UserController';
 import { UserService } from './services/UserService';
 import { UserRepository } from './data/repositories/UserRepository';
-import { UserEntity } from './data/entities/UserEntity';
 
 import { AuthMiddleware } from './middlewares/AuthMiddleware';
 import { AuthController } from './controllers/AuthController';
@@ -22,6 +21,7 @@ import { Environment as Env } from './lib/Environment';
 import { CircularCache } from './lib/CircularCache';
 import { MySQLConnection } from './data/connection/mysql/Connection';
 import { Logger } from './lib/Logger';
+import { User } from './data/entities/User';
 
 /** Display environment info */
 const logger = new Logger('Main');
@@ -43,14 +43,14 @@ const mysqlConnection = new MySQLConnection(new Logger(MySQLConnection.name));
 const userRepository = new UserRepository(mysqlConnection, new Logger(UserRepository.name));
 
 const healthService = new HealthService(
-    [{ label: 'mysql', reporter: mysqlConnection}],
+    [{ label: 'mysql', reporter: mysqlConnection }],
     new Logger(HealthService.name),
 );
 const userService = new UserService(userRepository, new Logger(UserService.name));
 const authService = new AuthService(
     Env.getJwtSecret(),
     userRepository,
-    new CircularCache<UserEntity>(10),
+    new CircularCache<User>(10),
     new Logger(AuthService.name),
 );
 
@@ -92,7 +92,10 @@ app.delete('/users/:id',
 app.get('/health',
     authMiddleware.verify.bind(authMiddleware),
     healthController.getReport.bind(healthController));
-app.post('/auth', authController.authenticateUser.bind(authController));
+
+app.post('/auth',
+    userMiddleware.verifyAuthenticateUserParams.bind(userMiddleware),
+    authController.authenticateUser.bind(authController));
 
 /** Listen for requests */
 app.listen(Env.getPort(), () => {

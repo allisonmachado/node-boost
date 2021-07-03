@@ -23,7 +23,7 @@ export class MySQLConnection implements ISQLConnection, IHealthReporter {
     public async isActive(): Promise<boolean> {
         try {
             const [[{ version }]] = await this.queryBuilder.raw('SELECT version() as version');
-            return version.startsWith('8');
+            return version.startsWith('5');
         } catch (error) {
             this.logger.error(`not active: ${error}`);
             return false;

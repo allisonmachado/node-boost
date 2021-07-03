@@ -13,7 +13,7 @@ export class HealthController extends BaseController {
         this.logger.debug('initialized');
     }
 
-    public async getReport(req: express.Request, res: express.Response): Promise<void> {
+    public async getReport(_req: express.Request, res: express.Response): Promise<void> {
         const report = await this.healthService.getStatus();
         res.send(report);
     }

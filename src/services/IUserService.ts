@@ -1,14 +1,9 @@
-export interface IUserService {
-    create(name: string, surname: string, email: string, password: string): Promise<number>;
-    list(): Promise<IUserAccessibleProps[]>;
-    findById(id: number): Promise<IUserAccessibleProps>;
-    update(id: number, name: string, surname: string, password: string): Promise<number>;
-    delete(id: number, requesterId: number): Promise<number>;
-}
+import { User } from '../data/entities/User';
 
-export interface IUserAccessibleProps {
-    id: number;
-    name: string;
-    surname: string;
-    email: string;
+export interface IUserService {
+    create(user: Omit<User, 'id'>): Promise<number>;
+    list(): Promise<Omit<User, 'password'>[]>;
+    findById(id: number): Promise<Omit<User, 'password'>>;
+    update(user: Partial<Omit<User, 'email'>>): Promise<number>;
+    delete(id: number, requesterId: number): Promise<number>;
 }

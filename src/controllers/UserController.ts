@@ -14,17 +14,17 @@ export class UserController extends BaseController {
         this.logger.debug('initialized');
     }
 
-    public async getUsers(req: express.Request, res: express.Response): Promise<void> {
+    public async getUsers(_req: express.Request, res: express.Response): Promise<void> {
         const users = await this.userService.list();
         res.send(users);
     }
 
     @CatchDuplicateEntry
     public async createUser(req: express.Request, res: express.Response): Promise<void> {
-        const { name, surname, email, password } = req.body;
+        const user = req.body;
 
-        const userId = await this.userService.create(name, surname, email, password);
-        res.status(201).send({ id: userId, name, surname, email });
+        const userId = await this.userService.create(user);
+        res.status(201).send({ id: userId });
     }
 
     public async getUser(req: express.Request, res: express.Response): Promise<void> {
@@ -39,9 +39,9 @@ export class UserController extends BaseController {
 
     public async updateUser(req: express.Request, res: express.Response): Promise<void> {
         const id = parseInt(req.params.id, 10);
-        const { name, surname, password } = req.body;
+        const user = { id, ...req.body };
 
-        const affectedRows = await this.userService.update(id, name, surname, password);
+        const affectedRows = await this.userService.update(user);
         if (affectedRows === 1) {
             res.status(204).send();
         } else {

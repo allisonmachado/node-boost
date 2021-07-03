@@ -17,10 +17,9 @@ export class AuthController extends BaseController {
         const { email, password } = req.body;
 
         if (await this.authService.validateCredentials(email, password)) {
-            const token = await this.authService.signTemporaryToken(email);
-            res.send({
-                auth: token,
-            });
+            const token = await this.authService.signAccessToken(email);
+
+            res.send({ token });
         } else {
             this.logger.info(`invalid auth attempt: [${email}]`);
             res.status(400).send();

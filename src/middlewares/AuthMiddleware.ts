@@ -10,7 +10,7 @@ export class AuthMiddleware {
 
     public async verify(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
         try {
-            const token = this.getTokenFromBearer(req);
+            const token = this.getTokenFromHeader(req);
             const contents = await this.authService.validateAccessToken(token);
             (req as IAuthenticatedRequest).user = contents;
             next();
@@ -23,7 +23,7 @@ export class AuthMiddleware {
         }
     }
 
-    private getTokenFromBearer(req: express.Request): string {
+    private getTokenFromHeader(req: express.Request): string {
         const authorization = req.headers.authorization;
         if (!authorization) {
             throw new Error('No Authorization Header');
@@ -37,7 +37,7 @@ export class AuthMiddleware {
     }
 
     private isTokenError(error: Error) {
-        const knownErrors = [
+        const tokenErrors = [
             'JsonWebTokenError',
             'TokenExpiredError',
             'NotBeforeError',
@@ -45,7 +45,7 @@ export class AuthMiddleware {
             'Invalid Token Format',
             'Invalid decoded jwt payload',
         ];
-        return knownErrors.find(e => error.message.includes(e) || error.name === e);
+        return tokenErrors.find(e => error.message.includes(e) || error.name === e);
     }
 }
 

@@ -17,6 +17,7 @@ export class HealthService extends BaseService implements IHealthService {
         let status = HealthStatus.UP;
         const timestamp = Date.now();
         const dependencies = [];
+
         for (const dependency of this.dependencies) {
             const active = await dependency.reporter.isActive();
             if (!active) { status = HealthStatus.DOWN; }
@@ -26,6 +27,7 @@ export class HealthService extends BaseService implements IHealthService {
             });
         }
         const report = { timestamp, status, dependencies };
+
         this.logger.info(this.stringifyReport(report));
         return report;
     }

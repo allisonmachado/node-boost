@@ -68,4 +68,21 @@ export class UserMiddleware {
             res.status(400).send();
         }
     }
+
+    public async verifyAuthenticateUserParams(
+        req: express.Request, res: express.Response, next: express.NextFunction,
+    ): Promise<void> {
+        if (!req.body) {
+            res.status(400).send();
+            return;
+        }
+        if (
+            validator.isLength(req.body.password, { min: 6, max: 200 }) &&
+            validator.isEmail(req.body.email)
+        ) {
+            next();
+        } else {
+            res.status(400).send();
+        }
+    }
 }

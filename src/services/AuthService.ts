@@ -1,5 +1,5 @@
+import { User } from '../data/entities/User';
 import { ILogger } from '../lib/ILogger';
-import { UserEntity } from '../data/entities/UserEntity';
 import { BaseService } from './BaseService';
 import { ISimpleCache } from '../lib/ISimpleCache';
 import { IUserRepository } from '../data/repositories/IUserRepository';
@@ -34,7 +34,7 @@ export class AuthService extends BaseService implements IAuthService {
     constructor(
         private secret: string,
         private userRepository: IUserRepository,
-        private cache: ISimpleCache<UserEntity>,
+        private cache: ISimpleCache<User>,
         private logger: ILogger,
     ) {
         super();
@@ -47,7 +47,7 @@ export class AuthService extends BaseService implements IAuthService {
     public async validateCredentials(email: string, password: string): Promise<boolean> {
         const user = await this.userRepository.findByEmail(email);
         if (user) {
-            if (await this.compareHashedPassword(password, user.getPassword())) {
+            if (await this.compareHashedPassword(password, user.password)) {
                 this.cache.save(email, user);
                 return true;
             }
@@ -56,16 +56,16 @@ export class AuthService extends BaseService implements IAuthService {
         return false;
     }
 
-    public async signTemporaryToken(email: string): Promise<string> {
+    public async signAccessToken(email: string): Promise<string> {
         let user = this.cache.search(email);
         if (!user) {
             user = await this.userRepository.findByEmail(email);
         }
         return this.sign({
-            id: user.getId(),
-            name: user.getName(),
-            surname: user.getSurname(),
-            email: user.getEmail(),
+            id: user.id,
+            name: user.name,
+            surname: user.surname,
+            email: user.email,
         }, this.secret, { expiresIn: '10h' });
     }
 

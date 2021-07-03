@@ -12,7 +12,7 @@ export async function up(): Promise<void> {
     const userRepository = new UserRepository(mysqlConnection, new Logger(UserRepository.name));
     const userService = new UserService(userRepository, new Logger(UserService.name));
     const password = process.env.INIT_PASSWORD;
-    await userService.create('Node', 'Boost', EMAIL, password);
+    await userService.create({ name: 'Node', surname: 'Boost', email: EMAIL, password });
 }
 
 export async function down(knex: Knex): Promise<void> {
