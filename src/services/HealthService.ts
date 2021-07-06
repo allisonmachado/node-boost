@@ -1,4 +1,4 @@
-import { zip } from 'lodash';
+import { zipWith } from 'lodash';
 import { ILogger } from '../lib/ILogger';
 import { BaseService } from './BaseService';
 import { IHealthReporter } from './IHealthReporter';
@@ -19,20 +19,17 @@ export class HealthService extends BaseService implements IHealthService {
 
         const statuses = await Promise.all(this.dependencies.map(d => d.reporter.isActive()));
         const labels = this.dependencies.map(d => d.label);
-        const dependencyParts = zip(labels, statuses);
 
-        const dependencies = dependencyParts.map(d => {
-            const [label, status] = d;
-            return {
-                name: label,
-                status: status ? HealthStatus.UP : HealthStatus.DOWN
-            };
-        });
+        const dependencyParts = zipWith(labels, statuses, (label, status) => ({ label, status }));
+        const dependencies = dependencyParts.map(part => ({
+            name: part.label,
+            status: part.status ? HealthStatus.UP : HealthStatus.DOWN
+        }));
+
         const status = dependencies
             .every(d => d.status === HealthStatus.UP) ? HealthStatus.UP : HealthStatus.DOWN;
 
         const report = { timestamp, status, dependencies };
-
         this.logger.info(this.stringifyReport(report));
         return report;
     }
