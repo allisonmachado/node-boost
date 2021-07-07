@@ -10,8 +10,7 @@ import * as bcrypt from 'bcryptjs';
 
 import util from 'util';
 import jwt from 'jsonwebtoken';
-import check from 'check-types';
-import validator from 'validator';
+import Joi from 'joi';
 
 export class AuthService extends BaseService implements IAuthService {
 
@@ -78,16 +77,13 @@ export class AuthService extends BaseService implements IAuthService {
     }
 
     private isUserJwtToken(obj: unknown): obj is IUserJwtPayload {
-        try {
-            return (
-                check.number(obj['id']) &&
-                check.string(obj['name']) &&
-                check.string(obj['surname']) &&
-                check.string(obj['email']) &&
-                validator.isEmail(obj['email'])
-            );
-        } catch (error) {
-            return false;
-        }
+        const validation = Joi.object({
+            id: Joi.number().integer().required(),
+            name: Joi.string().required(),
+            surname: Joi.string().required(),
+            email: Joi.string().email().required(),
+        }).options({ allowUnknown: true }).validate(obj);
+
+        return !validation.error;
     }
 }

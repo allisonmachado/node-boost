@@ -34,7 +34,6 @@
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
     "@types/chai": "^4.2.19",
-    "@types/check-types": "^7.3.2",
     "@types/cors": "^2.8.10",
     "@types/express": "^4.17.12",
     "@types/faker": "^5.5.6",
@@ -44,7 +43,6 @@
     "@types/mysql": "^2.15.18",
     "@types/node": "^16.0.0",
     "@types/sinon": "^10.0.2",
-    "@types/validator": "^13.6.1",
     "@typescript-eslint/eslint-plugin": "^4.28.1",
     "@typescript-eslint/parser": "^4.28.1",
     "chai": "^4.3.4",
@@ -57,14 +55,13 @@
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
-    "check-types": "^11.1.2",
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "joi": "^17.4.0",
     "jsonwebtoken": "^8.5.1",
     "knex": "^0.21.6",
     "lodash": "^4.17.21",
     "mysql": "^2.18.1",
-    "validator": "^13.6.0",
     "winston": "^3.3.3"
   }
 }

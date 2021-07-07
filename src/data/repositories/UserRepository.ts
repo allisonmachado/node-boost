@@ -3,10 +3,9 @@ import { ILogger } from '../../lib/ILogger';
 import { ISQLConnection } from '../connection/ISQLConnection';
 import { IUserRepository } from './IUserRepository';
 
-import validator from 'validator';
 import lodash from 'lodash';
-import check from 'check-types';
 import Knex from 'knex';
+import Joi from 'joi';
 
 export class UserRepository implements IUserRepository {
     private knex: Knex;
@@ -16,7 +15,7 @@ export class UserRepository implements IUserRepository {
     }
 
     public async create(user: Omit<User, 'id'>): Promise<number> {
-        const [ id ] = await this.knex('user').insert({
+        const [id] = await this.knex('user').insert({
             name: user.name,
             surname: user.surname,
             email: user.email,
@@ -26,16 +25,16 @@ export class UserRepository implements IUserRepository {
     }
 
     public async findById(id: number): Promise<User> {
-        const [ user ] = await this.knex('user').where('id', id);
-        if (!user || check.emptyArray(user)) {
+        const [user] = await this.knex('user').where('id', id);
+        if (!user) {
             return null;
         }
         return this.mapRecordToUser(user);
     }
 
     public async findByEmail(email: string): Promise<User> {
-        const [ user ] = await this.knex('user').where('email', email);
-        if (!user || check.emptyArray(user)) {
+        const [user] = await this.knex('user').where('email', email);
+        if (!user) {
             return null;
         }
         return this.mapRecordToUser(user);
@@ -60,22 +59,19 @@ export class UserRepository implements IUserRepository {
 
     private mapRecordToUser(user: unknown): User {
         if (!this.isUserRecord(user)) throw new Error(`Cannot map unknown value to user type: ${JSON.stringify(user)}`);
-        return user; // for this simple example the User and UserRecord are equal
+        return { ...user }; // for this simple example the User and UserRecord are equal
     }
 
     private isUserRecord(obj: unknown): obj is UserRecord {
-        try {
-            return (
-                check.number(obj['id']) &&
-                check.string(obj['name']) &&
-                check.string(obj['surname']) &&
-                check.string(obj['email']) &&
-                check.string(obj['password']) &&
-                validator.isEmail(obj['email'])
-            );
-        } catch (error) {
-            return false;
-        }
+        const validation = Joi.object({
+            id: Joi.number().integer().required(),
+            name: Joi.string().required(),
+            surname: Joi.string().required(),
+            email: Joi.string().email().required(),
+            password: Joi.string().required(),
+        }).validate(obj);
+
+        return !validation.error;
     }
 }
 
