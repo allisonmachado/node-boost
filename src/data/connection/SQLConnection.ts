@@ -1,5 +1,5 @@
 import Knex from 'knex';
 
-export interface ISQLConnection {
+export interface SQLConnection {
     getQueryBuilder(): Knex;
 }

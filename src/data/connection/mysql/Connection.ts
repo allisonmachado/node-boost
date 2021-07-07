@@ -2,15 +2,15 @@ import Knex from 'knex';
 import knex from 'knex';
 import envConnection from '../../../knexfile';
 
-import { ILogger } from '../../../lib/ILogger';
-import { ISQLConnection } from '../ISQLConnection';
-import { IHealthReporter } from '../../../services/IHealthReporter';
+import { Logger } from '../../../lib/Logger';
+import { SQLConnection } from '../SQLConnection';
+import { HealthReporter } from '../../../services/HealthReporter';
 
-export class MySQLConnection implements ISQLConnection, IHealthReporter {
+export class MySQLConnection implements SQLConnection, HealthReporter {
     private queryBuilder: Knex;
-    private logger: ILogger;
+    private logger: Logger;
 
-    constructor(logger: ILogger) {
+    constructor(logger: Logger) {
         this.queryBuilder = knex(envConnection);
         this.logger = logger;
         this.logger.debug('initialized');

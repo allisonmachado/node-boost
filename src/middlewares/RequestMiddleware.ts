@@ -1,9 +1,9 @@
 import express from 'express';
 
-import { ILogger } from '../lib/ILogger';
+import { Logger } from '../lib/Logger';
 
 export class RequestMiddleware {
-    constructor(private logger: ILogger) {
+    constructor(private logger: Logger) {
         this.logger.debug('initialized');
     }
 

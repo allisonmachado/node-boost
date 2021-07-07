@@ -1,15 +1,21 @@
 import winston from 'winston';
 
-import { ILogger } from './ILogger';
 import { Environment } from './Environment';
 
-export class Logger implements ILogger {
+export interface Logger {
+    error(msg: string): void;
+    info(msg: string): void;
+    debug(msg: string): void;
+}
+
+
+export class BaseLogger implements Logger {
     private static readonly level = Environment.getLogLevel();
     private logger: winston.Logger;
 
     constructor(private prefix: string) {
         this.logger = winston.createLogger({
-            level: Logger.level,
+            level: BaseLogger.level,
             format: winston.format.json(),
             transports: [
                 new winston.transports.Console(),

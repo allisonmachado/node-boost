@@ -1,15 +1,15 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { HealthStatus } from '../../src/services/IHealthService';
-import { HealthService } from '../../src/services/HealthService';
+import { HealthStatus } from '../../src/services/HealthService';
+import { BaseHealthService } from '../../src/services/HealthService';
 
 import { expect } from 'chai';
-import { Logger } from '../../src/lib/Logger';
+import { BaseLogger } from '../../src/lib/Logger';
 
 describe('Health Service', () => {
-    const logger = new Logger('Health Service Spec');
+    const logger = new BaseLogger('Health Service Spec');
 
     it('should return simple report if there are no dependencies', async () => {
-        const healthService = new HealthService([], logger);
+        const healthService = new BaseHealthService([], logger);
         const report = await healthService.getStatus();
 
         expect(report.status).to.equal(HealthStatus.UP);
@@ -21,7 +21,7 @@ describe('Health Service', () => {
         const depOne = { label: 'database', reporter };
         const depTwo = { label: 'microservice', reporter };
 
-        const healthService = new HealthService([depOne, depTwo], logger);
+        const healthService = new BaseHealthService([depOne, depTwo], logger);
         const report = await healthService.getStatus();
 
         expect(report.status).to.equal(HealthStatus.UP);
@@ -40,7 +40,7 @@ describe('Health Service', () => {
         const depTwo = { label: 'microservice', reporter: activeReporter };
         const depThree = { label: 'id-provider', reporter: downReporter };
 
-        const healthService = new HealthService([depOne, depTwo, depThree], logger);
+        const healthService = new BaseHealthService([depOne, depTwo, depThree], logger);
         const report = await healthService.getStatus();
 
         expect(report.status).to.equal(HealthStatus.DOWN);

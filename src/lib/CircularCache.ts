@@ -1,6 +1,6 @@
-import { ISimpleCache } from './ISimpleCache';
+import { BasicCache } from './BasicCache';
 
-export class CircularCache<T> implements ISimpleCache<T> {
+export class CircularCache<T> implements BasicCache<T> {
     private currentIndex: number;
     private readonly keyToIndex: Map<string, number>;
     private readonly indexToKey: Map<number, string>;

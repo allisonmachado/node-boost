@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { AuthController } from '../../src/controllers/AuthController';
-import { Logger } from '../../src/lib/Logger';
+import { BaseLogger } from '../../src/lib/Logger';
 import { expect } from 'chai';
 
 import sinon from 'sinon';
 
 describe('Auth Controller', () => {
-    const logger = new Logger('Auth Controller Spec');
+    const logger = new BaseLogger('Auth Controller Spec');
     
 
     describe('user authentication', async () => {

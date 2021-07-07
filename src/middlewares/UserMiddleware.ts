@@ -2,12 +2,12 @@ import express from 'express';
 import Joi from 'joi';
 
 import { CatchUnexpected } from '../lib/Decorators';
-import { ILogger } from '../lib/ILogger';
+import { Logger } from '../lib/Logger';
 
 @CatchUnexpected(400)
 export class UserMiddleware {
 
-    constructor(private logger: ILogger) {
+    constructor(private logger: Logger) {
 
     }
 

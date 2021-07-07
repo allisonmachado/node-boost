@@ -1,18 +1,23 @@
 import express from 'express';
 
-import { ILogger } from '../lib/ILogger';
-import { IAuthService, IUserJwtPayload } from '../services/IAuthService';
+import { Logger } from '../lib/Logger';
+import { AuthService, UserJwtPayload } from '../services/AuthService';
 
 export class AuthMiddleware {
-    constructor(private authService: IAuthService, private logger: ILogger) {
+    constructor(private authService: AuthService, private logger: Logger) {
         this.logger.debug('initialized');
     }
 
-    public async verify(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
+    public async verify(
+        req: express.Request & { user: UserJwtPayload | undefined },
+        res: express.Response,
+        next: express.NextFunction
+    ): Promise<void> {
         try {
             const token = this.getTokenFromHeader(req);
             const contents = await this.authService.validateAccessToken(token);
-            (req as IAuthenticatedRequest).user = contents;
+
+            req.user = contents;
             next();
         } catch (error) {
             if (this.isTokenError(error)) {
@@ -49,6 +54,6 @@ export class AuthMiddleware {
     }
 }
 
-export interface IAuthenticatedRequest extends express.Request {
-    user: IUserJwtPayload;
+export interface AuthenticatedRequest extends express.Request {
+    user: UserJwtPayload;
 }

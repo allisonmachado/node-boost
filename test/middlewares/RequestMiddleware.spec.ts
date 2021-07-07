@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { RequestMiddleware } from '../../src/middlewares/RequestMiddleware';
-import { Logger } from '../../src/lib/Logger';
+import { BaseLogger } from '../../src/lib/Logger';
 import { expect } from 'chai';
 
 import sinon from 'sinon';
 
 describe('Request Middleware', () => {
-    const logger = new Logger('Request Middleware Spec');
+    const logger = new BaseLogger('Request Middleware Spec');
 
     describe('global error handling', async () => {
         it('for body-parser json syntax error should return 400 status code', async () => {
@@ -66,7 +66,7 @@ describe('Request Middleware', () => {
                     callback();
                 }
             };
-            const logger = new Logger('');
+            const logger = new BaseLogger('');
             logger.info = sinon.spy();
             const middleware = new RequestMiddleware(logger);
 

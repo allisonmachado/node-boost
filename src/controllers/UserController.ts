@@ -1,15 +1,15 @@
 import express from 'express';
 
 import { CatchActionForbidden, CatchDuplicateEntry, CatchUnexpected } from '../lib/Decorators';
-import { IAuthenticatedRequest } from '../middlewares/AuthMiddleware';
+import { AuthenticatedRequest } from '../middlewares/AuthMiddleware';
 import { BaseController } from './BaseController';
-import { IUserService } from '../services/IUserService';
-import { ILogger } from '../lib/ILogger';
+import { UserService } from '../services/UserService';
+import { Logger } from '../lib/Logger';
 
 @CatchUnexpected(500)
 export class UserController extends BaseController {
 
-    constructor(private userService: IUserService, private logger: ILogger) {
+    constructor(private userService: UserService, private logger: Logger) {
         super();
         this.logger.debug('initialized');
     }
@@ -50,7 +50,7 @@ export class UserController extends BaseController {
     }
 
     @CatchActionForbidden
-    public async deleteUser(req: IAuthenticatedRequest, res: express.Response): Promise<void> {
+    public async deleteUser(req: AuthenticatedRequest, res: express.Response): Promise<void> {
         const affectedRows = await this.userService.delete(parseInt(req.params.id, 10), req.user.id);
         if (affectedRows === 1) {
             res.status(204).send();

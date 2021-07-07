@@ -1,17 +1,17 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { User } from '../../src/data/entities/User';
 import { expect } from 'chai';
-import { AuthService } from '../../src/services/AuthService';
+import { BaseAuthService } from '../../src/services/AuthService';
 import { CircularCache } from '../../src/lib/CircularCache';
 
 import jwt from 'jsonwebtoken';
 import sinon from 'sinon';
 
 import * as bcrypt from 'bcryptjs';
-import { Logger } from '../../src/lib/Logger';
+import { BaseLogger } from '../../src/lib/Logger';
 
 describe('Auth Service', () => {
-    const logger = new Logger('Auth Service Spec');
+    const logger = new BaseLogger('Auth Service Spec');
     const secret = 'abcd-1234';
     const cache = new CircularCache<User>(3);
 
@@ -47,7 +47,7 @@ describe('Auth Service', () => {
 
     describe('private implementations', async () => {
         it('should abstract bcrypt async compare hashed password', async () => {
-            const authService = new AuthService(secret, null, cache, logger);
+            const authService = new BaseAuthService(secret, null, cache, logger);
             const password = 'abcdxyz';
             const hash = await genSalt(password);
 
@@ -58,7 +58,7 @@ describe('Auth Service', () => {
         });
 
         it('should abstract jwt signing process', async () => {
-            const authService = new AuthService(secret, null, cache, logger);
+            const authService = new BaseAuthService(secret, null, cache, logger);
             // @ts-ignore
             const token = await authService.sign({ data: 'any' }, secret, { expiresIn: '10h' });
             const decodedJwt = await jwtVerify(token, secret);
@@ -77,7 +77,7 @@ describe('Auth Service', () => {
                 email: 'foobar@email.com',
                 password: '12345'
             });
-            const authService = new AuthService(secret, null, cache, logger);
+            const authService = new BaseAuthService(secret, null, cache, logger);
 
             const token = await authService.signAccessToken('foobar@email.com');
             const decoded = await authService.validateAccessToken(token);
@@ -88,7 +88,7 @@ describe('Auth Service', () => {
         });
 
         it('should not verify token not signed by the system', async () => {
-            const authService = new AuthService(secret, null, cache, logger);
+            const authService = new BaseAuthService(secret, null, cache, logger);
             const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9' +
                 '.eyJuYW1lIjoiSm9obiIsInN1cm5hbWUiOiJEb2UiLCJlbWFpbCI6ImpvaG5kb2VAZW1haWwuY29tIiwiaWF0IjoxNTE2MjM5MDIyfQ' +
                 '.PKyYB3UlAyDnDKlUSl7IHkAiqplvY_nKw1nLUbqj3i0';
@@ -102,7 +102,7 @@ describe('Auth Service', () => {
         });
 
         it('should not verify token signed by the system but with an invalid format', async () => {
-            const authService = new AuthService(secret, null, cache, logger);
+            const authService = new BaseAuthService(secret, null, cache, logger);
             const tokenPayload = {
                 name: 'Foo',
                 surname: 'Bar',
@@ -133,7 +133,7 @@ describe('Auth Service', () => {
                 findByEmail: sinon.stub().resolves(user)
             };
             // @ts-ignore
-            const authService = new AuthService(secret, userRepository, cache, logger);
+            const authService = new BaseAuthService(secret, userRepository, cache, logger);
 
             const validation = await authService.validateCredentials('foobar@email.com', password);
 
@@ -153,7 +153,7 @@ describe('Auth Service', () => {
                 findByEmail: sinon.stub().resolves(user)
             };
             // @ts-ignore
-            const authService = new AuthService(secret, userRepository, cache, logger);
+            const authService = new BaseAuthService(secret, userRepository, cache, logger);
 
             const validation = await authService.validateCredentials('foobar@email.com', 'abcdefg');
 
@@ -165,7 +165,7 @@ describe('Auth Service', () => {
                 findByEmail: sinon.stub().resolves(null)
             };
             // @ts-ignore
-            const authService = new AuthService(secret, userRepository, cache, logger);
+            const authService = new BaseAuthService(secret, userRepository, cache, logger);
 
             const validation = await authService.validateCredentials('foobar@email.com', 'abcdefg');
 

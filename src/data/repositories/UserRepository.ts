@@ -1,15 +1,24 @@
 import { User } from '../entities/User';
-import { ILogger } from '../../lib/ILogger';
-import { ISQLConnection } from '../connection/ISQLConnection';
-import { IUserRepository } from './IUserRepository';
+import { Logger } from '../../lib/Logger';
+import { SQLConnection } from '../connection/SQLConnection';
 
 import lodash from 'lodash';
 import Knex from 'knex';
 import Joi from 'joi';
 
-export class UserRepository implements IUserRepository {
+export interface UserRepository {
+    create(user: Omit<User, 'id'>): Promise<number>;
+    findById(id: number): Promise<User>;
+    findByEmail(email: string): Promise<User>;
+    findTop10(): Promise<User[]>;
+    update(user: Omit<User, 'email'>): Promise<number>;
+    delete(id: number): Promise<number>;
+}
+
+
+export class BaseUserRepository implements UserRepository {
     private knex: Knex;
-    constructor(private connection: ISQLConnection, protected logger: ILogger) {
+    constructor(private connection: SQLConnection, protected logger: Logger) {
         this.knex = this.connection.getQueryBuilder();
         this.logger.debug('initialized');
     }

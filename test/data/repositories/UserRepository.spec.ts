@@ -1,13 +1,12 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { expect } from 'chai';
-import { Logger } from '../../../src/lib/Logger';
-import { ILogger } from '../../../src/lib/ILogger';
-import { UserRepository } from '../../../src/data/repositories/UserRepository';
+import { Logger, BaseLogger } from '../../../src/lib/Logger';
+import { BaseUserRepository } from '../../../src/data/repositories/UserRepository';
 
 import sinon from 'sinon';
 
 describe('User Repository', () => {
-    const logger: ILogger = new Logger('User Repository Spec');
+    const logger: Logger = new BaseLogger('User Repository Spec');
     const fakeUser = {
         id: 1,
         name: 'Foo',
@@ -22,7 +21,7 @@ describe('User Repository', () => {
             const knex = sinon.fake.returns({ insert });
             const connection = { getQueryBuilder: () => knex };
             // @ts-ignore
-            const repository = new UserRepository(connection, logger);
+            const repository = new BaseUserRepository(connection, logger);
             const userId = await repository.create({
                 name: 'Foo',
                 surname: 'Bar',
@@ -40,7 +39,7 @@ describe('User Repository', () => {
             const knex = sinon.fake.returns({ where });
             const connection = { getQueryBuilder: () => knex };
             // @ts-ignore
-            const repository = new UserRepository(connection, logger);
+            const repository = new BaseUserRepository(connection, logger);
 
             const user = (await repository.findById(1));
 
@@ -58,7 +57,7 @@ describe('User Repository', () => {
             const knex = sinon.fake.returns({ where });
             const connection = { getQueryBuilder: () => knex };
             // @ts-ignore
-            const repository = new UserRepository(connection, logger);
+            const repository = new BaseUserRepository(connection, logger);
 
             const user = (await repository.findByEmail('baz@email.com'));
 
@@ -76,7 +75,7 @@ describe('User Repository', () => {
             const knex = sinon.fake.returns({ limit });
             const connection = { getQueryBuilder: () => knex };
             // @ts-ignore
-            const repository = new UserRepository(connection, logger);
+            const repository = new BaseUserRepository(connection, logger);
             const users = await repository.findTop10();
 
             expect(knex.calledWith('user')).to.be.true;
@@ -97,7 +96,7 @@ describe('User Repository', () => {
             const knex = sinon.fake.returns({ where });
             const connection = { getQueryBuilder: () => knex };
             // @ts-ignore
-            const repository = new UserRepository(connection, logger);
+            const repository = new BaseUserRepository(connection, logger);
             const affectedRows = await repository.delete(1);
 
             expect(knex.calledWith('user')).to.be.true;
@@ -112,7 +111,7 @@ describe('User Repository', () => {
                 const knex = sinon.fake.returns({ where });
                 const connection = { getQueryBuilder: () => knex };
                 // @ts-ignore
-                const repository = new UserRepository(connection, logger);
+                const repository = new BaseUserRepository(connection, logger);
 
                 const affectedRows = await repository.update({});
 
@@ -129,7 +128,7 @@ describe('User Repository', () => {
                 const knex = sinon.fake.returns({ where });
                 const connection = { getQueryBuilder: () => knex };
                 // @ts-ignore
-                const repository = new UserRepository(connection, logger);
+                const repository = new BaseUserRepository(connection, logger);
 
                 const affectedRows = await repository.update({ id: 1, name: 'Son' });
 
@@ -146,7 +145,7 @@ describe('User Repository', () => {
                 const knex = sinon.fake.returns({ where });
                 const connection = { getQueryBuilder: () => knex };
                 // @ts-ignore
-                const repository = new UserRepository(connection, logger);
+                const repository = new BaseUserRepository(connection, logger);
 
                 const affectedRows = await repository.update({
                     id: 1, name: '', surname: 'Goku'
@@ -165,7 +164,7 @@ describe('User Repository', () => {
                 const knex = sinon.fake.returns({ where });
                 const connection = { getQueryBuilder: () => knex };
                 // @ts-ignore
-                const repository = new UserRepository(connection, logger);
+                const repository = new BaseUserRepository(connection, logger);
 
                 const affectedRows = await repository.update({
                     id: 1, name: '', surname: '', password: '12341234'
@@ -184,7 +183,7 @@ describe('User Repository', () => {
                 const knex = sinon.fake.returns({ where });
                 const connection = { getQueryBuilder: () => knex };
                 // @ts-ignore
-                const repository = new UserRepository(connection, logger);
+                const repository = new BaseUserRepository(connection, logger);
 
                 const affectedRows = await repository.update({
                     id: 1, name: 'Son', surname: 'Goku', password: '12341234'

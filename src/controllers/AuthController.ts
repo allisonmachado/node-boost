@@ -1,14 +1,14 @@
 import express from 'express';
 
-import { ILogger } from '../lib/ILogger';
-import { IAuthService } from '../services/IAuthService';
+import { Logger } from '../lib/Logger';
+import { AuthService } from '../services/AuthService';
 import { BaseController } from './BaseController';
 import { CatchUnexpected } from '../lib/Decorators';
 
 @CatchUnexpected(500)
 export class AuthController extends BaseController {
 
-    constructor(private authService: IAuthService, private logger: ILogger) {
+    constructor(private authService: AuthService, private logger: Logger) {
         super();
         this.logger.debug('initialized');
     }

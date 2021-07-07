@@ -2,13 +2,13 @@ import express from 'express';
 
 import { CatchUnexpected } from '../lib/Decorators';
 import { BaseController } from './BaseController';
-import { IHealthService } from '../services/IHealthService';
-import { ILogger } from '../lib/ILogger';
+import { HealthService } from '../services/HealthService';
+import { Logger } from '../lib/Logger';
 
 @CatchUnexpected(500)
 export class HealthController extends BaseController {
 
-    constructor(private healthService: IHealthService, private logger: ILogger) {
+    constructor(private healthService: HealthService, private logger: Logger) {
         super();
         this.logger.debug('initialized');
     }

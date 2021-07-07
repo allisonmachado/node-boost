@@ -1,21 +1,28 @@
-import { IUserRepository } from '../data/repositories/IUserRepository';
-import { IUserService } from './IUserService';
+import { UserRepository } from '../data/repositories/UserRepository';
 import { BaseService } from './BaseService';
-import { ILogger } from '../lib/ILogger';
+import { Logger } from '../lib/Logger';
+import { User } from '../data/entities/User';
 
 import * as bcrypt from 'bcryptjs';
 
 import util from 'util';
 
 import { first } from 'lodash';
-import { User } from '../data/entities/User';
 
-export class UserService extends BaseService implements IUserService {
+export interface UserService {
+    create(user: Omit<User, 'id'>): Promise<number>;
+    list(): Promise<Omit<User, 'password'>[]>;
+    findById(id: number): Promise<Omit<User, 'password'>>;
+    update(user: Partial<Omit<User, 'email'>>): Promise<number>;
+    delete(id: number, requesterId: number): Promise<number>;
+}
+
+export class BaseUserService extends BaseService implements UserService {
     private genSalt: (rounds: number) => Promise<string>;
 
     private hash: (s: string, salt: number | string) => Promise<string>;
 
-    constructor(private userRepository: IUserRepository, private logger: ILogger) {
+    constructor(private userRepository: UserRepository, private logger: Logger) {
         super();
         this.userRepository = userRepository;
         this.genSalt = util.promisify(bcrypt.genSalt);

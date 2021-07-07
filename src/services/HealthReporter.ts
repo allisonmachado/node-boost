@@ -1,3 +1,3 @@
-export interface IHealthReporter {
+export interface HealthReporter {
     isActive(): Promise<boolean>;
 }

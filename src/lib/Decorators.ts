@@ -1,6 +1,6 @@
 import express from 'express';
 import { BaseController } from '../controllers/BaseController';
-import { IAuthenticatedRequest } from '../middlewares/AuthMiddleware';
+import { AuthenticatedRequest } from '../middlewares/AuthMiddleware';
 
 /**
  * This is intended to be used as a Typescript decorator for request processor classes.
@@ -15,7 +15,7 @@ export function CatchUnexpected(statusCode: number) {
                 continue;
             }
             const originalMethod = descriptor.value;
-            descriptor.value = async function(req: IAuthenticatedRequest, res: express.Response, ...args: unknown[]) {
+            descriptor.value = async function(req: AuthenticatedRequest, res: express.Response, ...args: unknown[]) {
                 try {
                     await originalMethod.apply(this, [req, res, ...args]);
                 } catch (error) {
@@ -55,7 +55,7 @@ export function CatchDuplicateEntry(_target: unknown, _propertyKey: string, desc
  */
 export function CatchActionForbidden(_target: unknown, _propertyKey: string, descriptor: PropertyDescriptor): void {
     const originalMethod = descriptor.value;
-    descriptor.value = async function(req: IAuthenticatedRequest, res: express.Response, ...args: unknown[]) {
+    descriptor.value = async function(req: AuthenticatedRequest, res: express.Response, ...args: unknown[]) {
         try {
             await originalMethod.apply(this, [req, res, ...args]);
         } catch (error) {

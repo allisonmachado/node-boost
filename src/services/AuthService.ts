@@ -1,9 +1,8 @@
 import { User } from '../data/entities/User';
-import { ILogger } from '../lib/ILogger';
+import { Logger } from '../lib/Logger';
+import { BasicCache } from '../lib/BasicCache';
 import { BaseService } from './BaseService';
-import { ISimpleCache } from '../lib/ISimpleCache';
-import { IUserRepository } from '../data/repositories/IUserRepository';
-import { IAuthService, IUserJwtPayload } from './IAuthService';
+import { UserRepository } from '../data/repositories/UserRepository';
 import { GetPublicKeyOrSecret, Secret, SignOptions } from 'jsonwebtoken';
 
 import * as bcrypt from 'bcryptjs';
@@ -12,7 +11,21 @@ import util from 'util';
 import jwt from 'jsonwebtoken';
 import Joi from 'joi';
 
-export class AuthService extends BaseService implements IAuthService {
+export interface AuthService {
+    validateCredentials(email: string, password: string): Promise<boolean>;
+    validateAccessToken(accessToken: string): Promise<UserJwtPayload>;
+    signAccessToken(email: string): Promise<string>;
+}
+
+export interface UserJwtPayload {
+    id: number;
+    name: string;
+    surname: string;
+    email: string;
+}
+
+
+export class BaseAuthService extends BaseService implements AuthService {
 
     private compareHashedPassword: (
         passwd1: string,
@@ -32,9 +45,9 @@ export class AuthService extends BaseService implements IAuthService {
 
     constructor(
         private secret: string,
-        private userRepository: IUserRepository,
-        private cache: ISimpleCache<User>,
-        private logger: ILogger,
+        private userRepository: UserRepository,
+        private cache: BasicCache<User>,
+        private logger: Logger,
     ) {
         super();
         this.compareHashedPassword = util.promisify(bcrypt.compare);
@@ -68,7 +81,7 @@ export class AuthService extends BaseService implements IAuthService {
         }, this.secret, { expiresIn: '10h' });
     }
 
-    public async validateAccessToken(payload: string): Promise<IUserJwtPayload> {
+    public async validateAccessToken(payload: string): Promise<UserJwtPayload> {
         const decoded = await this.verify(payload, this.secret);
         if (this.isUserJwtToken(decoded)) {
             return decoded;
@@ -76,7 +89,7 @@ export class AuthService extends BaseService implements IAuthService {
         throw new Error(`Invalid decoded jwt payload: ${JSON.stringify(decoded)}`);
     }
 
-    private isUserJwtToken(obj: unknown): obj is IUserJwtPayload {
+    private isUserJwtToken(obj: unknown): obj is UserJwtPayload {
         const validation = Joi.object({
             id: Joi.number().integer().required(),
             name: Joi.string().required(),

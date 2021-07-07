@@ -1,13 +1,12 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { expect } from 'chai';
-import { ILogger } from '../../src/lib/ILogger';
-import { Logger } from '../../src/lib/Logger';
+import { BaseLogger, Logger } from '../../src/lib/Logger';
 import { UserController } from '../../src/controllers/UserController';
 
 import sinon from 'sinon';
 
 describe('User Controller', () => {
-    const logger: ILogger = new Logger('User Controller Spec');
+    const logger: Logger = new BaseLogger('User Controller Spec');
 
     describe('user listing request handling', async () => {
         it('should list users', async () => {

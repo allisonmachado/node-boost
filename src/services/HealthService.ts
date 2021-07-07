@@ -1,20 +1,34 @@
 import { zipWith } from 'lodash';
-import { ILogger } from '../lib/ILogger';
+import { Logger } from '../lib/Logger';
 import { BaseService } from './BaseService';
-import { IHealthReporter } from './IHealthReporter';
-import { HealthStatus, IHealthReport, IHealthService } from './IHealthService';
+import { HealthReporter } from './HealthReporter';
 
-export class HealthService extends BaseService implements IHealthService {
+export interface HealthService {
+    getStatus(): Promise<HealthReport>;
+}
+
+export enum HealthStatus {
+    UP = 'up',
+    DOWN = 'down',
+}
+
+export interface HealthReport {
+    timestamp: number;
+    status: HealthStatus;
+    dependencies: Array<{ name: string, status: HealthStatus }>;
+}
+
+export class BaseHealthService extends BaseService implements HealthService {
 
     constructor(
-        private dependencies: Array<{ label: string, reporter: IHealthReporter }>,
-        private logger: ILogger,
+        private dependencies: Array<{ label: string, reporter: HealthReporter }>,
+        private logger: Logger,
     ) {
         super();
         this.logger.debug('initialized');
     }
 
-    public async getStatus(): Promise<IHealthReport> {
+    public async getStatus(): Promise<HealthReport> {
         const timestamp = Date.now();
 
         const statuses = await Promise.all(this.dependencies.map(d => d.reporter.isActive()));
@@ -34,7 +48,7 @@ export class HealthService extends BaseService implements IHealthService {
         return report;
     }
 
-    private stringifyReport(report: IHealthReport): string {
+    private stringifyReport(report: HealthReport): string {
         return `[${report.status.toUpperCase()}]`
             + `${report.dependencies.map(d => `'${d.name}': ${d.status}`).join(', ')}`;
     }

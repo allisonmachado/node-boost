@@ -7,24 +7,24 @@ import { RequestMiddleware } from './middlewares/RequestMiddleware';
 
 import { UserMiddleware } from './middlewares/UserMiddleware';
 import { UserController } from './controllers/UserController';
-import { UserService } from './services/UserService';
-import { UserRepository } from './data/repositories/UserRepository';
+import { BaseUserService } from './services/UserService';
+import { BaseUserRepository } from './data/repositories/UserRepository';
 
 import { AuthMiddleware } from './middlewares/AuthMiddleware';
 import { AuthController } from './controllers/AuthController';
-import { AuthService } from './services/AuthService';
+import { BaseAuthService } from './services/AuthService';
 
-import { HealthService } from './services/HealthService';
+import { BaseHealthService } from './services/HealthService';
 import { HealthController } from './controllers/HealthController';
 
 import { Environment as Env } from './lib/Environment';
 import { CircularCache } from './lib/CircularCache';
 import { MySQLConnection } from './data/connection/mysql/Connection';
-import { Logger } from './lib/Logger';
+import { BaseLogger } from './lib/Logger';
 import { User } from './data/entities/User';
 
 /** Display environment info */
-const logger = new Logger('Main');
+const logger = new BaseLogger('Main');
 
 logger.info('Location: ' + Env.getLocation());
 logger.info('LogLevel: ' + Env.getLogLevel());
@@ -39,29 +39,29 @@ logger.info('isStaging: ' + Env.isStaging());
 logger.info('isDev: ' + Env.isDev());
 
 /** Init application definitions */
-const mysqlConnection = new MySQLConnection(new Logger(MySQLConnection.name));
-const userRepository = new UserRepository(mysqlConnection, new Logger(UserRepository.name));
+const mysqlConnection = new MySQLConnection(new BaseLogger(MySQLConnection.name));
+const userRepository = new BaseUserRepository(mysqlConnection, new BaseLogger(BaseUserRepository.name));
 
-const healthService = new HealthService(
+const healthService = new BaseHealthService(
     [{ label: 'mysql', reporter: mysqlConnection }],
-    new Logger(HealthService.name),
+    new BaseLogger(BaseHealthService.name),
 );
-const userService = new UserService(userRepository, new Logger(UserService.name));
-const authService = new AuthService(
+const userService = new BaseUserService(userRepository, new BaseLogger(BaseUserService.name));
+const authService = new BaseAuthService(
     Env.getJwtSecret(),
     userRepository,
     new CircularCache<User>(10),
-    new Logger(AuthService.name),
+    new BaseLogger(BaseAuthService.name),
 );
 
-const healthController = new HealthController(healthService, new Logger(HealthController.name));
-const usercontroller = new UserController(userService, new Logger(UserController.name));
-const authController = new AuthController(authService, new Logger(AuthController.name));
+const healthController = new HealthController(healthService, new BaseLogger(HealthController.name));
+const usercontroller = new UserController(userService, new BaseLogger(UserController.name));
+const authController = new AuthController(authService, new BaseLogger(AuthController.name));
 
-const userMiddleware = new UserMiddleware(new Logger(UserMiddleware.name));
-const authMiddleware = new AuthMiddleware(authService, new Logger(AuthMiddleware.name));
+const userMiddleware = new UserMiddleware(new BaseLogger(UserMiddleware.name));
+const authMiddleware = new AuthMiddleware(authService, new BaseLogger(AuthMiddleware.name));
 
-const requestMiddleware = new RequestMiddleware(new Logger(RequestMiddleware.name));
+const requestMiddleware = new RequestMiddleware(new BaseLogger(RequestMiddleware.name));
 
 /** Register application global middlewares */
 const app = express();
