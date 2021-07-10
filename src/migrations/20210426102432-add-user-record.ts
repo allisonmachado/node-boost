@@ -1,6 +1,6 @@
 import Knex from 'knex';
 
-import { MySQLConnection } from '../data/connection/mysql/Connection';
+import { MySQLConnection } from '../data/connection/SQLConnection';
 import { BaseUserRepository } from '../data/repositories/UserRepository';
 import { BaseUserService } from '../services/UserService';
 import { BaseLogger } from '../lib/Logger';

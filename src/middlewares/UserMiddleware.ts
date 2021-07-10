@@ -2,14 +2,9 @@ import express from 'express';
 import Joi from 'joi';
 
 import { CatchUnexpected } from '../lib/Decorators';
-import { Logger } from '../lib/Logger';
 
 @CatchUnexpected(400)
 export class UserMiddleware {
-
-    constructor(private logger: Logger) {
-
-    }
 
     public async verifyCreateUserParams(
         req: express.Request, res: express.Response, next: express.NextFunction,

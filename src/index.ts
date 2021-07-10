@@ -19,7 +19,7 @@ import { HealthController } from './controllers/HealthController';
 
 import { Environment as Env } from './lib/Environment';
 
-import { MySQLConnection } from './data/connection/mysql/Connection';
+import { MySQLConnection } from './data/connection/SQLConnection';
 import { CircularCache } from './lib/BasicCache';
 import { BaseLogger } from './lib/Logger';
 
@@ -58,7 +58,7 @@ const healthController = new HealthController(healthService, new BaseLogger(Heal
 const usercontroller = new UserController(userService, new BaseLogger(UserController.name));
 const authController = new AuthController(authService, new BaseLogger(AuthController.name));
 
-const userMiddleware = new UserMiddleware(new BaseLogger(UserMiddleware.name));
+const userMiddleware = new UserMiddleware();
 const authMiddleware = new AuthMiddleware(authService, new BaseLogger(AuthMiddleware.name));
 
 const requestMiddleware = new RequestMiddleware(new BaseLogger(RequestMiddleware.name));

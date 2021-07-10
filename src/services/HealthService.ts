@@ -1,6 +1,6 @@
 import { zipWith } from 'lodash';
 import { Logger } from '../lib/Logger';
-import { HealthReporter } from './HealthReporter';
+import { HealthReporter } from '../lib/HealthReporter';
 
 export interface HealthService {
     getStatus(): Promise<HealthReport>;
