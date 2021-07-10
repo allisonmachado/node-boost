@@ -55,5 +55,5 @@ export class AuthMiddleware {
 }
 
 export interface AuthenticatedRequest extends express.Request {
-    user: UserJwtPayload;
+  user: UserJwtPayload;
 }

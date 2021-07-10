@@ -3,25 +3,25 @@ import { Logger } from '../lib/Logger';
 import { HealthReporter } from '../lib/HealthReporter';
 
 export interface HealthService {
-    getStatus(): Promise<HealthReport>;
+  getStatus(): Promise<HealthReport>;
 }
 
 export enum HealthStatus {
-    UP = 'up',
-    DOWN = 'down',
+  UP = 'up',
+  DOWN = 'down',
 }
 
 export interface HealthReport {
-    timestamp: number;
-    status: HealthStatus;
-    dependencies: Array<{ name: string, status: HealthStatus }>;
+  timestamp: number;
+  status: HealthStatus;
+  dependencies: Array<{ name: string, status: HealthStatus }>;
 }
 
 export class BaseHealthService implements HealthService {
 
   constructor(
-        private dependencies: Array<{ label: string, reporter: HealthReporter }>,
-        private logger: Logger,
+    private dependencies: Array<{ label: string, reporter: HealthReporter }>,
+    private logger: Logger,
   ) {
     this.logger.debug('initialized');
   }
@@ -48,6 +48,6 @@ export class BaseHealthService implements HealthService {
 
   private stringifyReport(report: HealthReport): string {
     return `[${report.status.toUpperCase()}]`
-            + `${report.dependencies.map(d => `'${d.name}': ${d.status}`).join(', ')}`;
+      + `${report.dependencies.map(d => `'${d.name}': ${d.status}`).join(', ')}`;
   }
 }

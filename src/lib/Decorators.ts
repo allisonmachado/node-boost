@@ -14,7 +14,7 @@ export function CatchUnexpected(statusCode: number) {
         continue;
       }
       const originalMethod = descriptor.value;
-      descriptor.value = async function(req: AuthenticatedRequest, res: express.Response, ...args: unknown[]) {
+      descriptor.value = async function (req: AuthenticatedRequest, res: express.Response, ...args: unknown[]) {
         try {
           await originalMethod.apply(this, [req, res, ...args]);
         } catch (error) {
@@ -34,7 +34,7 @@ export function CatchUnexpected(statusCode: number) {
  */
 export function CatchDuplicateEntry(_target: unknown, _propertyKey: string, descriptor: PropertyDescriptor): void {
   const originalMethod = descriptor.value;
-  descriptor.value = async function(req: express.Request, res: express.Response, ...args: unknown[]) {
+  descriptor.value = async function (req: express.Request, res: express.Response, ...args: unknown[]) {
     try {
       await originalMethod.apply(this, [req, res, ...args]);
     } catch (error) {
@@ -54,7 +54,7 @@ export function CatchDuplicateEntry(_target: unknown, _propertyKey: string, desc
  */
 export function CatchActionForbidden(_target: unknown, _propertyKey: string, descriptor: PropertyDescriptor): void {
   const originalMethod = descriptor.value;
-  descriptor.value = async function(req: AuthenticatedRequest, res: express.Response, ...args: unknown[]) {
+  descriptor.value = async function (req: AuthenticatedRequest, res: express.Response, ...args: unknown[]) {
     try {
       await originalMethod.apply(this, [req, res, ...args]);
     } catch (error) {

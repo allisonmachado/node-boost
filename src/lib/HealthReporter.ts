@@ -1,3 +1,3 @@
 export interface HealthReporter {
-    isActive(): Promise<boolean>;
+  isActive(): Promise<boolean>;
 }

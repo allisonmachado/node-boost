@@ -17,7 +17,7 @@ export class UserController {
     res.send(users);
   }
 
-    @CatchDuplicateEntry
+  @CatchDuplicateEntry
   public async createUser(req: express.Request, res: express.Response): Promise<void> {
     const user = req.body;
 
@@ -25,35 +25,35 @@ export class UserController {
     res.status(201).send({ id: userId });
   }
 
-    public async getUser(req: express.Request, res: express.Response): Promise<void> {
-      const id = parseInt(req.params.id, 10);
-      const users = await this.userService.findById(id);
-      if (!users) {
-        res.status(404).send();
-      } else {
-        res.send(users);
-      }
+  public async getUser(req: express.Request, res: express.Response): Promise<void> {
+    const id = parseInt(req.params.id, 10);
+    const users = await this.userService.findById(id);
+    if (!users) {
+      res.status(404).send();
+    } else {
+      res.send(users);
     }
+  }
 
-    public async updateUser(req: express.Request, res: express.Response): Promise<void> {
-      const id = parseInt(req.params.id, 10);
-      const user = { id, ...req.body };
+  public async updateUser(req: express.Request, res: express.Response): Promise<void> {
+    const id = parseInt(req.params.id, 10);
+    const user = { id, ...req.body };
 
-      const affectedRows = await this.userService.update(user);
-      if (affectedRows === 1) {
-        res.status(204).send();
-      } else {
-        res.status(404).send();
-      }
+    const affectedRows = await this.userService.update(user);
+    if (affectedRows === 1) {
+      res.status(204).send();
+    } else {
+      res.status(404).send();
     }
+  }
 
-    @CatchActionForbidden
-    public async deleteUser(req: AuthenticatedRequest, res: express.Response): Promise<void> {
-      const affectedRows = await this.userService.delete(parseInt(req.params.id, 10), req.user.id);
-      if (affectedRows === 1) {
-        res.status(204).send();
-      } else {
-        res.status(404).send();
-      }
+  @CatchActionForbidden
+  public async deleteUser(req: AuthenticatedRequest, res: express.Response): Promise<void> {
+    const affectedRows = await this.userService.delete(parseInt(req.params.id, 10), req.user.id);
+    if (affectedRows === 1) {
+      res.status(204).send();
+    } else {
+      res.status(404).send();
     }
+  }
 }
