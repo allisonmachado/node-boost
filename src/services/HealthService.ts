@@ -1,6 +1,5 @@
 import { zipWith } from 'lodash';
 import { Logger } from '../lib/Logger';
-import { BaseService } from './BaseService';
 import { HealthReporter } from './HealthReporter';
 
 export interface HealthService {
@@ -18,13 +17,12 @@ export interface HealthReport {
     dependencies: Array<{ name: string, status: HealthStatus }>;
 }
 
-export class BaseHealthService extends BaseService implements HealthService {
+export class BaseHealthService implements HealthService {
 
     constructor(
         private dependencies: Array<{ label: string, reporter: HealthReporter }>,
         private logger: Logger,
     ) {
-        super();
         this.logger.debug('initialized');
     }
 

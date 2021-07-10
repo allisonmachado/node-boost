@@ -8,7 +8,7 @@ import { RequestMiddleware } from './middlewares/RequestMiddleware';
 import { UserMiddleware } from './middlewares/UserMiddleware';
 import { UserController } from './controllers/UserController';
 import { BaseUserService } from './services/UserService';
-import { BaseUserRepository } from './data/repositories/UserRepository';
+import { BaseUserRepository, User } from './data/repositories/UserRepository';
 
 import { AuthMiddleware } from './middlewares/AuthMiddleware';
 import { AuthController } from './controllers/AuthController';
@@ -18,10 +18,10 @@ import { BaseHealthService } from './services/HealthService';
 import { HealthController } from './controllers/HealthController';
 
 import { Environment as Env } from './lib/Environment';
-import { CircularCache } from './lib/CircularCache';
+
 import { MySQLConnection } from './data/connection/mysql/Connection';
+import { CircularCache } from './lib/BasicCache';
 import { BaseLogger } from './lib/Logger';
-import { User } from './data/entities/User';
 
 /** Display environment info */
 const logger = new BaseLogger('Main');

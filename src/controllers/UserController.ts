@@ -2,15 +2,13 @@ import express from 'express';
 
 import { CatchActionForbidden, CatchDuplicateEntry, CatchUnexpected } from '../lib/Decorators';
 import { AuthenticatedRequest } from '../middlewares/AuthMiddleware';
-import { BaseController } from './BaseController';
 import { UserService } from '../services/UserService';
 import { Logger } from '../lib/Logger';
 
 @CatchUnexpected(500)
-export class UserController extends BaseController {
+export class UserController {
 
     constructor(private userService: UserService, private logger: Logger) {
-        super();
         this.logger.debug('initialized');
     }
 

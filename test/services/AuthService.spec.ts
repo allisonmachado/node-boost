@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { User } from '../../src/data/entities/User';
+import { User } from '../../src/data/repositories/UserRepository';
 import { expect } from 'chai';
+import { BaseLogger } from '../../src/lib/Logger';
+import { CircularCache } from '../../src/lib/BasicCache';
 import { BaseAuthService } from '../../src/services/AuthService';
-import { CircularCache } from '../../src/lib/CircularCache';
 
 import jwt from 'jsonwebtoken';
 import sinon from 'sinon';
 
 import * as bcrypt from 'bcryptjs';
-import { BaseLogger } from '../../src/lib/Logger';
 
 describe('Auth Service', () => {
     const logger = new BaseLogger('Auth Service Spec');

@@ -1,5 +1,4 @@
 import express from 'express';
-import { BaseController } from '../controllers/BaseController';
 import { AuthenticatedRequest } from '../middlewares/AuthMiddleware';
 
 /**
@@ -7,7 +6,7 @@ import { AuthenticatedRequest } from '../middlewares/AuthMiddleware';
  * It should intercept exceptios and properly return 500 status code indicating an internal server error occured.
  */
 export function CatchUnexpected(statusCode: number) {
-    return (target: BaseController & { prototype: unknown }): void => {
+    return (target: { prototype: unknown }): void => {
         for (const propertyName of Object.getOwnPropertyNames(target.prototype)) {
             const descriptor = Object.getOwnPropertyDescriptor(target.prototype, propertyName);
             const isMethod = descriptor.value instanceof Function;

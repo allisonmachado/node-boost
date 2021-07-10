@@ -1,10 +1,27 @@
-import { User } from '../entities/User';
 import { Logger } from '../../lib/Logger';
 import { SQLConnection } from '../connection/SQLConnection';
 
 import lodash from 'lodash';
 import Knex from 'knex';
 import Joi from 'joi';
+
+export interface User { // high level definition
+    id: number;
+    name: string;
+    surname: string;
+    email: string;
+
+    password: string;
+}
+
+
+interface UserRecord { // internal database row mapping
+    id: number,
+    name: string,
+    surname: string,
+    email: string,
+    password: string,
+}
 
 export interface UserRepository {
     create(user: Omit<User, 'id'>): Promise<number>;
@@ -84,10 +101,3 @@ export class BaseUserRepository implements UserRepository {
     }
 }
 
-interface UserRecord {
-    id: number,
-    name: string,
-    surname: string,
-    email: string,
-    password: string,
-}

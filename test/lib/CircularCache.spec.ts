@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { expect } from 'chai';
-import { CircularCache } from '../../src/lib/CircularCache';
+import { CircularCache } from '../../src/lib/BasicCache';
 
 describe('Minimal cache specification', () => {
     describe('constructor rules', async () => {

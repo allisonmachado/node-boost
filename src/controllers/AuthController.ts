@@ -2,14 +2,12 @@ import express from 'express';
 
 import { Logger } from '../lib/Logger';
 import { AuthService } from '../services/AuthService';
-import { BaseController } from './BaseController';
 import { CatchUnexpected } from '../lib/Decorators';
 
 @CatchUnexpected(500)
-export class AuthController extends BaseController {
+export class AuthController {
 
     constructor(private authService: AuthService, private logger: Logger) {
-        super();
         this.logger.debug('initialized');
     }
 

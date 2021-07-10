@@ -1,7 +1,5 @@
-import { UserRepository } from '../data/repositories/UserRepository';
-import { BaseService } from './BaseService';
+import { User, UserRepository } from '../data/repositories/UserRepository';
 import { Logger } from '../lib/Logger';
-import { User } from '../data/entities/User';
 
 import * as bcrypt from 'bcryptjs';
 
@@ -17,13 +15,12 @@ export interface UserService {
     delete(id: number, requesterId: number): Promise<number>;
 }
 
-export class BaseUserService extends BaseService implements UserService {
+export class BaseUserService implements UserService {
     private genSalt: (rounds: number) => Promise<string>;
 
     private hash: (s: string, salt: number | string) => Promise<string>;
 
     constructor(private userRepository: UserRepository, private logger: Logger) {
-        super();
         this.userRepository = userRepository;
         this.genSalt = util.promisify(bcrypt.genSalt);
         this.hash = util.promisify(bcrypt.hash);

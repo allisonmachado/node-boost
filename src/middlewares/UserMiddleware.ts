@@ -18,7 +18,7 @@ export class UserMiddleware {
             name: Joi.string().required(),
             surname: Joi.string().required(),
             email: Joi.string().email().required(),
-            password: Joi.string().required(),
+            password: Joi.string().required().min(6),
         }).validate(req.body).error) {
             res.status(400).send();
         } else {
@@ -49,7 +49,7 @@ export class UserMiddleware {
             id: Joi.string().regex(/^\d+$/),
             name: Joi.string().required(),
             surname: Joi.string().required(),
-            password: Joi.string().required(),
+            password: Joi.string().required().min(6),
         }).validate(req.body).error) {
             res.status(400).send();
         } else {

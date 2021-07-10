@@ -1,8 +1,6 @@
-import { User } from '../data/entities/User';
 import { Logger } from '../lib/Logger';
 import { BasicCache } from '../lib/BasicCache';
-import { BaseService } from './BaseService';
-import { UserRepository } from '../data/repositories/UserRepository';
+import { User, UserRepository } from '../data/repositories/UserRepository';
 import { GetPublicKeyOrSecret, Secret, SignOptions } from 'jsonwebtoken';
 
 import * as bcrypt from 'bcryptjs';
@@ -24,8 +22,7 @@ export interface UserJwtPayload {
     email: string;
 }
 
-
-export class BaseAuthService extends BaseService implements AuthService {
+export class BaseAuthService implements AuthService {
 
     private compareHashedPassword: (
         passwd1: string,
@@ -49,7 +46,6 @@ export class BaseAuthService extends BaseService implements AuthService {
         private cache: BasicCache<User>,
         private logger: Logger,
     ) {
-        super();
         this.compareHashedPassword = util.promisify(bcrypt.compare);
         this.sign = util.promisify(jwt.sign);
         this.verify = util.promisify(jwt.verify);
