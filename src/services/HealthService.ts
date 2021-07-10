@@ -1,37 +1,53 @@
-import { ILogger } from '../lib/ILogger';
-import { BaseService } from './BaseService';
-import { IHealthReporter } from './IHealthReporter';
-import { HealthStatus, IHealthReport, IHealthService } from './IHealthService';
+import { zipWith } from 'lodash';
+import { Logger } from '../lib/Logger';
+import { HealthReporter } from '../lib/HealthReporter';
 
-export class HealthService extends BaseService implements IHealthService {
+export interface HealthService {
+  getStatus(): Promise<HealthReport>;
+}
 
-    constructor(
-        private dependencies: Array<{ label: string, reporter: IHealthReporter }>,
-        private logger: ILogger,
-    ) {
-        super();
-        this.logger.debug('initialized');
-    }
+export enum HealthStatus {
+  UP = 'up',
+  DOWN = 'down',
+}
 
-    public async getStatus(): Promise<IHealthReport> {
-        let status = HealthStatus.UP;
-        const timestamp = Date.now();
-        const dependencies = [];
-        for (const dependency of this.dependencies) {
-            const active = await dependency.reporter.isActive();
-            if (!active) { status = HealthStatus.DOWN; }
-            dependencies.push({
-                name: dependency.label,
-                status: active ? HealthStatus.UP : HealthStatus.DOWN,
-            });
-        }
-        const report = { timestamp, status, dependencies };
-        this.logger.info(this.stringifyReport(report));
-        return report;
-    }
+export interface HealthReport {
+  timestamp: number;
+  status: HealthStatus;
+  dependencies: Array<{ name: string, status: HealthStatus }>;
+}
 
-    private stringifyReport(report: IHealthReport): string {
-        return `[${report.status.toUpperCase()}]`
-            + `${report.dependencies.map(d => `'${d.name}': ${d.status}`).join(', ')}`;
-    }
+export class BaseHealthService implements HealthService {
+
+  constructor(
+    private dependencies: Array<{ label: string, reporter: HealthReporter }>,
+    private logger: Logger,
+  ) {
+    this.logger.debug('initialized');
+  }
+
+  public async getStatus(): Promise<HealthReport> {
+    const timestamp = Date.now();
+
+    const statuses = await Promise.all(this.dependencies.map(d => d.reporter.isActive()));
+    const labels = this.dependencies.map(d => d.label);
+
+    const dependencyParts = zipWith(labels, statuses, (label, status) => ({ label, status }));
+    const dependencies = dependencyParts.map(part => ({
+      name: part.label,
+      status: part.status ? HealthStatus.UP : HealthStatus.DOWN
+    }));
+
+    const status = dependencies
+      .every(d => d.status === HealthStatus.UP) ? HealthStatus.UP : HealthStatus.DOWN;
+
+    const report = { timestamp, status, dependencies };
+    this.logger.info(this.stringifyReport(report));
+    return report;
+  }
+
+  private stringifyReport(report: HealthReport): string {
+    return `[${report.status.toUpperCase()}]`
+      + `${report.dependencies.map(d => `'${d.name}': ${d.status}`).join(', ')}`;
+  }
 }
