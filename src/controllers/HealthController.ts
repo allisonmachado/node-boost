@@ -7,12 +7,12 @@ import { Logger } from '../lib/Logger';
 @CatchUnexpected(500)
 export class HealthController {
 
-    constructor(private healthService: HealthService, private logger: Logger) {
-        this.logger.debug('initialized');
-    }
+  constructor(private healthService: HealthService, private logger: Logger) {
+    this.logger.debug('initialized');
+  }
 
-    public async getReport(_req: express.Request, res: express.Response): Promise<void> {
-        const report = await this.healthService.getStatus();
-        res.send(report);
-    }
+  public async getReport(_req: express.Request, res: express.Response): Promise<void> {
+    const report = await this.healthService.getStatus();
+    res.send(report);
+  }
 }

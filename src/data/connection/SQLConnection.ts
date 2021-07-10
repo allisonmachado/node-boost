@@ -14,22 +14,22 @@ export class MySQLConnection implements SQLConnection, HealthReporter {
     private logger: Logger;
 
     constructor(logger: Logger) {
-        this.queryBuilder = knex(envConnection);
-        this.logger = logger;
-        this.logger.debug('initialized');
+      this.queryBuilder = knex(envConnection);
+      this.logger = logger;
+      this.logger.debug('initialized');
     }
 
     public getQueryBuilder(): Knex {
-        return this.queryBuilder;
+      return this.queryBuilder;
     }
 
     public async isActive(): Promise<boolean> {
-        try {
-            const [[{ version }]] = await this.queryBuilder.raw('SELECT version() as version');
-            return version.startsWith('5');
-        } catch (error) {
-            this.logger.error(`not active: ${error}`);
-            return false;
-        }
+      try {
+        const [[{ version }]] = await this.queryBuilder.raw('SELECT version() as version');
+        return version.startsWith('5');
+      } catch (error) {
+        this.logger.error(`not active: ${error}`);
+        return false;
+      }
     }
 }

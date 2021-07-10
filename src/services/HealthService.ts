@@ -19,35 +19,35 @@ export interface HealthReport {
 
 export class BaseHealthService implements HealthService {
 
-    constructor(
+  constructor(
         private dependencies: Array<{ label: string, reporter: HealthReporter }>,
         private logger: Logger,
-    ) {
-        this.logger.debug('initialized');
-    }
+  ) {
+    this.logger.debug('initialized');
+  }
 
-    public async getStatus(): Promise<HealthReport> {
-        const timestamp = Date.now();
+  public async getStatus(): Promise<HealthReport> {
+    const timestamp = Date.now();
 
-        const statuses = await Promise.all(this.dependencies.map(d => d.reporter.isActive()));
-        const labels = this.dependencies.map(d => d.label);
+    const statuses = await Promise.all(this.dependencies.map(d => d.reporter.isActive()));
+    const labels = this.dependencies.map(d => d.label);
 
-        const dependencyParts = zipWith(labels, statuses, (label, status) => ({ label, status }));
-        const dependencies = dependencyParts.map(part => ({
-            name: part.label,
-            status: part.status ? HealthStatus.UP : HealthStatus.DOWN
-        }));
+    const dependencyParts = zipWith(labels, statuses, (label, status) => ({ label, status }));
+    const dependencies = dependencyParts.map(part => ({
+      name: part.label,
+      status: part.status ? HealthStatus.UP : HealthStatus.DOWN
+    }));
 
-        const status = dependencies
-            .every(d => d.status === HealthStatus.UP) ? HealthStatus.UP : HealthStatus.DOWN;
+    const status = dependencies
+      .every(d => d.status === HealthStatus.UP) ? HealthStatus.UP : HealthStatus.DOWN;
 
-        const report = { timestamp, status, dependencies };
-        this.logger.info(this.stringifyReport(report));
-        return report;
-    }
+    const report = { timestamp, status, dependencies };
+    this.logger.info(this.stringifyReport(report));
+    return report;
+  }
 
-    private stringifyReport(report: HealthReport): string {
-        return `[${report.status.toUpperCase()}]`
+  private stringifyReport(report: HealthReport): string {
+    return `[${report.status.toUpperCase()}]`
             + `${report.dependencies.map(d => `'${d.name}': ${d.status}`).join(', ')}`;
-    }
+  }
 }

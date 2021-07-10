@@ -1,17 +1,17 @@
 import { Environment as Env } from './lib/Environment';
 
 const envConnection = {
-    client: 'mysql',
-    connection: {
-        host: Env.getMysqlHost(),
-        port: Env.getMysqlPort(),
-        ssl: Env.getMysqlSSLConnection(),
-        user: Env.getMysqlUser(),
-        password: Env.getMysqlPassword(),
-        database: Env.getMysqlSchema(),
-        socketPath: Env.getMysqlSocketPath(),
-    },
-    acquireConnectionTimeout: 10000,
+  client: 'mysql',
+  connection: {
+    host: Env.getMysqlHost(),
+    port: Env.getMysqlPort(),
+    ssl: Env.getMysqlSSLConnection(),
+    user: Env.getMysqlUser(),
+    password: Env.getMysqlPassword(),
+    database: Env.getMysqlSchema(),
+    socketPath: Env.getMysqlSocketPath(),
+  },
+  acquireConnectionTimeout: 10000,
 };
 
 /**

@@ -14,27 +14,27 @@ export class BaseLogger implements Logger {
     private logger: winston.Logger;
 
     constructor(private prefix: string) {
-        this.logger = winston.createLogger({
-            level: BaseLogger.level,
-            format: winston.format.json(),
-            transports: [
-                new winston.transports.Console(),
-            ],
-        });
+      this.logger = winston.createLogger({
+        level: BaseLogger.level,
+        format: winston.format.json(),
+        transports: [
+          new winston.transports.Console(),
+        ],
+      });
     }
 
     public error(msg: string): void {
-        this.logger.error(`[${this.prefix}]: ${msg}`);
+      this.logger.error(`[${this.prefix}]: ${msg}`);
     }
 
     public info(msg: string): void {
-        this.logger.info(`[${this.prefix}]: ${msg}`);
+      this.logger.info(`[${this.prefix}]: ${msg}`);
     }
 
     public debug(msg: string): void {
-        this.logger.log({
-            message: `[${this.prefix}]: ${msg}`,
-            level: 'debug',
-        });
+      this.logger.log({
+        message: `[${this.prefix}]: ${msg}`,
+        level: 'debug',
+      });
     }
 }

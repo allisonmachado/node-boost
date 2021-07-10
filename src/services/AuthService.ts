@@ -46,53 +46,53 @@ export class BaseAuthService implements AuthService {
         private cache: BasicCache<User>,
         private logger: Logger,
     ) {
-        this.compareHashedPassword = util.promisify(bcrypt.compare);
-        this.sign = util.promisify(jwt.sign);
-        this.verify = util.promisify(jwt.verify);
-        this.logger.debug('initialized');
+      this.compareHashedPassword = util.promisify(bcrypt.compare);
+      this.sign = util.promisify(jwt.sign);
+      this.verify = util.promisify(jwt.verify);
+      this.logger.debug('initialized');
     }
 
     public async validateCredentials(email: string, password: string): Promise<boolean> {
-        const user = await this.userRepository.findByEmail(email);
-        if (user) {
-            if (await this.compareHashedPassword(password, user.password)) {
-                this.cache.save(email, user);
-                return true;
-            }
-            return false;
+      const user = await this.userRepository.findByEmail(email);
+      if (user) {
+        if (await this.compareHashedPassword(password, user.password)) {
+          this.cache.save(email, user);
+          return true;
         }
         return false;
+      }
+      return false;
     }
 
     public async signAccessToken(email: string): Promise<string> {
-        let user = this.cache.search(email);
-        if (!user) {
-            user = await this.userRepository.findByEmail(email);
-        }
-        return this.sign({
-            id: user.id,
-            name: user.name,
-            surname: user.surname,
-            email: user.email,
-        }, this.secret, { expiresIn: '10h' });
+      let user = this.cache.search(email);
+      if (!user) {
+        user = await this.userRepository.findByEmail(email);
+      }
+      return this.sign({
+        id: user.id,
+        name: user.name,
+        surname: user.surname,
+        email: user.email,
+      }, this.secret, { expiresIn: '10h' });
     }
 
     public async validateAccessToken(payload: string): Promise<UserJwtPayload> {
-        const decoded = await this.verify(payload, this.secret);
-        if (this.isUserJwtToken(decoded)) {
-            return decoded;
-        }
-        throw new Error(`Invalid decoded jwt payload: ${JSON.stringify(decoded)}`);
+      const decoded = await this.verify(payload, this.secret);
+      if (this.isUserJwtToken(decoded)) {
+        return decoded;
+      }
+      throw new Error(`Invalid decoded jwt payload: ${JSON.stringify(decoded)}`);
     }
 
     private isUserJwtToken(obj: unknown): obj is UserJwtPayload {
-        const validation = Joi.object({
-            id: Joi.number().integer().required(),
-            name: Joi.string().required(),
-            surname: Joi.string().required(),
-            email: Joi.string().email().required(),
-        }).options({ allowUnknown: true }).validate(obj);
+      const validation = Joi.object({
+        id: Joi.number().integer().required(),
+        name: Joi.string().required(),
+        surname: Joi.string().required(),
+        email: Joi.string().email().required(),
+      }).options({ allowUnknown: true }).validate(obj);
 
-        return !validation.error;
+      return !validation.error;
     }
 }
