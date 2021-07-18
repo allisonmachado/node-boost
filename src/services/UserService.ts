@@ -21,7 +21,6 @@ export class BaseUserService implements UserService {
   private hash: (s: string, salt: number | string) => Promise<string>;
 
   constructor(private userRepository: UserRepository, private logger: Logger) {
-    this.userRepository = userRepository;
     this.genSalt = util.promisify(bcrypt.genSalt);
     this.hash = util.promisify(bcrypt.hash);
     this.logger.debug('initialized');
